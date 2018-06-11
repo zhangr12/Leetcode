@@ -1,0 +1,23 @@
+//1. In line 13, the letter - 'a' returns the relative position of the letter to the letter "a" in ASCII.
+//This means, 'a' - 'a' = 0, 'b' - 'a' = 1, etc.
+//Remember, 'a' means the position of letter "a" in ASCII
+class Solution {
+public:
+    int uniqueMorseRepresentations(vector<string>& words) {
+        vector<string> EngToMorse{".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        unordered_set<string> MapWords;
+        string temp = "";
+        for (string word:words){
+            temp = "";
+            for (char letter:word){
+                temp = temp + EngToMorse[letter - 'a'];
+            }
+            MapWords.insert(temp);
+        }
+        int res = 0;
+        for (auto& item:MapWords){
+            res++;
+        }
+        return res;
+    }
+};
