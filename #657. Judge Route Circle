@@ -1,0 +1,48 @@
+//1. use auto or char in the for loop. In the if else condition part, use '' to compare char with char
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        vector<int> memory{0, 0};
+        for (char move:moves){
+            if (move == 'L'){
+                memory[0] += 1;
+            }
+            else if(move == 'R'){
+                memory[0] -= 1;
+            }
+            else if(move == 'U'){
+                memory[1] += 1;
+            }
+            else if(move == 'D'){
+                memory[1] -= 1;
+            }
+        }
+        if (memory[0] == 0 && memory[1] == 0){
+            return true;
+        }
+        return false;
+    }
+};
+
+
+///////////////////////////////////
+//1. switch is also a good method to use here
+class Solution {
+public:
+    bool judgeCircle(string moves) {
+        int h = 0;
+        int v = 0;
+        for (auto move:moves){
+            switch(move){
+                case 'U': v++; break;
+                case 'D': v--; break;
+                case 'L': h++; break;
+                case 'R': h--; break;
+            }
+        }
+        if (h == 0 && v == 0){
+            return true;
+        }
+        return false;
+    }
+};
