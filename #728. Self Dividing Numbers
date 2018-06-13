@@ -1,0 +1,19 @@
+//1. a%b return the residual of a divide b
+//2. a/b return floor(a/b) if both of a and b are int type
+class Solution {
+public:
+    vector<int> selfDividingNumbers(int left, int right) {
+        vector<int> res;
+        for (int i = left; i <= right; i++){
+            int j = i;
+            int d;
+            while(j){
+                d = j%10;
+                if (d == 0 || i%d != 0) break;
+                j /= 10;
+            }
+            if (j == 0) res.push_back(i);
+        }
+        return res;
+    }
+};
