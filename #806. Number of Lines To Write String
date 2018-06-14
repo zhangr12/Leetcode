@@ -1,0 +1,21 @@
+//1. use char to iterate through single characters in the string
+//2. char-'a' returns the relative position of the char in ASCII, i.e. 'a'-'a' = 0, 'b'-'a' = 1, etc.
+//3. {} can be used to represent a vector, i.e. {a,b} is a vector with two length
+class Solution {
+public:
+    vector<int> numberOfLines(vector<int>& widths, string S) {
+        if (S.size() == 0) return {0, 0};
+        int num_lines = 1;
+        int crt_len = 0;
+        for (char s:S){
+            if (widths[s-'a'] + crt_len > 100){
+                num_lines++;
+                crt_len = widths[s-'a'];
+            }
+            else{
+                crt_len += widths[s-'a'];
+            }
+        }
+        return {num_lines, crt_len};
+    }
+};
