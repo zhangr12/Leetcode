@@ -1,0 +1,33 @@
+//1. .substr() can be used to take substring from string
+//2. stoi() can be used to convert string to integer
+class Solution {
+public:
+    vector<string> subdomainVisits(vector<string>& cpdomains) {
+        unordered_map<string, int> domainMap;
+        for(auto cp:cpdomains){
+            int i = cp.find(" ");
+            int n = stoi(cp.substr(0, i));
+            for (int j = i+1; j < cp.size(); j++){
+                if (cp[j] == '.'){
+                    if (domainMap.find(cp.substr(j+1, cp.size()-1)) != domainMap.end()){
+                        domainMap[cp.substr(j+1, cp.size()-1)] += n;
+                    }
+                    else{
+                        domainMap[cp.substr(j+1, cp.size()-1)] = n;
+                    }
+                }
+            }
+            if (domainMap.find(cp.substr(i+1, cp.size())) != domainMap.end()){
+                domainMap[cp.substr(i+1, cp.size())] += n;
+            }
+            else{
+                domainMap[cp.substr(i+1, cp.size())] = n;
+            }
+        }
+        vector<string> res;
+        for (auto item : domainMap){
+            res.push_back(to_string(item.second) + " " + item.first);
+        }
+        return res;
+    }
+};
