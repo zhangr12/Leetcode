@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<int> shortestToChar(string S, char C) {
+        vector<int> res(S.size(), 0);
+        int n = S.find(C);
+        for (int i = 0; i < n; i++){
+            res[i] = n-i;
+        }
+        for (int i = n+1; i < S.size(); i++){
+            if (S[i] == C){
+                //go back to update the res
+                for (int j = i-1; j >= 0; j--){
+                    if (S[j] == C || res[j] <= res[j+1] + 1){
+                        break;
+                    }
+                    else{
+                        res[j] = min(res[j], res[j+1] + 1);
+                    }
+                }
+            }
+            else{
+                //crt_dis increase by 1 and set the value of res to corresponing crt_dis
+                res[i] = res[i-1] + 1;
+            }
+        }
+        return res;
+    }
+};
+
+
+
+//Two pass solution: first from left to right, then from right to left
+//First calculate the distance with C from left, then calculate it from right
+class Solution {
+public:
+    vector<int> shortestToChar(string S, char C) {
+        int n = S.size();
+        vector<int> res(n, n);
+        int pos = n;
+        for (int i = 0; i < n; i++){
+            if (S[i] == C) pos = i;
+            res[i] = min(res[i], abs(pos - i));
+        }
+        for(int i = n-1; i >=0; i--){
+            if (S[i] == C) pos = i;
+            res[i] = min(res[i], abs(pos - i));
+        }
+        return res;
+    }
+};
