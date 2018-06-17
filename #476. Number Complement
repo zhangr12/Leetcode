@@ -1,0 +1,14 @@
+//Don't quite understand...
+//The while loop clears all the overlapping 1s with num. Finally, the output is simply the XOR between mask and num
+int findComplement(int num) {
+    int mask{~0};
+    int bit{0};
+    while(mask & num) mask &= ~(1<<bit++);
+    return ~(mask ^ num);
+}
+
+//The actual process looks like this
+//num           = 00000101
+//mask          = 11111000
+//mask ^ num    = 11111101
+//~(mask ^ num) = 00000010
