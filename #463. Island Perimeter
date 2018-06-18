@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int count = 0;
+        int repeat = 0;
+        for (int i = 0; i < grid.size(); i++){
+            for (int j = 0; j < grid[i].size(); j++){
+                if (grid[i][j] == 1){
+                    count++;
+                    if (i != 0 && grid[i-1][j] == 1) repeat++;
+                    if (j != 0 && grid[i][j-1] == 1) repeat++;
+                }
+            }
+        }
+        return count*4-repeat*2;
+    }
+};
+
+
+
+
+///////////////////////////////////
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        vector<vector <int>> edges_h;
+        vector<vector <int>> edges_v;
+        for (int i = 0; i < grid.size() + 1; i++){
+            vector<int> temp(grid[0].size(), 0);
+            edges_h.push_back(temp);
+        }
+        for (int i = 0; i < grid.size(); i++){
+            vector<int> temp(grid[0].size() + 1, 0);
+            edges_v.push_back(temp);
+        }
+        for (int i = 0; i < grid.size(); i++){
+            for (int j = 0; j < grid[i].size(); j++){
+                if (grid[i][j] == 1){
+                    edges_h[i][j] += 1;
+                    edges_h[i+1][j] += 1;
+                    edges_v[i][j] += 1;
+                    edges_v[i][j+1] += 1;
+                }
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < edges_h.size(); i++){
+            for (int j = 0; j < edges_h[0].size(); j++){
+                if (edges_h[i][j] == 1){
+                    res += 1;
+                }
+            }
+        }
+        for (int i = 0; i < edges_v.size(); i++){
+            for (int j = 0; j < edges_v[0].size(); j++){
+                if (edges_v[i][j] == 1){
+                    res += 1;
+                }
+            }
+        }
+        return res;
+    }
+};
