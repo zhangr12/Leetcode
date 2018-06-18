@@ -1,0 +1,43 @@
+//1. Unordered_set is a good data structure to use if you only want to check exist or not
+class Solution {
+public:
+    vector<string> findWords(vector<string>& words) {
+        unordered_set<char> dict1={ 'q','Q','w','W','e','E','r','R','t','T','y','Y','u','U','i','I','o','O','p','P' };
+		unordered_set<char> dict2={ 'a','A','s','S','d','D','f','F','g','G','h','H','j','J','k','K','l','L'};
+		unordered_set<char> dict3={ 'z','Z','x','X','c','C','v','V','b','B','n','N','m','M'};
+        vector<string> res;
+        for (auto word : words){
+            if (dict1.find(word[0]) != dict1.end()){
+                bool in1 = true;
+                for (auto letter:word){
+                    if (dict1.find(letter) == dict1.end()){
+                        in1 = false;
+                        break;
+                    }
+                }
+                if (in1) res.push_back(word);
+            }
+            else if (dict2.find(word[0]) != dict2.end()){
+                bool in2 = true;
+                for (auto letter:word){
+                    if (dict2.find(letter) == dict2.end()){
+                        in2 = false;
+                        break;
+                    }
+                }
+                if (in2) res.push_back(word);
+            }
+            else if (dict3.find(word[0]) != dict3.end()){
+                bool in3 = true;
+                for (auto letter:word){
+                    if (dict3.find(letter) == dict3.end()){
+                        in3 = false;
+                        break;
+                    }
+                }
+                if (in3) res.push_back(word);
+            }
+        }
+        return res;
+    }
+};
