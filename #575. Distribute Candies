@@ -1,0 +1,30 @@
+//1. bitset is a vector that only contains 0 and 1
+//2. assume A is a bitset, A.test(b) returns the value of he bitset at position b; A.set(b) set position b of bitset A to be 1
+//3. +100000 is because the input's range is [-100000, 100000], after plus 100000, we can use the input value as vector index
+class Solution {
+public:
+    int distributeCandies(vector<int>& candies) {
+        bitset<200001> hash;
+        int count = 0;
+        for(int candy:candies){
+            if(!hash.test(candy + 100000)){
+                count++;
+                hash.set(candy + 100000);
+            }
+        }
+        int n = candies.size()/2;
+        return min(n, count);
+    }
+};
+
+
+
+//////////////////////////
+//1. this method is not as fast as the above one using bitset
+class Solution {
+public:
+    int distributeCandies(vector<int>& candies) {
+        set<int> s( candies.begin(), candies.end() );
+        return min(candies.size()/2, s.size());
+    }
+};
