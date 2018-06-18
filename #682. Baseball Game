@@ -1,0 +1,29 @@
+//1. a.pop_back() method remove the last element from vector a, return nothing.
+//2. a.back() method returns the last element of vector a
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        // use a vector to remember the valid options
+        vector<int> valid;
+        int res = 0;
+        for (int i = 0; i < ops.size(); i++){
+            if (ops[i] == "C"){
+                res -= valid.back();
+                valid.pop_back();
+            }
+            else if (ops[i] == "D"){
+                res += valid.back()*2;
+                valid.push_back(valid.back()*2);
+            }
+            else if (ops[i] == "+"){
+                res = res + valid.back() + valid[valid.size() - 2];
+                valid.push_back(valid.back() + valid[valid.size() - 2]);
+            }
+            else{
+                res += stoi(ops[i]);
+                valid.push_back(stoi(ops[i]));
+            }
+        }
+        return res;
+    }
+};
