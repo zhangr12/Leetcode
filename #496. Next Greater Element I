@@ -5,6 +5,7 @@ public:
         unordered_map<int, int> numsMap;
         stack<int> stack_Nums;
         for (int num:nums){
+            // determine whoes next greater value is num
             while(stack_Nums.size() > 0 && stack_Nums.top() < num){
                 numsMap[stack_Nums.top()] = num;
                 stack_Nums.pop();
