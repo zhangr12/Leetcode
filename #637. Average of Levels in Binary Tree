@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ ///////////////////////////
+ //1. build a helper function to do BFS
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> res;
+        vector<TreeNode*> crt_level;
+        crt_level.push_back(root);
+        traverse(res, crt_level);
+        return res;
+    }
+    
+    void traverse(vector<double>& res, vector<TreeNode*>& crt_level){
+        vector<TreeNode*> next_level;
+        double temp = 0;
+        for (auto crt_node:crt_level){
+            temp += crt_node->val;
+            if (crt_node->left != NULL) next_level.push_back(crt_node->left);
+            if (crt_node->right != NULL) next_level.push_back(crt_node->right);
+        }
+        res.push_back(temp/crt_level.size());
+        if (next_level.size() != 0) traverse(res, next_level);
+    }
+};
+
+////////////////////////////////////////
+// use a queue to do BFS, use the size of queue to identify which layer the node is
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        double temp;
+        int level_size;
+        vector<double> res;
+        queue<TreeNode*> crt_level;
+        TreeNode* crt_node;
+        crt_level.push(root);
+        while (!crt_level.empty()){
+            temp = 0;
+            level_size = crt_level.size();
+            for(int i = 0; i < level_size; i++){
+                crt_node = crt_level.front();
+                temp += crt_node->val;
+                crt_level.pop();
+                if (crt_node->left!=NULL) crt_level.push(crt_node->left);
+                if (crt_node->right!=NULL) crt_level.push(crt_node->right);
+            }
+            res.push_back(temp/level_size);
+        }
+        return res;
+    }
+};
