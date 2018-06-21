@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool hasAlternatingBits(int n) {
+        int last = n%2;
+        n/=2;
+        int crt;
+        while (n){
+            crt = n%2;
+            if (crt==last) return false;
+            n/=2;
+            last = crt;
+        }
+        return true;
+    }
+};
