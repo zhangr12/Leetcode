@@ -1,0 +1,19 @@
+//1. bitwise operation: >>, <<, &, |, ^, ~
+class Solution {
+public:
+    int countPrimeSetBits(int L, int R) {
+        set<int> primes = {2,3,5,7,11,13,17,19};
+        int count = 0;
+        int bit_num;
+        for(int i = L; i <= R; i++){
+            bit_num = 0;
+            int n = i;
+            while(n){
+                bit_num += n & 1;
+                n >>= 1;
+            }
+            count += primes.count(bit_num);
+        }
+        return count;
+    }
+};
