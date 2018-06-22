@@ -7,6 +7,7 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+ //DFS
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
@@ -17,6 +18,31 @@ public:
         nodes.push(root);
         while (!nodes.empty()){
             crt_node = nodes.top();
+            nodes.pop();
+            temp = crt_node->left;
+            crt_node->left = crt_node->right;
+            crt_node->right = temp;
+            if(crt_node->left != NULL) nodes.push(crt_node->left);
+            if(crt_node->right != NULL) nodes.push(crt_node->right);
+        }
+        return root;
+    }
+};
+
+
+
+///////////////////////////////////
+//BFS
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if(root == NULL) return root;
+        queue<TreeNode*> nodes;
+        TreeNode* crt_node;
+        TreeNode* temp;
+        nodes.push(root);
+        while (!nodes.empty()){
+            crt_node = nodes.front();
             nodes.pop();
             temp = crt_node->left;
             crt_node->left = crt_node->right;
