@@ -1,0 +1,32 @@
+class Solution {
+public:
+    string toGoatLatin(string S) {
+        set<char> vowel = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+        string word;
+        string res;
+        int word_idx = 1;
+        int first = 0;
+        for (int i = 0; i < S.size(); i++){
+            //now we have S[first]~S[i-1] as a word
+            if (S[i] == ' ' || i == S.size() - 1){
+                if (i == S.size()-1) i = S.size();
+                word = S.substr(first, i - first);
+                string new_word;
+                if(vowel.count(word[0])){
+                    new_word = word + "ma";
+                }
+                else{
+                    new_word = word.substr(1, word.size() - 1) + word[0] + "ma";
+                }
+                for(int j = 0; j < word_idx; j++){
+                    new_word += "a";
+                }
+                res = res + new_word + " ";
+                // move pointer to the start of next word
+                first = i+1;
+                word_idx++;
+            }
+        }
+        return res.substr(0, res.size() - 1);
+    }
+};
