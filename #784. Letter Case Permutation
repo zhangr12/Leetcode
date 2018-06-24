@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> letterCasePermutation(string S) {
+        vector<string> res;
+        int crt_len;
+        if(!isalpha(S[0])){
+            res.push_back("");
+            res[0] += S[0];
+        }
+        else{
+            res.push_back("");
+            res.push_back("");
+            res[0] += S[0];
+            res[1] += S[0]^(1<<5);
+        }
+        for (int i = 1; i < S.size(); i++){
+            if (!isalpha(S[i])){
+                for (int j = 0; j < res.size(); j++){
+                    res[j] += S[i];
+                }
+            }
+            else{
+                crt_len = res.size();
+                for(int j = 0; j < crt_len; j++){
+                    res.push_back(res[j]);
+                }
+                for(int j = 0; j < crt_len; j++){
+                    res[j] += S[i];
+                }
+                for(int j = crt_len; j < res.size(); j++){
+                    res[j] += S[i]^(1<<5);
+                }
+            }
+        }
+        return res;
+    }
+};
