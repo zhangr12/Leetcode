@@ -1,0 +1,65 @@
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        //the size of grid is m-by-n
+        int m = grid.size();
+        int n = grid[0].size();
+        int res = 0;
+        int crt_max = 0;
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
+                if(grid[i][j] == 0 || grid[i][j] == -1){
+                    continue;
+                }
+                else{
+                    //use BFS to explore the island
+                    queue<int> edge;
+                    edge.push(i);
+                    edge.push(j);
+                    int crt_x, crt_y;
+                    crt_max = 0;
+                    while (!edge.empty()){
+                        crt_max++;
+                        crt_x = edge.front();
+                        edge.pop();
+                        crt_y = edge.front();
+                        edge.pop();
+                        //mark is as explored
+                        grid[crt_x][crt_y] = -1;
+                        if (crt_x + 1 < m){
+                            if (grid[crt_x + 1][crt_y] == 1){
+                                edge.push(crt_x + 1);
+                                edge.push(crt_y);
+                                //mark as on-waiting-list
+                                grid[crt_x + 1][crt_y] = 2;
+                            }
+                        }
+                        if (crt_x - 1 >= 0){
+                            if (grid[crt_x - 1][crt_y] == 1){
+                                edge.push(crt_x - 1);
+                                edge.push(crt_y);
+                                grid[crt_x - 1][crt_y] = 2;
+                            }
+                        }
+                        if (crt_y + 1 < n){
+                            if (grid[crt_x][crt_y + 1] == 1){
+                                edge.push(crt_x);
+                                edge.push(crt_y + 1);
+                                grid[crt_x][crt_y + 1] = 2;
+                            }
+                        }
+                        if (crt_y - 1 >= 0){
+                            if (grid[crt_x][crt_y - 1] == 1){
+                                edge.push(crt_x);
+                                edge.push(crt_y - 1);
+                                grid[crt_x][crt_y - 1] = 2;
+                            }
+                        }
+                    }
+                    if (res < crt_max) res = crt_max;
+                }
+            }
+        }
+        return res;
+    }
+};
