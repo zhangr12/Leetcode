@@ -1,3 +1,4 @@
+// always move j to the next zero explicitly
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
@@ -24,6 +25,7 @@ public:
 
 
 ///////////////////////////////////////////
+// "implicitly" move j to the next zero
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
