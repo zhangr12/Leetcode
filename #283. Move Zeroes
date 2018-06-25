@@ -1,0 +1,41 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int j = 0;
+        int temp;
+        for(int i = 0; i < nums.size(); i++){
+            while (nums[j] != 0 && j < nums.size()){
+                j++;
+            }
+            if (j >= nums.size() - 1) break;
+            if (nums[i] == 0){
+                continue;
+            }
+            else{
+                if(i > j){
+                    temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+            }
+        }
+    }
+};
+
+
+///////////////////////////////////////////
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int j = 0;
+        int temp;
+        for (int i = 0; i < nums.size(); i++){
+            if (nums[i] != 0){
+                temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+                j++;
+            }283. Move Zeroes
+        }
+    }
+};
