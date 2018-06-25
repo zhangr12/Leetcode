@@ -1,0 +1,32 @@
+// hash function
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        unordered_map<char, int> sMap;
+        //Initialze sMap
+        for(int i = 0; i < 26; i++) sMap['a' + i] = 0;
+        //write s into sMap
+        for(char S:s) sMap[S]++;
+        for(char T:t) sMap[T]--;
+        unordered_map<char, int>::iterator it;
+        for (it = sMap.begin(); it != sMap.end(); it++){
+            if (it->second == -1) return it->first;
+        }
+    }
+};
+
+
+
+
+//////////////////////////////////
+// char and XOR operator
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        int i = 0, res = 0;
+        for(i = 0; i < s.size(); i++){
+            res^=s[i]^t[i];
+        }
+        return res^t[i];
+    }
+};
