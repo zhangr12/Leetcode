@@ -1,0 +1,24 @@
+//This method works best if you want to do a lot of search for different id(s), since it build the hash table first, which minimize the search time later.
+//If you want to use DFS, just replace queue with stack, front with top.
+
+class Solution {
+public:
+    int getImportance(vector<Employee*> employees, int id) {
+        // convert vector<Employee*> to a unordered_map with id as key and Employee pointer as value
+        unordered_map<int, Employee*> employeesMap;
+        for(auto employee : employees) employeesMap[employee->id] = employee;
+        int res = 0;
+        queue<int> subs;
+        subs.push(id);
+        int crt_id;
+        Employee* crt_val;
+        while (!subs.empty()){
+            crt_id = subs.front();
+            subs.pop();
+            crt_val = employeesMap[crt_id];
+            res += crt_val->importance;
+            for (int crt_id_sub : crt_val->subordinates) subs.push(crt_id_sub);
+        }
+        return res;
+    }
+};
