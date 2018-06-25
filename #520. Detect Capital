@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        if (word.size() == 1) return true;
+        if (isupper(word[0]) && isupper(word[1])){
+            for (int i = 2; i < word.size(); i++){
+                if (!isupper(word[i])) return false;
+            }
+            return true;
+        }
+        else if(isupper(word[0])){
+            for (int i = 1; i < word.size(); i++){
+                if (isupper(word[i])) return false;
+            }
+            return true;
+        }
+        else{
+            for (auto letter : word){
+                if (isupper(letter)) return false;
+            }
+            return true;
+        }
+    }
+};
+
+
+//////////////////////////////////
+//same method by using ASCII
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        if (word.size() == 1) return true;
+        if (isupper(word[0]) && isupper(word[1])){
+            for (int i = 2; i < word.size(); i++){
+                if (word[i] < 'A' || word[i] > 'Z') return false;
+            }
+            return true;
+        }
+        else if(isupper(word[0])){
+            for (int i = 1; i < word.size(); i++){
+                if (word[i] >= 'A' && word[i] <= 'Z') return false;
+            }
+            return true;
+        }
+        else{
+            for (auto letter : word){
+                if (letter >= 'A' && letter <= 'Z') return false;
+            }
+            return true;
+        }
+    }
+};
