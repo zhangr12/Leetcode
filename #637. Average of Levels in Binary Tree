@@ -32,7 +32,7 @@ public:
     }
 };
 
-////////////////////////////////////////
+/////////////////////////////////////////
 // use a queue to do BFS, use the size of queue to identify which layer the node is
 class Solution {
 public:
