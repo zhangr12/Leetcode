@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int countBinarySubstrings(string s) {
+        vector<int> sGroup;
+        int count = 1;
+        char crt = s[0];
+        for(int i = 1; i < s.size(); i++){
+            if (s[i] != crt){
+                crt = s[i];
+                sGroup.push_back(count);
+                count = 1;
+            }
+            else{
+                count++;
+            }
+        }
+        //push_back the last contiguous substring
+        sGroup.push_back(count);
+        int res = 0;
+        for(int i = 1; i < sGroup.size(); i++){
+            res += min(sGroup[i-1], sGroup[i]);
+        }
+        return res;
+    }
+};
