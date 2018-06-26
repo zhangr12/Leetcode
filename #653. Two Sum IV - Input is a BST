@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> val_set;
+        //DFS
+        stack<TreeNode*> nodes;
+        nodes.push(root);
+        TreeNode* crt;
+        while (!nodes.empty()){
+            crt = nodes.top();
+            nodes.pop();
+            if (val_set.find(crt->val) != val_set.end()) return true;
+            val_set.insert(k-crt->val);
+            if (crt->left != NULL) nodes.push(crt->left);
+            if (crt->right != NULL) nodes.push(crt->right);
+        }
+        return false;
+    }
+};
+
+
+//////////////////////////////////////////////
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> val_set;
+        //BFS
+        queue<TreeNode*> nodes;
+        nodes.push(root);
+        TreeNode* crt;
+        while (!nodes.empty()){
+            crt = nodes.front();
+            nodes.pop();
+            if (val_set.find(crt->val) != val_set.end()) return true;
+            val_set.insert(k-crt->val);
+            if (crt->left != NULL) nodes.push(crt->left);
+            if (crt->right != NULL) nodes.push(crt->right);
+        }
+        return false;
+    }
+};
