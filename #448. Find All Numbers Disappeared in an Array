@@ -1,0 +1,17 @@
+//O(n) time, O(1) space
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        vector<int> res;
+        int crt;
+        for(int i = 0; i < nums.size(); i++){
+            //idx start from 0
+            crt = abs(nums[i]) - 1;
+            nums[crt] = nums[crt] > 0 ? -nums[crt] : nums[crt];
+        }
+        for(int i = 0; i < nums.size(); i++){
+            if (nums[i] > 0) res.push_back(i + 1);
+        }
+        return res;
+    }
+};
