@@ -1,6 +1,8 @@
 class Solution {
 public:
     bool isOneBitCharacter(vector<int>& bits) {
+        //if the current bit is 1, it has to move two steps
+        //if the current bit is 0, then it has to move one step
         int i = 0;
         while (i < bits.size()){
             if (bits[i] == 1){
