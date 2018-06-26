@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int rotatedDigits(int N) {
+        //if only contains 0, 1, 8: not good
+        //if contains 3, 4, 7: not good
+        //otherwise, contains 2, 5, 6, 9: good
+        int res = 0;
+        int crt, residual;
+        bool has2569, valid;
+        for (int i = 1; i <= N; i++){
+            has2569 = false;
+            valid = true;
+            crt = i;
+            while (crt){
+                residual = crt%10;
+                if (residual == 2 || residual == 5 || residual == 6 || residual == 9) has2569 = true;
+                if (residual == 3 || residual == 4 || residual == 7){
+                    valid = false;
+                    break;
+                }
+                crt /= 10;
+            }
+            if(has2569 && valid) res += 1;
+        }
+        return res;
+    }
+};
