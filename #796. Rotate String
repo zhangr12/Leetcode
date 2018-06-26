@@ -1,0 +1,10 @@
+// the shift only shift from one end to the other, then if B is a shift, it must contains in A+A
+class Solution {
+public:
+    bool rotateString(string A, string B) {
+        if (A.size() != B.size()) return false;
+        string AA = A + A;
+        if (AA.find(B) != string::npos) return true;
+        return false;
+    }
+};
