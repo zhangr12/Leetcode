@@ -1,0 +1,29 @@
+////////////////////////////////
+// * is much faster than pow function
+// if it is possible, use * to calculate power
+class Solution {
+public:
+    int titleToNumber(string s) {
+        long int char_num = 26;
+        int s_size = s.size();
+        int res = s[s_size - 1] - 'A' + 1;
+        for(int i = s_size - 2; i >= 0; i--){
+            res += (s[i] - 'A' + 1)*char_num;
+            char_num *= 26;
+        }
+        return res;
+    }
+};
+
+
+class Solution {
+public:
+    int titleToNumber(string s) {
+        int s_size = s.size(), res = 0;
+        for (char S:s){
+            res += (S-'A' + 1)*pow(26, s_size - 1);
+            s_size--;
+        }
+        return res;
+    }
+};
