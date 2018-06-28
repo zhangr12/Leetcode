@@ -7,6 +7,7 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+ // reverse inorder traversal for binary search tree will traverse a tree in non-increasing order
 class Solution {
 public:
     void helper(TreeNode* root, int& sum){
