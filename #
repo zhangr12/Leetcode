@@ -1,0 +1,43 @@
+//idea using unordered_map
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        if (nums.size() == 1) return nums[0];
+        unordered_map<int, int> numMap;
+        int target = nums.size()/2;
+        for (int num:nums){
+            if (numMap.find(num) != numMap.end()){
+                numMap[num] += 1;
+            }
+            else{
+                numMap[num] = 1;
+            }
+        }
+        unordered_map<int, int>::iterator it;
+        for (it = numMap.begin(); it != numMap.end(); it++){
+            if (it->second > target) return it->first;
+        }
+    }
+};
+
+
+//another smart idea which uses the property that majority is greater than floor(n/2)
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int count = 1, major = nums[0];
+        for (int i = 1; i < nums.size(); i++){
+            if (count == 0){
+                major = nums[i];
+                count++;
+            }
+            else if (major == nums[i]){
+                count++;
+            }
+            else{
+                count--;
+            }
+        }
+        return major;
+    }
+};
