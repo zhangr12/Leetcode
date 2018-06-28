@@ -1,0 +1,41 @@
+// Below two methods have the same idea: 
+// 1. use unordered_map to find corresponding number for each letter; 
+// 2. read from left to right, if left letter is less than right letter, substract left letter from res, else, add this number to res
+class Solution {
+public:
+    int romanToInt(string s) {
+        unordered_map<char, int> RomMap = {{'I',1}, {'V',5}, {'X',10}, {'L',50}, {'C',100}, {'D',500}, {'M',1000}};
+        int res = 0, i;
+        for(i = 0; i < s.size(); i++){
+            if (i == s.size() - 1){
+                res += RomMap[s[i]];
+            }
+            else if (RomMap[s[i]] >= RomMap[s[i + 1]]){
+                res += RomMap[s[i]];
+            }
+            else{
+                res -= RomMap[s[i]];
+                res += RomMap[s[i + 1]];
+                i++;
+            }
+        }
+        return res;
+    }
+};
+
+
+//////////////////////////////////
+class Solution {
+public:
+    int romanToInt(string s) {
+        unordered_map<char, int> RomMap = {{'I',1}, {'V',5}, {'X',10}, {'L',50}, {'C',100}, {'D',500}, {'M',1000}};
+        int res = 0, i;
+        for(i = 0; i < s.size() - 1; i++){
+            res += RomMap[s[i]] >= RomMap[s[i + 1]] ? RomMap[s[i]] : -RomMap[s[i]];
+        }
+        if (i == s.size() - 1){
+            res += RomMap[s[i]];
+        }
+        return res;
+    }
+};
