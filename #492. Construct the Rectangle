@@ -1,0 +1,32 @@
+// not the best code
+class Solution {
+public:
+    vector<int> constructRectangle(int area) {
+        vector<int> res = {1,1};
+        if (area == 1) return res;
+        int start = pow(area, 0.5);
+        int j = 0;
+        for(int i = start; i <= area; i++){
+            j = area/i;
+            if(j*i == area){
+                res[0] = max(i,j);
+                res[1] = min(i,j);
+                return res;
+            }
+        }
+    }
+};
+
+
+//////////////////////////////////////////
+// this is better
+class Solution {
+public:
+    vector<int> constructRectangle(int area) {
+        int start = pow(area, 0.5);
+        while(area%start != 0){
+            start--;
+        }
+        return {area/start,start};
+    }
+};
