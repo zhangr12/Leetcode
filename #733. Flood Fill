@@ -1,0 +1,68 @@
+// use dynamic programing
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        if (image[sr][sc] != newColor){
+            dfs(image, sr, sc, image[sr][sc], newColor);
+        }
+        return image;
+    }
+    
+private:
+    void dfs(vector<vector<int>>& image, int i, int j, int c0, int c1) {
+        if (i < 0 || j < 0 || i >= image.size() || j >= image[0].size() || image[i][j] != c0) return;
+        image[i][j] = c1;
+        dfs(image, i-1, j, c0, c1);
+        dfs(image, i+1, j, c0, c1);
+        dfs(image, i, j-1, c0, c1);
+        dfs(image, i, j+1, c0, c1);
+    }
+};
+
+
+///////////////////////////////////////
+// use queue to do BFS
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        queue<int> pixel;
+        pixel.push(sr);
+        pixel.push(sc);
+        int prev = image[sr][sc];
+        if (prev == newColor) return image;
+        int row, col;
+        int m = image.size(), n = image[0].size();
+        while (!pixel.empty()){
+            row = pixel.front();
+            pixel.pop();
+            col = pixel.front();
+            pixel.pop();
+            image[row][col] = newColor;
+            if (row - 1 >= 0){
+                if (image[row - 1][col] == prev){
+                    pixel.push(row - 1);
+                    pixel.push(col);
+                }
+            }
+            if (row + 1 < m){
+                if (image[row + 1][col] == prev){
+                    pixel.push(row + 1);
+                    pixel.push(col);
+                }
+            }
+            if (col - 1 >= 0){
+                if (image[row][col - 1] == prev){
+                    pixel.push(row);
+                    pixel.push(col - 1);
+                }
+            }
+            if (col + 1 < n){
+                if (image[row][col + 1] == prev){
+                    pixel.push(row);
+                    pixel.push(col + 1);
+                }
+            }
+        }
+        return image;
+    }
+};
