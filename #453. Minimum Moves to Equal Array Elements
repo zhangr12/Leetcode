@@ -1,0 +1,27 @@
+// this problem is equal to decrease 1 for each element at everytime until they all equal to the min value in the array
+
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        int sum = nums[0], min_num = nums[0];
+        for(int i = 1; i < nums.size(); i++){
+            sum += nums[i];
+            if (nums[i] < min_num) min_num = nums[i];
+        }
+        return sum - min_num*nums.size();
+    }
+};
+
+
+/////////////////////////////
+// using min_element
+// min_element return a pointer, so we need to add * in front of it to get the value of the pointer.
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        int sum = 0;
+        int min_num = *min_element(nums.begin(), nums.end());
+        for(int num:nums) sum += num - min_num;
+        return sum;
+    }
+};
