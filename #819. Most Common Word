@@ -42,3 +42,56 @@ public:
         return res;
     }
 };
+
+
+
+
+/////////////////////////////////////////
+//The code below use unordered_set to store banned, the rest part is the same
+//It is 50% faster than the code above!!!!!
+//USE SET IF YOU WANT TO SEARCH, IT IS WAY MORE EFFICIENT THAN VECTOR
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) {
+        // make to lower case
+        for(int i = 0; i < paragraph.size(); i++){
+            if (paragraph[i] >= 'A' && paragraph[i] <= 'Z') paragraph[i] = tolower(paragraph[i]);
+        }
+        for(int i = 0; i < banned.size(); i++){
+            for (int j = 0; j < banned[i].size(); j++){
+                if (banned[i][j] >= 'A' && banned[i][j] <= 'Z') banned[i][j] = tolower(banned[i][j]);
+            }
+        }
+        unordered_set<string> ban(banned.begin(), banned.end());
+        unordered_map<string, int> wordMap;
+        string temp;
+        int crt = 0;
+        for(int i = 0; i < paragraph.size(); i++){
+            if (paragraph[i] < 'a' || paragraph[i] > 'z'){
+                if (crt < i){
+                    temp = paragraph.substr(crt, i - crt);
+                    if (ban.find(temp) == ban.end()){
+                        wordMap[temp] += 1;
+                    }
+                }
+                crt = i + 1;
+            }
+            else if (i == paragraph.size() - 1){
+                temp = paragraph.substr(crt, i - crt + 1);
+                if (ban.find(temp) == ban.end()){
+                    wordMap[temp] += 1;
+                }
+            }
+        }
+        unordered_map<string, int>::iterator it;
+        int max = 0;
+        string res;
+        for (it = wordMap.begin(); it != wordMap.end(); it++){
+            if (it->second > max){
+                max = it->second;
+                res = it->first;
+            }
+        }
+        return res;
+    }
+};
