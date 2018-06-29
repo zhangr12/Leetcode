@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int maxCount(int m, int n, vector<vector<int>>& ops) {
+        if (ops.size() == 0) return m*n;
+        int min_row = m, min_col = n;
+        for (int i = 0; i < ops.size(); i++){
+            min_row = min(min_row, ops[i][0]);
+            min_col = min(min_col, ops[i][1]);
+        }
+        return min_row*min_col;
+    }
+};
