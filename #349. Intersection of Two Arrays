@@ -1,0 +1,14 @@
+// if want do search, transfer vector to set first
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> num1(nums1.begin(), nums1.end());
+        unordered_set<int> num2(nums2.begin(), nums2.end());
+        unordered_set<int>::iterator it;
+        vector<int> res;
+        for(it = num1.begin(); it != num1.end(); it++){
+            if (num2.find(*it) != num2.end()) res.push_back(*it);
+        }
+        return res;
+    }
+};
