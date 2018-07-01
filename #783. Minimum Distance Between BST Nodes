@@ -7,7 +7,7 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-// Inorder traversal
+// Inorder traversal with prev and res as public variable
 class Solution {
 public:
     int res = INT_MAX, prev = INT_MIN;
@@ -18,4 +18,25 @@ public:
         if (root->right != NULL) minDiffInBST(root->right);
         return res;
     }
+};
+
+
+////////////////////////////////////////
+// inorder traversal with helper function
+// the helper function has the pointer of prev and res as input, so that it can keep tracking the nodes in non-increasing order
+class Solution {
+public:
+    int minDiffInBST(TreeNode* root) {
+        int res = INT_MAX, prev = INT_MIN;
+        Inorder(root, prev, res);
+        return res;
+    }
+private:
+    void Inorder(TreeNode* node, int& prev, int& res){
+        if(node->left != NULL) Inorder(node->left, prev, res);
+        if (prev!=INT_MIN) res = min(res, node->val - prev);
+        prev = node->val;
+        if(node->right != NULL) Inorder(node->right, prev, res);
+    }
+    
 };
