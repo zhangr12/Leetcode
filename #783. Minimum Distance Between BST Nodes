@@ -31,7 +31,7 @@ public:
         Inorder(root, prev, res);
         return res;
     }
-private:
+
     void Inorder(TreeNode* node, int& prev, int& res){
         if(node->left != NULL) Inorder(node->left, prev, res);
         if (prev!=INT_MIN) res = min(res, node->val - prev);
