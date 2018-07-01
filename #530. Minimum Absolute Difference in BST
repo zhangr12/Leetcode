@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ // using helper function, which use pointer to keep tracking the value of prev and res
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        int res = INT_MAX, prev = -1;
+        inorder(root, prev, res);
+        return res;
+    }
+    
+    void inorder(TreeNode* node, int& prev, int& res){
+        if (node->left != NULL) inorder(node->left, prev, res);
+        if (prev != -1) res = min(res, node->val - prev);
+        prev = node->val;
+        if (node->right != NULL) inorder(node->right, prev, res);
+    }
+};
+
+
+///////////////////////////////////
+// set prev and res as public variables, in this case we do not need helper function
+class Solution {
+public:
+    int res = INT_MAX, prev = -1;
+    int getMinimumDifference(TreeNode* root) {
+        if (root->left != NULL) getMinimumDifference(root->left);
+        if (prev != -1) res = min(res, root->val - prev);
+        prev = root->val;
+        if (root->right != NULL) getMinimumDifference(root->right);
+        return res;
+    }
+};
