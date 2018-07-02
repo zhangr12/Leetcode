@@ -6,6 +6,7 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ // solution 1: take care of head node first
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
@@ -14,6 +15,24 @@ public:
         ListNode* temp;
         ListNode* prev = head;
         head->next = NULL;
+        while(crt != NULL){
+            temp = crt->next;
+            crt->next = prev;
+            prev = crt;
+            crt = temp;
+        }
+        return prev;
+    }
+};
+
+// solution 2: do not treat head node specially
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return head;
+        ListNode* crt = head;
+        ListNode* temp;
+        ListNode* prev = NULL;
         while(crt != NULL){
             temp = crt->next;
             crt->next = prev;
