@@ -23,3 +23,28 @@ public:
         return prev;
     }
 };
+
+
+///////////////////////////////////
+// recuvsive method with helper function
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return head;
+        ListNode* crt = head->next;
+        ListNode* prev = head;
+        ListNode* temp;
+        head->next = NULL;
+        helper(prev, crt, temp);
+        return prev;
+    }
+    
+    void helper(ListNode*& prev, ListNode*& crt, ListNode*& temp){
+        if (crt == NULL) return;
+        temp = crt->next;
+        crt->next = prev;
+        prev = crt;
+        crt = temp;
+        helper(prev, crt, temp);
+    }
+};
