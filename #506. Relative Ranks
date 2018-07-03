@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> findRelativeRanks(vector<int>& nums) {
+        vector<int> duplicate_num;
+        for(int i = 0; i < nums.size(); i++) duplicate_num.push_back(nums[i]);
+        sort(nums.begin(), nums.end());
+        unordered_map<int, string> dic;
+        for(int i = nums.size() - 1; i >= 0; i--){
+            if(i == nums.size() - 1){
+                dic[nums[i]] = "Gold Medal";
+            }
+            else if (i == nums.size() - 2){
+                dic[nums[i]] = "Silver Medal";
+            }
+            else if (i == nums.size() - 3){
+                dic[nums[i]] = "Bronze Medal";
+            }
+            else{
+                dic[nums[i]] = to_string(nums.size() - i);
+            }
+        }
+        vector<string> res;
+        for(int i = 0; i < duplicate_num.size(); i++) res.push_back(dic[duplicate_num[i]]);
+        return res;
+    }
+};
