@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, int> sMap;
+        for(int i = 0; i < s.size(); i++){
+            if (sMap.find(s[i]) != sMap.end()){
+                sMap[s[i]] = -2;
+            }
+            else{
+                sMap[s[i]] = i;
+            }
+        }
+        unordered_map<char, int>::iterator it;
+        int res = INT_MAX;
+        for (it = sMap.begin(); it != sMap.end(); it++){
+            if (it->second == -2) continue;
+            res = min(res, it->second);
+        }
+        return res == INT_MAX ? -1 : res;
+    }
+};
