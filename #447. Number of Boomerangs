@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numberOfBoomerangs(vector<pair<int, int>>& points) {
+        int res = 0;
+        for (int i = 0; i < points.size(); i++){
+            unordered_map<int, int> disMap;
+            for(int j = 0; j < points.size(); j++){
+                if(i != j){
+                    disMap[distance(points[i], points[j])]++;
+                }
+            }
+            unordered_map<int, int>::iterator it;
+            for(it = disMap.begin(); it!=disMap.end();it++){
+                res += it->second*(it->second - 1);
+            }
+        }
+        return res;
+    }
+private:
+    int distance(pair<int, int>& i, pair<int, int>& j){
+        return (i.first - j.first)*(i.first - j.first) + (i.second - j.second)*(i.second - j.second);
+    }
+};
