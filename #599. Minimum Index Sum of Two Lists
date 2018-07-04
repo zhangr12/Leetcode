@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        unordered_map<string, int[2]> listMap;
+        for(int i = 0; i < list1.size(); i++){
+            listMap[list1[i]][1] += i;
+        }
+        for(int i = 0; i < list2.size(); i++){
+            if(listMap.find(list2[i]) != listMap.end()){
+                listMap[list2[i]][0] = 1;
+                listMap[list2[i]][1] += i;
+            }
+        }
+        int temp = INT_MAX;
+        vector<string> res;
+        unordered_map<string, int[2]>::iterator it;
+        for(it = listMap.begin(); it != listMap.end(); it++){
+            if(it->second[0] == 1 && it->second[1] < temp) temp = it->second[1];
+        }
+        for(it = listMap.begin(); it != listMap.end(); it++){
+            if(it->second[0] == 1 && it->second[1] == temp) res.push_back(it->first);
+        }
+        return res;
+    }
+};
