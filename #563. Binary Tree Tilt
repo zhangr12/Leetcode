@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findTilt(TreeNode* root) {
+        int res = 0;
+        helper(root, res);
+        return res;
+    }
+    
+    int helper(TreeNode* node, int& res){
+        if (!node) return 0;
+        int left, right;
+        left = helper(node->left, res);
+        right = helper(node->right, res);
+        res += abs(left - right);
+        return node->val + left + right;
+    }
+};
+
+
+//////////////////////////
+// we can also set res as a public variable
+class Solution {
+public:
+    int res = 0;
+    int findTilt(TreeNode* root) {
+        helper(root);
+        return res;
+    }
+    
+    int helper(TreeNode* node){
+        if (!node) return 0;
+        int left, right;
+        left = helper(node->left);
+        right = helper(node->right);
+        res += abs(left - right);
+        return node->val + left + right;
+    }
+};
