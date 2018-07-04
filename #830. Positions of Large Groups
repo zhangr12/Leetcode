@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<int>> largeGroupPositions(string S) {
+        if (S.size() == 0) return {};
+        int count = 1, start = 0, i;
+        char crt = S[0];
+        vector<vector<int>> res;
+        for(i = 1; i < S.size(); i++){
+            if (crt == S[i]){
+                count++;
+            }
+            else{
+                if (count >= 3){
+                    vector<int> temp;
+                    temp.push_back(start);
+                    temp.push_back(i - 1);
+                    res.push_back(temp);
+                }
+                count = 1;
+                crt = S[i];
+                start = i;
+            }
+        }
+        if(count >= 3){
+            vector<int> temp;
+            temp.push_back(start);
+            temp.push_back(i - 1);
+            res.push_back(temp);
+        }
+        return res;
+    }
+};
