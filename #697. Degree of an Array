@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int findShortestSubArray(vector<int>& nums) {
+        unordered_map<int, int[3]> numsMap;
+        for(int i = 0; i < nums.size(); i++){
+            if(numsMap.find(nums[i]) != numsMap.end()){
+                numsMap[nums[i]][0]++;
+                numsMap[nums[i]][2] = i;
+            }
+            else{
+                numsMap[nums[i]][0] = 1;
+                numsMap[nums[i]][1] = i;
+                numsMap[nums[i]][2] = i;
+            }
+        }
+        unordered_map<int, int[3]>::iterator it;
+        int res = nums.size(), temp = 0;
+        for(it = numsMap.begin(); it != numsMap.end(); it++){
+            if(it->second[0] > temp){
+                res = it->second[2] - it->second[1] + 1;
+                temp = it->second[0];
+            }
+            else if(it->second[0] == temp){
+                res = min(res, it->second[2] - it->second[1] + 1);
+            }
+        }
+        return res;
+    }
+};
