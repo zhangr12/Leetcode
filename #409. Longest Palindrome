@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        unordered_map<char, int> sMap;
+        for(char S:s) sMap[S]++;
+        unordered_map<char, int>::iterator it;
+        int odd_count = 0, res = 0;
+        for(it = sMap.begin(); it != sMap.end(); it++){
+            if (it->second % 2 != 0){
+                odd_count++;
+            }
+        }
+        return odd_count == 0 ? s.size() : s.size()-odd_count+1;
+    }
+};
