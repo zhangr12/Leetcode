@@ -13,6 +13,28 @@ public:
         if(root == NULL) return 0;
         int res = -1;
         depth(root, res);
+        return res;
+    }
+    
+    int depth(TreeNode* node, int& res){
+        if (node == NULL) return 0;
+        int depthL = depth(node->left, res);  // treat node->left as root, what is the depth
+        int depthR = depth(node->right, res); // treat node->right as root, what is the depth
+        res = max(res, depthL+depthR); // since we only conside edge, so do not need to +1 here
+        return max(depthL, depthR) + 1;  //the depth from the real root should +1
+    }
+};
+
+
+
+
+//////////////////////////////////
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        if(root == NULL) return 0;
+        int res = -1;
+        depth(root, res);
         return res - 1;
     }
     
@@ -23,6 +45,4 @@ public:
         res = max(res, 1+depthL+depthR);
         return max(depthL, depthR) + 1;
     }
-    
-    
 };
