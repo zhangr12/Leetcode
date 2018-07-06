@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        char temp1;
+        int i = 0, j = k-1, temp2;
+        while (j < s.size()){
+            temp2 = j;
+            while(i<j){
+                temp1 = s[i];
+                s[i] = s[j];
+                s[j] = temp1;
+                i++;
+                j--;
+            }
+            i = temp2 + k + 1;
+            j = i + k - 1;
+        }
+        j = s.size() - 1;
+        // when there are less than 2k elements left, i is greater than s.size()-1, so we do not need to worry about this case
+        while(i<j){
+            temp1 = s[i];
+            s[i] = s[j];
+            s[j] = temp1;
+            i++;
+            j--;
+        }
+        return s;
+    }
+};
