@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() == 0 || nums2.size() == 0) return {};
+        unordered_map<int, int> nums;
+        for(int num:nums1) nums[num]++;
+        vector<int> res;
+        for(int num:nums2){
+            if (nums.find(num) != nums.end() && nums[num] > 0){
+                nums[num]--;
+                res.push_back(num);
+            }
+        }
+        return res;
+    }
+};
