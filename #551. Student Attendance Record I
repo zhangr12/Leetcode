@@ -1,0 +1,30 @@
+// need to think more careful about the corner case
+class Solution {
+public:
+    bool checkRecord(string s) {
+        if(s.size() < 2) return true;
+        int count_A = 0;
+        char prevprev = s[0], prev = s[1];
+        if (s[0] == 'A') count_A++;
+        if (s[1] == 'A') count_A++;
+        if (count_A == 2) return false;
+        for(int i = 2; i < s.size(); i++){
+            if (s[i] == 'A'){
+                count_A++;
+                if (count_A >= 2) return false;
+                prevprev = prev;
+                prev = 'A';
+            }
+            else if(s[i] == 'L'){
+                if(prevprev == 'L' && prev == 'L') return false;
+                prevprev = prev;
+                prev = 'L';
+            }
+            else{
+                prevprev = prev;
+                prev = s[i];
+            }
+        }
+        return true;
+    }
+};
