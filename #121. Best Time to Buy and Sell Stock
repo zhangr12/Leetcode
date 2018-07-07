@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() < 2) return 0;
+        int res = 0, crt_min = prices[0];
+        for(int i = 1; i < prices.size(); i++){
+            if (prices[i] < crt_min){
+                crt_min = prices[i];
+            }
+            else{
+                res = max(res, prices[i] - crt_min);
+            }
+        }
+        return res;
+    }
+};
