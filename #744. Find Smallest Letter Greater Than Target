@@ -1,0 +1,23 @@
+class Solution {
+public:
+    char nextGreatestLetter(vector<char>& letters, char target) {
+        char res;
+        int dist = 30, temp;
+        set<char> L(letters.begin(), letters.end());
+        for(char l:L){
+            if (l > target){
+                if (dist > l-target){
+                    dist = l-target;
+                    res = l;
+                }
+            }
+            else if (l < target){
+                if (dist > 26 - target + l){
+                    dist = 26 - target + l;
+                    res = l;
+                }
+            }
+        }
+        return res;
+    }
+};
