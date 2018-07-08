@@ -32,3 +32,41 @@ public:
         return res;
     }
 };
+
+
+/////////////////////////////////////////////
+// the method below does not use make_pair, this method has the same run time with the above make_pair method
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        if (root == NULL) return res;
+        queue<TreeNode*> q_node;
+        queue<string> q_string;
+        q_node.push(root);
+        q_string.push(to_string(root->val));
+        TreeNode* node;
+        string str;
+        while(!q_node.empty()){
+            node = q_node.front();
+            str = q_string.front();
+            q_node.pop();
+            q_string.pop();
+            if(node->left == NULL && node->right == NULL){
+                res.push_back(str);
+            }
+            else{
+                str += "->";
+                if(node->left != NULL){
+                    q_node.push(node->left);
+                    q_string.push(str+to_string(node->left->val));
+                }
+                if(node->right != NULL){
+                    q_node.push(node->right);
+                    q_string.push(str+to_string(node->right->val));
+                }
+            }
+        }
+        return res;
+    }
+};
