@@ -46,3 +46,44 @@ public:
         return head;
     }
 };
+
+
+
+/////////////////////////
+// we do not need crt1 and crt2, we can just use l1 and l2
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == NULL) return l2;
+        if (l2 == NULL) return l1;
+        ListNode* head;
+        ListNode* crt;
+        // determine head first;
+        if (l1->val > l2->val){
+            head = l2;
+            crt = l2;
+            l2 = l2->next;
+        }
+        else{
+            head = l1;
+            crt = l1;
+            l1 = l1->next;
+        }
+        // loop until we each either l1 or l2's end
+        while(l1 != NULL && l2 != NULL){
+            if(l1->val > l2->val){
+                crt->next = l2;
+                crt = l2;
+                l2 = l2->next;
+            }
+            else{
+                crt->next = l1;
+                crt = l1;
+                l1 = l1->next;
+            }
+        }
+        if(l1 == NULL && l2 != NULL) crt->next = l2;
+        if(l2 == NULL && l1 != NULL) crt->next = l1;
+        return head;
+    }
+};
