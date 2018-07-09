@@ -1,3 +1,5 @@
+// given a sigle digit integer b in the form of char, use "int a = b - '0';" to convert it to int
+// stoi can only be used to convert string to integer, not char to integer.
 class Solution {
 public:
     string addStrings(string num1, string num2) {
