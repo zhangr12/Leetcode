@@ -1,0 +1,8 @@
+class Solution {
+public:
+    string toHex(int num) {
+        stringstream stream;
+        stream << hex << num;
+        return stream.str();
+    }
+};
