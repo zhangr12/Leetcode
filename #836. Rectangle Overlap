@@ -1,4 +1,4 @@
-//One solution is to one by one pick all points of one rectangle and see if the point lies inside the other rectangle or not. This can be done using the algorithm discussed here.
+//One solution is to one by one pick all points of one rectangle and see if the point lies inside the other rectangle or not. 
 //Following is a simpler approach. Two rectangles do not overlap if one of the following conditions is true.
 //1) One rectangle is above top edge of other rectangle.
 //2) One rectangle is on left side of left edge of other rectangle.
