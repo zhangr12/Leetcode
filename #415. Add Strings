@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        string temp;
+        if (num1.size() < num2.size()){
+            temp = num1;
+            num1 = num2;
+            num2 = temp;
+        }
+        // now num1 is the larger one, num2 is the smaller one
+        int carry = 0, temp2, i, j, crt1, crt2;
+        string res = "";
+        for(i = num2.size() - 1, j = num1.size() - 1; i >= 0 && j >= 0; i--, j--){
+            crt1 = num1[j]-'0';
+            crt2 = num2[i]-'0';
+            temp2 = crt1 + crt2 + carry;
+            carry = temp2 / 10;
+            res = to_string(temp2%10) + res;
+        }
+        for (j; j >= 0; j--){
+            crt1 = num1[j]-'0';
+            temp2 = crt1 + carry;
+            carry = temp2 / 10;
+            res = to_string(temp2%10) + res;
+        }
+        if (carry == 1) res = "1" + res;
+        return res;
+    }
+};
