@@ -18,3 +18,27 @@ public:
         return res;
     }
 };
+
+
+////////////////////////////
+//we can also set temp1 as reference to speed up the algorithm
+//note than a reference cannot be reassigned!!!!!! and must be assigned when initialization
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res;
+        if(numRows == 0) return res;
+        res.push_back({1});
+        for (int i = 1; i < numRows; i++){
+            vector<int> temp2;
+            temp2.push_back(1);
+            vector<int>& temp1 = res.back();
+            for(int j = 1; j < temp1.size(); j++){
+                temp2.push_back(temp1[j-1] + temp1[j]);
+            }
+            temp2.push_back(1);
+            res.push_back(temp2);
+        }
+        return res;
+    }
+};
