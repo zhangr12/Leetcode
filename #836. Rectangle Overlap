@@ -1,0 +1,12 @@
+//One solution is to one by one pick all points of one rectangle and see if the point lies inside the other rectangle or not. This can be done using the algorithm discussed here.
+//Following is a simpler approach. Two rectangles do not overlap if one of the following conditions is true.
+//1) One rectangle is above top edge of other rectangle.
+//2) One rectangle is on left side of left edge of other rectangle.
+class Solution {
+public:
+    bool isRectangleOverlap(vector<int>& rec1, vector<int>& rec2) {
+        if (rec1[0] >= rec2[2] || rec2[0] >= rec1[2]) return false;
+        if (rec1[1] >= rec2[3] || rec2[1] >= rec1[3]) return false;
+        return true;
+    }
+};
