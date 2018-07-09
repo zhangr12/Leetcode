@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        sort(nums.begin(), nums.end());
+        vector<pair<int, int>> enum_nums;
+        int res = 0, count = 1;
+        for(int i = 1; i < nums.size(); i++){
+            if (nums[i-1] == nums[i]){
+                count++;
+            }
+            else{
+                enum_nums.push_back(make_pair(nums[i-1], count));
+                count = 1;
+            }
+        }
+        enum_nums.push_back(make_pair(nums[nums.size() - 1], count));
+        for(int i = 1; i < enum_nums.size(); i++){
+            if (enum_nums[i].first - enum_nums[i-1].first == 1) res = max(res, enum_nums[i].second + enum_nums[i-1].second);
+        }
+        return res;
+    }
+};
