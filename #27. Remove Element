@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        if(nums.size() == 0) return 0;
+        int j = 0, i = 0;
+        // find the first location of val in nums
+        while(j < nums.size()){
+            if (nums[j] == val) break;
+            j++;
+        }
+        if(j == nums.size()) return j;
+        for(i = j; i < nums.size(); i++){
+            if (nums[i] != val){
+                nums[j] = nums[i];
+                nums[i] = val;
+                j++;
+            }
+        }
+        return j;
+    }
+};
