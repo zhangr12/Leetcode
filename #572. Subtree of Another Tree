@@ -1,0 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSubtree(TreeNode* s, TreeNode* t) {
+        // first use pre-order traversal to copy the tree
+        string sTree = "", tTree = "";
+        preorder(s, sTree);
+        preorder(t, tTree);
+        // see whether t is a subset of s
+        if(sTree.find(tTree)!=string::npos) return true;
+        return false;
+    }
+    
+    void preorder(TreeNode* root, string& res){
+        stack<TreeNode*> s;
+        TreeNode* node;
+        s.push(root);
+        while(!s.empty()){
+            node = s.top();
+            s.pop();
+            if (node == NULL){
+                res.push_back(INT_MIN);
+            }
+            else{
+                res += "#" + to_string(node->val) + "#";
+                s.push(node->right);
+                s.push(node->left);
+            }
+        }
+    }
+    
+};
