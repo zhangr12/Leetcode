@@ -1,0 +1,46 @@
+// four cases:
+// 1. temp < 0, nums[i] > 0: temp = nums[i]
+// 2. temp < 0, nums[i] < 0: temp = nums[i]
+// 3. temp > 0, temp + nums[i] >= 0: temp += nums[i];
+// 4. temp > 0, temp + nums[i] < 0; temp = nums[i];
+// can also combine into two cases
+// 1. temp + nums[i] >= 0: temp += nums[i];
+// 2. temp < 0 || temp + nums[i] < 0: temp = nums[i];
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        int sum = nums[0], temp = nums[0];
+        for (int i = 1; i < nums.size(); i++){
+            if(temp < 0 || temp + nums[i] < 0){
+                temp = nums[i];
+            }
+            else{
+                temp += nums[i];
+            }
+            sum = max(temp, sum);
+        }
+        return sum;
+    }
+};
+
+
+
+//////////////////////////more concise colution
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        int sum = nums[0], temp = nums[0];
+        for (int i = 1; i < nums.size(); i++){
+            if(temp < 0 || temp + nums[i] < 0){
+                temp = nums[i];
+            }
+            else{
+                temp += nums[i];
+            }
+            sum = max(temp, sum);
+        }
+        return sum;
+    }
+};
