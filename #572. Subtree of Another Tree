@@ -30,11 +30,12 @@ public:
                 res.push_back(INT_MIN);
             }
             else{
+                // we add # in on both side of node values because we want to identify each numbers
+                // otherwise, [2] will be a subtree of [12]. With #, [#2#] can be distinguished from [#12#]
                 res += "#" + to_string(node->val) + "#";
                 s.push(node->right);
                 s.push(node->left);
             }
         }
     }
-    
 };
