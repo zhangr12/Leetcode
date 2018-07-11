@@ -1,0 +1,13 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int strategy1 = 0, strategy2 = nums[0], temp;
+        for(int i = 1; i < nums.size(); i++){
+            temp = strategy2;
+            strategy2 = max(strategy2, strategy1+nums[i]);
+            strategy1 = temp;
+        }
+        return max(strategy1, strategy2);
+    }
+};
