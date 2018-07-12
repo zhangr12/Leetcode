@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int pivotIndex(vector<int>& nums) {
+        if (nums.size() == 0) return -1;
+        int r = 0, l = 0, i = 0;
+        for(int num:nums){
+            r += num;
+        }
+        r -= nums[0];
+        while(i < nums.size()){
+            if (l == r) return i;
+            // add current pivot to l
+            // minus future pivot from r
+            l += nums[i];
+            r -= nums[i+1];
+            // move pivot to right
+            i++;
+        }
+        return -1;
+    }
+};
