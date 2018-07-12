@@ -27,3 +27,26 @@ public:
         return res[0] == '-' ? res.substr(1, res.size()-1) : res;
     }
 };
+
+
+
+//////////////////////////////////////
+// do not add '-' unless we meet the next alphabet or numerate
+class Solution {
+public:
+    string licenseKeyFormatting(string S, int K) {
+        int count = 0;
+        string res = "";
+        for(int i = S.size() - 1; i >= 0; i--){
+            if(count == K && S[i] != '-'){
+                res = "-" + res;
+                count = 0;
+            }
+            if(S[i]!='-'){
+                 res=(char)toupper(S[i])+res;
+                 count++;
+            }
+        }
+        return res;
+    }
+};
