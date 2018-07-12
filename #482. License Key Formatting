@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string licenseKeyFormatting(string S, int K) {
+        int l2u = 'a' - 'A', count = 0, i = S.size() - 1;
+        string res = "";
+        while(i >= 0){
+            if(S[i] == '-'){
+                i--;
+                continue;
+            }
+            else if(S[i] >= 'a' && S[i] <= 'z'){
+                S[i] -= l2u;
+                res = S[i] + res;
+                count++;
+                i--;
+            }
+            else{
+                res = S[i] + res;
+                count++;
+                i--;
+            }
+            if (count == K){
+                res = "-" + res;
+                count = 0;
+            }
+        }
+        return res[0] == '-' ? res.substr(1, res.size()-1) : res;
+    }
+};
