@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        unordered_map<string, int> m;
+        string temp1, temp2;
+        int subsets;
+        for(int i = 1; i <= s.size()/2; i++){
+            if(s.size()%i == 0){
+                temp1 = s.substr(0, i);
+                subsets = s.size()/i;
+                int start = i;
+                while(start < s.size()){
+                    if(temp1.compare(s.substr(start, i)) == 0){
+                        start += i;
+                        continue;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                if (start == s.size()) return true;
+            }
+        }
+        return false;
+    }
+};
