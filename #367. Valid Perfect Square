@@ -1,0 +1,19 @@
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        int max_pow = pow(INT_MAX, 0.5);
+        int l = 1, r = min(num/2+2, max_pow), mid;
+        while(l <= r){
+            mid = l + (r-l)/2;
+            if(l*l == num || r*r == num || mid*mid == num) return true;
+            //cout << l << " " << mid << " " << r << endl;
+            if(mid*mid > num){
+                r = mid-1;
+            }
+            else{
+                l = mid + 1;
+            }
+        }
+        return false;
+    }
+};
