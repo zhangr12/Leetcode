@@ -1,3 +1,7 @@
+// 1. for a high dimensional cube, its volumn is minimized when each of its dimension is equal
+// so we put the buckets into a high dim matrix and try to localize the poison one
+// 2. the number of pig is equal to the number of dimensions of the matrix
+// we use each pig to find the index of poison bucket at one of the dimensions
 class Solution {
 public:
     int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
