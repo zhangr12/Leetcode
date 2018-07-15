@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() <= 1) return nums.size();
+        int crt = nums[0], i = 0, j = -1;
+        for(i = 1; i < nums.size(); i++){
+            if(nums[i] == crt){
+                j = i;
+                break;
+            }
+            else{
+                crt = nums[i];
+            }
+        }
+        if(j == -1) return i;
+        for(int i = j+1; i < nums.size(); i++){
+            if (nums[i] != crt){
+                nums[j] = nums[i];
+                crt = nums[i];
+                j++;
+            }
+            else{
+                continue;
+            }
+        }
+        return j;
+    }
+};
