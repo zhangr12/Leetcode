@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int countSegments(string s) {
+        if(s.size() == 0) return 0;
+        int res = 0;
+        for(int i = 1; i < s.size(); i++){
+            if (s[i] == ' ' && s[i-1] != ' ') res++;
+        }
+        // the last one is not ' ' means we need to add 1 to include the last segment
+        return s[s.size() - 1] == ' ' ? res : res + 1;
+    }
+};
