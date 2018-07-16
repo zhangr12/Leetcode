@@ -1,0 +1,37 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ // 1. if it is leaf, check if it's value is equal to sum
+ // 2. if it is, return true, else return false
+ // 3. if it is not leaf
+ // 4. if left and right node both exist, check both left and right path
+ // 5. if not both exist, check the one that exist
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(root == NULL) return false;
+        if(root->left == NULL && root->right == NULL){
+            if(root->val == sum){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        if (root->left != NULL && root->right != NULL){
+            return hasPathSum(root->left, sum - root->val) || hasPathSum(root->right, sum - root->val);
+        }
+        else if(root->left != NULL){
+            return hasPathSum(root->left, sum - root->val);
+        }
+        else{
+            return hasPathSum(root->right, sum - root->val);
+        }
+    }
+};
