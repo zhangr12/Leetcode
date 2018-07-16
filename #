@@ -1,0 +1,81 @@
+// at the very end we need to take care of the element(s) show up at the end of the vector
+// we can also add one more char in the chars(for example (char)34, since all characters have an ASCII value in [35, 126])
+// in that way we do not need to worry about the end element(s). See second solution
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        int i = 1, j = 0, count = 1;
+        char crt = chars[0];
+        for(i; i < chars.size(); i++){
+            if(chars[i] == crt){
+                count++;
+                continue;
+            }
+            else{
+                if(count == 1){
+                    chars[j] = crt;
+                    j++;
+                }
+                else{
+                    chars[j] = crt;
+                    j++;
+                    for(char c:to_string(count)){
+                        chars[j] = c;
+                        j++;
+                    }
+                }
+                crt = chars[i];
+                count = 1;
+            }
+        }
+        if(count == 1){
+            chars[j] = crt;
+            j++;
+        }
+        else{
+            chars[j] = crt;
+            j++;
+            for(char c:to_string(count)){
+                chars[j] = c;
+                j++;
+            }
+        }
+        return j;
+    }
+};
+
+
+////////////////////////////////////////
+// add one more char into chars so that we do not need to take care of the end element(s)
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        int i = 1, j = 0, count = 1;
+        char crt = chars[0];
+        //All characters have an ASCII value in [35, 126].
+        chars.push_back((char)34);
+        for(i; i < chars.size(); i++){
+            if(chars[i] == crt){
+                count++;
+                continue;
+            }
+            else{
+                if(count == 1){
+                    chars[j] = crt;
+                    j++;
+                }
+                else{
+                    chars[j] = crt;
+                    j++;
+                    for(char c:to_string(count)){
+                        chars[j] = c;
+                        j++;
+                    }
+                }
+                crt = chars[i];
+                count = 1;
+            }
+        }
+        return j;
+    }
+};
