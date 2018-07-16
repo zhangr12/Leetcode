@@ -18,3 +18,33 @@ public:
         return low - 1;
     }
 };
+
+
+////////////////////////////////
+// classic (-b + sqrt(b^2-4ac))/(2a) method
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        //(k+1)*k/2 = n
+        //k^2+k = 2*n
+        //k^2+k-2*n = 0
+        return floor((-1 + sqrt(1 + (double)8*n))/2.0);
+    }
+};
+
+
+
+
+////////////////////////////////
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        //(k+1)*k/2 = n
+        //k^2+k = 2*n
+        //k^2+k+1/4 = 2*n+1/4
+        //(k+1/2)^2 = 2*n+1/4
+        //k+1/2 = (2*n+1/4)^0.5
+        //k = (2*n+1/4)^0.5 - 1/2
+        return floor(- 0.5 + sqrt((double)2*n+0.25));
+    }
+};
