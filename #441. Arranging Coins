@@ -1,0 +1,20 @@
+// binary search
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        //(k+1)*k/2 = n
+        //k^2+k = 2*n
+        //k^2+k-2n = 0
+        long long int low = 1, high = n, mid;
+        while(low <= high){
+            mid = low + (high-low)/2;
+            if((mid+1)*mid/2 > n){
+                high = mid - 1;
+            }
+            else{
+                low = mid + 1;
+            }
+        }
+        return low - 1;
+    }
+};
