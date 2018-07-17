@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        // '(', ')', '{', '}', '[' and ']'
+        stack<char> SS;
+        for(char S:s){
+            if(S == '(' || S == '{' || S == '['){
+                SS.push(S);
+            }
+            else{
+                if(SS.empty()){
+                    return false;
+                }
+                else if((S == ')' && SS.top() != '(') || (S == ']' && SS.top() != '[') || (S == '}' && SS.top() != '{')){
+                    return false;
+                }
+                SS.pop();
+            }
+        }
+        return SS.empty() ? true : false;
+    }
+};
