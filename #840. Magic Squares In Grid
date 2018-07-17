@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        if(grid.size() < 3 or grid[0].size() < 3) return 0;
+        int res = 0;
+        for(int i = 1; i < grid.size() - 1; i++){
+            for(int j = 1; j < grid[0].size() - 1; j++){
+                // one observation is that if a matrix is magic matrix, then its center element must be 5 !!!
+                if(grid[i][j] == 5){
+                    vector<vector<int>> temp;
+                    for(int k = -1; k < 2; k++){
+                         vector<int> temp_row;
+                        for(int l = -1; l < 2; l++){
+                            temp_row.push_back(grid[i+k][j+l]);
+                        }
+                        temp.push_back(temp_row);
+                    }
+                    res += helper(temp);
+                }
+            }
+        }
+        return res;
+    }
+    
+    int helper(vector<vector<int>>& m){
+        vector<int> nums(9, 1);
+        // check if 1~9 are all included
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(m[i][j] < 1 || m[i][j] > 9) return 0;
+                if(nums[m[i][j] - 1] == 0) return 0;
+                nums[m[i][j] - 1] = 0;
+            }
+        }
+        // check sum
+        int temp = m[0][0] + m[0][1] + m[0][2];
+        // row sum
+        for (int i = 1; i < 3; i++){
+            if (m[i][0] + m[i][1] + m[i][2] != temp) return 0;
+        }
+        
+        // column sum
+        for (int i = 0; i < 3; i++){
+            if (m[0][i] + m[1][i] + m[2][i] != temp) return 0;
+        }
+        
+        //diagnal sum
+        if(m[0][0] + m[1][1] + m[2][2] != temp || m[0][2] + m[1][1] + m[2][0] != temp) return 0;
+        
+        return 1;
+        
+    }
+    
+};
