@@ -8,15 +8,18 @@ public:
                 SS.push(S);
             }
             else{
+                // not enough left side
                 if(SS.empty()){
                     return false;
                 }
+                // not match
                 else if((S == ')' && SS.top() != '(') || (S == ']' && SS.top() != '[') || (S == '}' && SS.top() != '{')){
                     return false;
                 }
                 SS.pop();
             }
         }
+        // not enough right side
         return SS.empty() ? true : false;
     }
 };
