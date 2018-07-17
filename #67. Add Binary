@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string temp1;
+        if(a.size() < b.size()){
+            temp1 = a;
+            a = b;
+            b = temp1;
+        }
+        // now b is the smaller one
+        int carry = 0, temp;
+        string res = "";
+        for(int i = b.size() - 1, j = a.size() - 1; i >= 0; i--, j--){
+            temp = (int)(b[i] - '0') + (int)(a[j] - '0') + carry;
+            if (temp <= 1){
+                carry = 0;
+                res = to_string(temp) + res;
+            }
+            else{
+                res = to_string(temp%2) + res;
+                carry = 1;
+            }
+        }
+        for(int i = a.size() - b.size() - 1; i >= 0; i--){
+            temp = (int)(a[i] - '0') + carry;
+            if (temp <= 1){
+                carry = 0;
+                res = to_string(temp) + res;
+            }
+            else{
+                res = to_string(temp%2) + res;
+                carry = 1;
+            }
+        }
+        return carry == 0 ? res : "1" + res;
+    }
+};
