@@ -6,6 +6,7 @@ public:
         int i = 0, j = 0, p_i = 0;
         str += ' ';
         string temp;
+        // build map from str to pattern and check whether same words in str map to same char in pattern
         while(j < str.size()){
             while(str[j] != ' ') j++;
             temp = str.substr(i, j-i);
@@ -19,6 +20,7 @@ public:
             }
             p_i++;
         }
+        // now we check chether every char in pattern has been mapped only once
         vector<int> chars(256, 1);
         unordered_map<string, char>::iterator it;
         for(it= m.begin(); it != m.end(); it++){
