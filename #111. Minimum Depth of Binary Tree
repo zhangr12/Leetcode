@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ // BFS solution: once detect a leaf, return the current depth
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        // BFS might be more efficient for this problem
+        if(root == NULL) return 0;
+        queue<TreeNode*> q;
+        q.push(root);
+        int res = 0, level;
+        TreeNode* node;
+        bool reach_leaf = false;
+        while(!q.empty()){
+            res++;
+            level = q.size();
+            for(int i = 0; i < level; i++){
+                node = q.front();
+                q.pop();
+                // check if we reach leaf or not
+                if(node->left == NULL && node->right == NULL){
+                    reach_leaf = true;
+                    break;
+                }
+                if(node->left!=NULL) q.push(node->left);
+                if(node->right!=NULL) q.push(node->right);
+            }
+            if(reach_leaf) return res;
+        }
+    }
+};
+
+
+
+///////////////////////////////////////
+// recursive solution
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+        // if both children exist, search both
+        if (root->left != NULL && root->right != NULL){
+            return 1 + min(minDepth(root->left), minDepth(root->right));
+        }
+        // else search the one that exist
+        else if(root->left != NULL){
+            return 1 + minDepth(root->left);
+        }
+        else{
+            return 1 + minDepth(root->right);
+        }
+    }
+};
+
+
+
+///////////////////////////////////////
+// another recursive solution
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == NULL) return 0;
+        if (root->left != NULL && root->right != NULL){
+            return 1 + min(minDepth(root->left), minDepth(root->right));
+        }
+        else{
+            return 1 + max(minDepth(root->left), minDepth(root->right));
+        }
+    }
+};
