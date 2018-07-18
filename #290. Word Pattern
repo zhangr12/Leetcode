@@ -31,3 +31,36 @@ public:
         return true;
     }
 };
+
+
+
+//////////////////////////////////////////////
+// solution using two maps, use more space but should be a little bit faster than previous one
+// because we do not need to check whether every char in pattern has been mapped only once or not
+// also we do not need to find the key every time
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        if(count(str.begin(), str.end(), ' ') + 1 != pattern.size()) return false;
+        unordered_map<string, int> s2i;
+        unordered_map<char, int> p2i;
+        int i = 0, j = 0, p_i = 0;
+        str += ' ';
+        string temp;
+        // build map from str to pattern and check whether same words in str map to same char in pattern
+        while(j < str.size()){
+            while(str[j] != ' ') j++;
+            temp = str.substr(i, j-i);
+            i = j + 1;
+            j++;
+            if (s2i[temp] != p2i[pattern[p_i]]){
+                return false;
+            }
+            else{
+                s2i[temp] = p2i[pattern[p_i]] = p_i + 1;
+            }
+            p_i++;
+        }
+        return true;
+    }
+};
