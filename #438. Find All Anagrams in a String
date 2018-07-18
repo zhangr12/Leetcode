@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> res, vp(26, 0);
+        if (s.size() < p.size()) return res;
+        // vectorize p
+        for(char P:p) vp[P-'a']++;
+        // put window on s
+        for(int j = 0; j < p.size(); j++){
+            vp[s[j]-'a']--;
+        }
+        int sum = 0;
+        for(int j = 0; j < 26; j++){
+            sum += abs(vp[j]);
+        }
+        if (sum == 0) res.push_back(0);
+        int i = 1;
+        while (i <= s.size() - p.size()){
+            vp[s[i + p.size() - 1]-'a']--;
+            vp[s[i - 1]-'a']++;
+            sum = 0;
+            for(int j = 0; j < 26; j++) sum += abs(vp[j]);
+            //cout << sum << endl;
+            if (sum == 0) res.push_back(i);
+            //cout << i << endl;
+            i++;
+        }
+        return res;
+    }
+};
