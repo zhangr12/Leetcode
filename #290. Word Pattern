@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        if(count(str.begin(), str.end(), ' ') + 1 != pattern.size()) return false;
+        unordered_map<string, char> m;
+        int i = 0, j = 0, p_i = 0;
+        str += ' ';
+        string temp;
+        while(j < str.size()){
+            while(str[j] != ' ') j++;
+            temp = str.substr(i, j-i);
+            i = j + 1;
+            j++;
+            if (m.find(temp) == m.end()){
+                m[temp] = pattern[p_i];
+            }
+            else{
+                if(m[temp] != pattern[p_i]) return false;
+            }
+            p_i++;
+        }
+        vector<int> chars(256, 1);
+        unordered_map<string, char>::iterator it;
+        for(it= m.begin(); it != m.end(); it++){
+            if(chars[it->second] == 0) return false;
+            chars[it->second]--;
+        }
+        // now we are sure pattern and str is one to one and onto we can return true
+        return true;
+    }
+};
