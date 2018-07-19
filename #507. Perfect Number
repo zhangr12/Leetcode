@@ -1,0 +1,12 @@
+class Solution {
+public:
+    bool checkPerfectNumber(int num) {
+        if(num == 1) return false;
+        int end = sqrt(num), sum = 1, temp;
+        for(int i = 2; i <= end; i++){
+            temp = num/i;
+            if(temp*i == num) sum += temp + i;
+        }
+        return sum == num ? true : false;
+    }
+};
