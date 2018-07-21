@@ -1,3 +1,4 @@
+// increase order
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
@@ -25,5 +26,26 @@ public:
             }
             if(exit) return res.substr(0, res.size() - 1);
         }
+    }
+};
+
+
+
+//////////////////////////////
+// decrease order
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        if (strs.size() == 0) return "";
+        string res = strs[0];
+        int j = res.size();
+        for(int i = 1; i < strs.size(); i++){
+            j = min(j, (int)strs[i].size());
+            for(j; j >=0; j--){
+                if(res.substr(0, j) == strs[i].substr(0, j)) break;
+            }
+            if(j == 0) break;
+        }
+        return res.substr(0, j);
     }
 };
