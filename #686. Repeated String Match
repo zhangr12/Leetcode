@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int repeatedStringMatch(string A, string B) {
+        int res;
+        string as = A;
+        for(res = 1; res <= B.size()/A.size() + 2; res++, as+=A){
+            if(as.find(B) != string::npos) return res;
+        }
+        return -1;
+    }
+};
