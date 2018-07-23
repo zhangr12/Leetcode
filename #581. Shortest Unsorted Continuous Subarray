@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        if (nums.size() <= 1) return 0;
+        // record the max and min value whenever it is in descending order
+        // later we first count how many elements are in [min, max], call it t1
+        // then we count how many terms in the start equal to min and how many term at the end equal to max, call it t2
+        // the result equal to t1-t2
+        int temp_min = INT_MAX, temp_max = INT_MIN;
+        for(int i = 1; i < nums.size(); i++){
+            if(nums[i] >= nums[i-1]){
+                continue;
+            }
+            else{
+                if(nums[i-1] > temp_max) temp_max = nums[i-1];
+                if(nums[i] < temp_min) temp_min = nums[i];
+            }
+        }
+        int res = 0;
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] >= temp_min && nums[i] <= temp_max) res++;
+        }
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] == temp_min){
+                res--;
+            }
+            else{
+                break;
+            }
+        }
+        for(int i = nums.size() - 1; i >=0; i--){
+            if(nums[i] == temp_max){
+                res--;
+            }
+            else{
+                break;
+            }
+        }
+        return res;
+    }
+};
