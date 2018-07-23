@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        if(houses.size() == 0) return 0;
+        sort(houses.begin(), houses.end());
+        sort(heaters.begin(), heaters.end());
+        if(heaters.size() == 1){
+            if(houses.size() == 1){
+                return abs(heaters[0] - houses[0]);
+            }
+            else{
+                return max(abs(heaters[0] - houses[0]), abs(heaters[0] - houses[houses.size() - 1]));
+            }
+        }
+        double radiusL, radiusR;
+        // head
+        int crt = 0, temp = 0;
+        radiusR = (heaters[1] - heaters[0])/2.0;
+        while(houses[crt] <= heaters[0] + radiusR && crt < houses.size()){
+            if(abs(heaters[0]-houses[crt]) > temp) temp = abs(heaters[0]-houses[crt]);
+            crt++;
+        }
+        //middle
+        int i;
+        for(i = 1; i < heaters.size() - 1; i++){
+            radiusL = (heaters[i] - heaters[i-1])/2.0;
+            radiusR = (heaters[i+1] - heaters[i])/2.0;
+            while(houses[crt] >= heaters[i] - radiusL && houses[crt] < heaters[i] + radiusR && crt < houses.size()){
+                if(abs(heaters[i] - houses[crt]) > temp) temp = abs(heaters[i]-houses[crt]);
+                crt++;
+            }
+        }
+        
+        //tail
+        radiusL = (heaters[i] - heaters[i-1])/2.0;
+        while(houses[crt] >= heaters[i] - radiusL && crt < houses.size()){
+            if(abs(heaters[i]-houses[crt]) > temp) temp = abs(heaters[i]-houses[crt]);
+            crt++;
+        }
+        
+        return temp;
+    }
+};
