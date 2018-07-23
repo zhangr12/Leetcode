@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int findNthDigit(int n) {
+        // 9*1, 90*2, 900*3, 9000*4, 90000*5, ...
+        long int i = 9, j = 1, temp, prev;
+        temp = i*j;
+        while(temp < n){
+            i *= 10;
+            j++;
+            prev = temp;
+            temp += i*j;
+        }
+        string num = to_string(pow(10, j-1) + (n-prev-1)/j);
+        int a = num[(n-prev-1)%j] - '0';
+        return a;
+    }
+};
