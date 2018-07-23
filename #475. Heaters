@@ -4,6 +4,7 @@ public:
         if(houses.size() == 0) return 0;
         sort(houses.begin(), houses.end());
         sort(heaters.begin(), heaters.end());
+        // if there is only one heater, it must cover all the houses
         if(heaters.size() == 1){
             if(houses.size() == 1){
                 return abs(heaters[0] - houses[0]);
@@ -12,7 +13,12 @@ public:
                 return max(abs(heaters[0] - houses[0]), abs(heaters[0] - houses[houses.size() - 1]));
             }
         }
+        // if there are more than one heaters, then the left cover radius of each heater is at most half of the distance with its left adjacent heater, same thing for right cover radius
         double radiusL, radiusR;
+        // we need to treat left most and right most heater separately since they only have one side radius
+        // all the heaters in the middle should cover all the houses in the range [heater - left radius, heater + right radius)
+        // we calculate the coverage radius for each heater, and at the very end we return the maximum value among these coverage redius
+        
         // head
         int crt = 0, temp = 0;
         radiusR = (heaters[1] - heaters[0])/2.0;
