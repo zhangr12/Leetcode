@@ -1,3 +1,4 @@
+// Binary search
 class Solution {
 public:
     int mySqrt(int x) {
@@ -13,5 +14,23 @@ public:
             }
         }
         return low - 1;
+    }
+};
+
+
+//////////////////////////////////
+// Binary search: Newton's Method
+class Solution {
+public:
+    int mySqrt(int x) {
+        // n^2 - x
+        // 2n
+        double n = 1, m;
+        while(true){
+            m = n - (n*n-x)/(2*n);
+            if(abs(m-n)<0.0000001) break;
+            n = m;
+        }
+        return n;
     }
 };
