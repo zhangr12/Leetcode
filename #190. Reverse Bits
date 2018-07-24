@@ -1,0 +1,36 @@
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        vector<int> temp(32, 0);
+        vector<long int> tp{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824, 2147483648};
+        uint32_t res = 0;
+        int i = 0;
+        while(n){
+            temp[i] = n%2;
+            n /= 2;
+            i++;
+        }
+        for(int j = 31; j >= 0; j--) res += tp[j]*temp[31-j];
+        return res;
+    }
+};
+
+
+//////////////////////////////////
+// store tp as const vector<int>
+class Solution {
+public:
+    const vector<long int> tp{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824, 2147483648};
+    uint32_t reverseBits(uint32_t n) {
+        vector<int> temp(32, 0);
+        uint32_t res = 0;
+        int i = 0;
+        while(n){
+            temp[i] = n%2;
+            n /= 2;
+            i++;
+        }
+        for(int j = 31; j >= 0; j--) res += tp[j]*temp[31-j];
+        return res;
+    }
+};
