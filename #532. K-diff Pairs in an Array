@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int findPairs(vector<int>& nums, int k) {
+        if(nums.size() <= 1) return 0;
+        sort(nums.begin(), nums.end());
+        int left = 0, res = 0, prevl = INT_MIN, prevr;
+        while(left < nums.size() - 1){
+            if(nums[left] == prevl){
+                left++;
+                continue;
+            }
+            prevl = nums[left];
+            prevr = INT_MAX;
+            for(int i = left + 1; i < nums.size(); i++){
+                if(nums[i] - nums[left] > k) break;
+                if(nums[i] - nums[left] == k && prevr != nums[i]){
+                    //cout << nums[i] << " " << nums[left] << endl;
+                    res++;
+                    prevr = nums[i];
+                }
+            }
+            left++;
+        }
+        return res;
+    }
+};
