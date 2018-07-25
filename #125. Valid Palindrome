@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i = 0, j = s.size() - 1;
+        while(i < j){
+            // if not alphanumeric, move forward
+            if(s[i] < 48 || (s[i] > 57 && s[i] < 65) || (s[i] > 90 && s[i] < 97) || s[i] > 122){
+                i++;
+                continue;
+            }
+            if(s[j] < 48 || (s[j] > 57 && s[j] < 65) || (s[j] > 90 && s[j] < 97) || s[j] > 122){
+                j--;
+                continue;
+            }
+            // if alphabet, convert lower case to upper case
+            if(s[i] >= 65 && s[i] <= 90) s[i] += 32;
+            if(s[j] >= 65 && s[j] <= 90) s[j] += 32;
+            if(s[i] != s[j]){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+};
