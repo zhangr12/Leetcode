@@ -10,12 +10,17 @@ public:
                 continue;
             }
             else{
+                // we use count to count the number of different places
                 count++;
+                // more than two different places, return false
                 if(count > 2) return false;
+                // when count == 1
                 if(first == -1){
                     first = i;
                 }
+                // when count == 2
                 else{
+                    // check if we can swap two letters to make A equal to B
                     if(A[first] == B[i] && A[i] == B[first]){
                         continue;
                     }
@@ -25,6 +30,7 @@ public:
                 }
             }
         }
+        // when count == 0, it still can be true if the string contains duplicate characters, we can swap the two duplicate letters and still get two identical strings
         if(count == 0){
             unordered_map<char, int>::iterator it;
             for(it = m.begin(); it != m.end(); it++){
