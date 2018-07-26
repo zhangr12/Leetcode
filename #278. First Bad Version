@@ -17,3 +17,26 @@ public:
         return i > n ? n : i;
     }
 };
+
+
+////////////////////////////////
+// we can reverse the condition and still get same result
+// Forward declaration of isBadVersion API.
+bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int i = 1, j = n, mid;
+        while(i <= j){
+            mid = i + (j-i)/2;
+            if(!isBadVersion(mid)){
+                i = mid + 1;
+            }
+            else{
+                j = mid - 1;
+            }
+        }
+        return i > n ? n : i;
+    }
+};
