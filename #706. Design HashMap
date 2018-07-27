@@ -1,0 +1,96 @@
+class MyHashMap {
+public:
+    vector<int> v;
+    /** Initialize your data structure here. */
+    MyHashMap() {
+        
+    }
+    
+    /** value will always be non-negative. */
+    void put(int key, int value) {
+        if(key >= v.size()){
+            for(int i = v.size(); i <= key; i++) v.push_back(-1);
+        }
+        v[key] = value;
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    int get(int key) {
+        if(key >= v.size()) return -1;
+        return v[key];
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    void remove(int key) {
+        if(key < v.size()) v[key] = -1;
+    }
+};
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */
+ 
+ 
+ 
+ ///////////////////////////////
+ // slow solution
+ class MyHashMap {
+public:
+    vector<int> k, v;
+    /** Initialize your data structure here. */
+    MyHashMap() {
+        
+    }
+    
+    /** value will always be non-negative. */
+    void put(int key, int value) {
+        if(k.size() == 0){
+            k.push_back(key);
+            v.push_back(value);
+        }
+        else{
+            int i = 0;
+            for(; i < k.size(); i++){
+                if(k[i] == key) break;
+            }
+            if(i == k.size()){
+                k.push_back(key);
+                v.push_back(value);
+            }
+            else{
+                v[i] = value;
+            }
+        }
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    int get(int key) {
+        int i = 0;
+        for(; i < k.size(); i++){
+            if (k[i] == key) return v[i];
+        }
+        return -1;
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    void remove(int key) {
+        for(int i = 0; i < k.size(); i++){
+            if(k[i] == key){
+                k.erase(k.begin() + i);
+                v.erase(v.begin() + i);
+            }
+        }
+    }
+};
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */
