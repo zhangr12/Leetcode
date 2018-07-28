@@ -1,0 +1,165 @@
+class Solution {
+public:
+    int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
+        // key question: how can we know whether the robot is moving toward an obstacle or not?
+        // need to find an efficient way to search through obstacles
+        map<int, set<int>> h, v;
+        for(auto ob : obstacles){
+            // move verticle, search
+            h[ob[1]].insert(ob[0]);
+            v[ob[0]].insert(ob[1]);
+        }
+        int res = 0;
+        vector<int> pos(2, 0), facing(2, 0), nxt_pos(2, 0);
+        facing[1] = 1;
+        
+        set<int>::iterator it;
+        set<int> temp;
+        
+        for(int c : commands){
+            // adjust facing
+            if(c < 0){
+                if (c == -1){
+                    if(facing[0] == 0){
+                        if(facing[1] == 1){
+                            facing[0] = 1;
+                            facing[1] = 0;
+                        }
+                        else if(facing[1] == -1){
+                            facing[0] = -1;
+                            facing[1] = 0;
+                        }
+                    }
+                    else if(facing[0] == 1){
+                        facing[0] = 0;
+                        facing[1] = -1;
+                    }
+                    else{
+                        facing[0] = 0;
+                        facing[1] = 1;
+                    }
+                }
+                else if(c == -2){
+                    if(facing[0] == 0){
+                        if(facing[1] == 1){
+                            facing[0] = -1;
+                            facing[1] = 0;
+                        }
+                        else if(facing[1] == -1){
+                            facing[0] = 1;
+                            facing[1] = 0;
+                        }
+                    }
+                    else if(facing[0] == 1){
+                        facing[0] = 0;
+                        facing[1] = 1;
+                    }
+                    else{
+                        facing[0] = 0;
+                        facing[1] = -1;
+                    }
+                }
+            }
+            // move!
+            else{
+                // ideally, this should be the next position
+                nxt_pos[0] = pos[0]+c*facing[0];
+                nxt_pos[1] = pos[1]+c*facing[1];
+                //cout << facing[0] << " " << facing[1] << endl;
+                //cout << nxt_pos[0] << " " << nxt_pos[1] << endl;
+                // check if we have obstacles on the path
+                // if moving horizontally, check if x exist in h
+                if(facing[1] == 0){
+                    if(h.find(pos[1]) == h.end()){
+                        pos[0] = nxt_pos[0];
+                        pos[1] = nxt_pos[1];
+                    }
+                    else{
+                        if(facing[0] == 1){
+                            temp = h[pos[1]];
+                            it = temp.lower_bound(pos[0]);
+                            if(it == temp.end() || *(it) - 1 < pos[0]){
+                                pos[0] = nxt_pos[0];
+                                pos[1] = nxt_pos[1];
+                            }
+                            else{
+                                pos[0] = min(nxt_pos[0], *it - 1);
+                                pos[1] = nxt_pos[1];
+                            }
+                        }
+                        else{
+                            temp = h[pos[1]];
+                            it = temp.upper_bound(pos[0]);
+                            if(it == temp.begin()){
+                                pos[0] = nxt_pos[0];
+                                pos[1] = nxt_pos[1];
+                            }
+                            it--;
+                            //if(it == temp.end()){
+                            //    pos[0] = max(nxt_pos[0], min(*(it) + 1, pos[0]));
+                            //    pos[1] = nxt_pos[1];
+                            //}
+                            //else{
+                            //cout << nxt_pos[0] << " " << *(it) + 1 << " " << pos[0] << endl;
+                            if(*(it) < nxt_pos[0] || *(it) + 1 > pos[0]){
+                                pos[0] = nxt_pos[0];
+                            }
+                            else{
+                                pos[0] = *(it) + 1;
+                            }
+                            pos[1] = nxt_pos[1];
+                        }
+                    }
+                }
+                else if(facing[0] == 0){
+                    if(v.find(pos[0]) == v.end()){
+                        pos[0] = nxt_pos[0];
+                        pos[1] = nxt_pos[1];
+                    }
+                    else{
+                        if(facing[1] == 1){
+                            temp = v[pos[0]];
+                            it = temp.lower_bound(pos[1]);
+                            //cout << nxt_pos[1] << " " << *(it) - 1 << " " << pos[1] << endl;
+                            if(it == temp.end() || *(it) - 1 < pos[1]){
+                                pos[0] = nxt_pos[0];
+                                pos[1] = nxt_pos[1];
+                            }
+                            else{
+                                pos[0] = nxt_pos[0];
+                                pos[1] = min(nxt_pos[1], *it - 1);
+                            }
+                        }
+                        else{
+                            temp = v[pos[0]];
+                            it = temp.upper_bound(pos[1]);
+                            if(it == temp.begin()){
+                                pos[0] = nxt_pos[0];
+                                pos[1] = nxt_pos[1];
+                            }
+                            it--;
+                            //if(it == temp.end()){
+                            //    pos[0] = nxt_pos[0];
+                            //    pos[1] = max(nxt_pos[1], min(*(it) + 1, pos[1]));
+                            //}
+                            //else{
+                            //cout << nxt_pos[1] << " " << *(it) + 1 << " " << pos[1] << endl;
+                            pos[0] = nxt_pos[0];
+                            if(*(it) < nxt_pos[1] || *(it) + 1 > pos[1]){
+                                pos[1] = nxt_pos[1];
+                            }
+                            else{
+                                pos[1] = *(it) + 1;
+                            }
+                            //}
+                        }
+                    }
+                }
+                //cout << pos[0] << " " << pos[1] << endl;
+            }
+            res = max(res, pos[0]*pos[0]+pos[1]*pos[1]);
+            //cout << res << endl;
+        }
+        return res;
+    }
+};
