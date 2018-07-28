@@ -26,3 +26,27 @@ public:
  * obj.remove(key);
  * bool param_3 = obj.contains(key);
  */
+
+
+///////////////////////////////////
+//  bool array is faster than vector
+class MyHashSet {
+public:
+    /** Initialize your data structure here. */
+    bool h[1000001] = {false};
+    MyHashSet() {
+    }
+    
+    void add(int key) {
+        h[key] = true;
+    }
+    
+    void remove(int key) {
+        h[key] = false;
+    }
+    
+    /** Returns true if this set contains the specified element */
+    bool contains(int key) {
+        return h[key];
+    }
+};
