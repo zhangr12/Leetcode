@@ -1,0 +1,76 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ // this method is better than the second one
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        return maxTree(nums, 0, nums.size() - 1);
+    }
+    
+    // do not copy the vector, instead, pass the reference of the vector to function along with the start and end point of the sub vector
+    TreeNode* maxTree(vector<int>& nums, int start, int end){
+        if(start > end) return NULL;
+        int max_idx, maxNum = INT_MIN;
+        for(int i = start; i <= end; i++){
+            if (nums[i] > maxNum){
+                max_idx = i;
+                maxNum = nums[i];
+            }
+        }
+        TreeNode* root = new TreeNode(maxNum);
+        root->left = maxTree(nums, start, max_idx - 1);
+        root->right = maxTree(nums, max_idx+1, end);
+        return root;
+    }
+};
+
+
+////////////////////////////////////////
+// recursive method
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        int maxIdx = indexMax(nums);
+        TreeNode* root = new TreeNode(nums[maxIdx]);
+        if(maxIdx == 0){
+            root->left = NULL;
+        }
+        else{
+            vector<int> temp1;
+            // copy the left sub vector
+            for(int i = 0; i < maxIdx; i++) temp1.push_back(nums[i]);
+            root->left = constructMaximumBinaryTree(temp1);
+        }
+        if(maxIdx == nums.size() - 1){
+            root->right = NULL;
+        }
+        else{
+            vector<int> temp2;
+            // copy the right sub vector
+            for(int i = maxIdx + 1; i < nums.size(); i++) temp2.push_back(nums[i]);
+            root->right = constructMaximumBinaryTree(temp2);
+        }
+        return root;
+    }
+    
+    
+    int indexMax(vector<int>& tempNums){
+        int max_idx = 0, maxNum = tempNums[0];
+        for(int i = 1; i < tempNums.size(); i++){
+            if (tempNums[i] > maxNum){
+                max_idx = i;
+                maxNum = tempNums[i];
+            }
+        }
+        return max_idx;
+    }
+    
+    
+};
