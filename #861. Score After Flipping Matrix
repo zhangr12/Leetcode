@@ -1,0 +1,43 @@
+//if the leading bit is 0 --> toggle it.
+//e.g. [0,0,1,1] --> [1,1,0,0] value is from 3 to 12
+//Let the leading bit is 1.
+
+//After all of the leading bit is 1, process each col by col.
+//Toggle it if the number of 0s is more than 1s.
+
+// the greedy method works because the importance of bit is increasing from right to left, so we need to take care of the important nit first
+class Solution {
+public:
+    int matrixScore(vector<vector<int>>& A) {
+        int row = A.size(), col = A[0].size();
+        // if the leading number of any row is 0, toggling this row
+        for(int i = 0; i < row; i++){
+            if(A[i][0] == 0){
+                for(int j = 0; j < col; j++){
+                    A[i][j] ^= 1;
+                }
+            }
+        }
+        // if the number of zeros in current column is greater than the number of 1s, toggle current column
+        int count;
+        for(int j = 1; j < col; j++){
+            count = 0;
+            for(int i = 0; i < row; i++){
+                if(A[i][j] == 0) count++;
+            }
+            if(count > row/2){
+                for(int i = 0; i < row; i++){
+                    A[i][j] ^= 1;
+                }
+            }
+        }
+        // calculate result
+        vector<int> pow_2;
+        for(int i = 0; i < col; i++) pow_2.push_back(pow(2, col-i-1));
+        int res = 0;
+        for(int i = 0; i < row; i++){
+            for (int j = 0; j < col; j++) res += A[i][j]*pow_2[j];
+        }
+        return res;
+    }
+};
