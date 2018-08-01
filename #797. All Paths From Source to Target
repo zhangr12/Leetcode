@@ -1,0 +1,32 @@
+// dfs
+class Solution {
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        vector<vector<int>> res;
+        int target = graph.size() - 1;
+        if(graph.size() == 0) return res;
+        stack<vector<int>> s;
+        vector<int> temp;
+        temp.push_back(0);
+        s.push(temp);
+        // s would become empty when all the end-node combination has been explored
+        while(!s.empty()){
+            temp = s.top();
+            s.pop();
+            // push temp to res if it has reached the end-node
+            if(temp.back() == target){
+                res.push_back(temp);
+                continue;
+            }
+            //if(graph[temp.back()].size() == 0) continue;
+            // explore the next node
+            for(int i = 0; i < graph[temp.back()].size(); i++){
+                vector<int> temp1 = temp;
+                temp1.push_back(graph[temp.back()][i]);
+                // otherwise, push it back to s to keep exploring the path in next round
+                s.push(temp1);
+            }
+        }
+        return res;
+    }
+};
