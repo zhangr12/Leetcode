@@ -20,7 +20,7 @@ public:
                 continue;
             }
             // if its already the end of a path and we do not reach the end-node, then we abandon the current path
-            // the for loop will skip the path which does not have desired end-node
+            // the for loop will skip the path which does not have desired end-node, since graph[temp.back()].size() will be 0 for those path
             // explore the next node
             for(int i = 0; i < graph[temp.back()].size(); i++){
                 vector<int> temp1 = temp;
