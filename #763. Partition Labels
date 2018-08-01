@@ -1,3 +1,31 @@
+//First pass we record the last position for each letter. Second pass we keep the maximum position of the letters we have seen so far. 
+//If the pointer exceeds the maximum position, we found the part.
+class Solution {
+public:
+    vector<int> partitionLabels(string S) {
+        vector<int> res;
+        if(S.size() == 0) return res;
+        vector<int> v(26, 0);
+        for(int i = 0; i < S.size(); i++) v[S[i] - 'a'] = max(v[S[i] - 'a'], i);
+        int upper_bound = 0, lower_bound = 0;
+        for(int i = 0; i < S.size(); i++){
+            if(i > upper_bound){
+                res.push_back(upper_bound - lower_bound + 1);
+                upper_bound = max(upper_bound, v[S[i] - 'a']);
+                lower_bound = i;
+            }
+            else{
+                upper_bound = max(upper_bound, v[S[i] - 'a']);
+            }
+        }
+        res.push_back(upper_bound - lower_bound + 1);
+        return res;
+    }
+};
+
+
+
+//////////////////////////////
 class Solution {
 public:
     vector<int> partitionLabels(string S) {
