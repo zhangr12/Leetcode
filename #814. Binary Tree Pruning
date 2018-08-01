@@ -1,0 +1,23 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* pruneTree(TreeNode* root) {
+        // if root is NULL already, return NULL
+        if(root == NULL) return NULL;
+        // check left node
+        if(root->left != NULL) root->left = pruneTree(root->left);
+        // check right node
+        if(root->right != NULL) root->right = pruneTree(root->right);
+        // check current node, if its children has been pruned, then remove current node
+        if(root->val == 0 && root->left == NULL && root->right == NULL) return NULL;
+        return root;
+    }
+};
