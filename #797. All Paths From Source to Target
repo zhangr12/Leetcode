@@ -5,6 +5,7 @@ public:
         vector<vector<int>> res;
         int target = graph.size() - 1;
         if(graph.size() == 0) return res;
+        // use stack to do DFS
         stack<vector<int>> s;
         vector<int> temp;
         temp.push_back(0);
@@ -18,7 +19,8 @@ public:
                 res.push_back(temp);
                 continue;
             }
-            //if(graph[temp.back()].size() == 0) continue;
+            // if its already the end of a path and we do not reach the end-node, then we abandon the current path
+            // the for loop will skip the path which does not have desired end-node
             // explore the next node
             for(int i = 0; i < graph[temp.back()].size(); i++){
                 vector<int> temp1 = temp;
