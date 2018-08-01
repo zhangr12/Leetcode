@@ -1,0 +1,62 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string S) {
+        vector<int> res;
+        if(S.size() == 0) return res;
+        map<char, vector<int>> m;
+        for(int i = 0; i < S.size(); i++){
+            if(m.find(S[i]) == m.end()){
+                m[S[i]] = {i, i};
+            }
+            else{
+                // update upper bound
+                m[S[i]][1] = i;
+            }
+        }
+        map<char, vector<int>>::iterator it;
+        int l, r, count = 0, prev_size, m_fixed_size = m.size();
+        map<int, int> m2;
+        cout << m.size() << endl;
+        while(count < m_fixed_size){
+            it = m.begin();
+            l = it->second[0];
+            r = it->second[1];
+            prev_size = m.size();
+            m.erase(it);
+            count++;
+            while(prev_size != m.size()){
+                prev_size = m.size();
+                for(it = m.begin(); it != m.end(); it++){
+                    if(it->second[0] < l && it->second[1] > l && it->second[1] < r){
+                        l = it->second[0];
+                        m.erase(it);
+                        count++;
+                        break;
+                    }
+                    else if(it->second[0] > l && it->second[0] < r && it->second[1] > r){
+                        r = it->second[1];
+                        m.erase(it);
+                        count++;
+                        break;
+                    }
+                    else if(it->second[0] < l && it->second[1] > r){
+                        l = it->second[0];
+                        r = it->second[1];
+                        m.erase(it);
+                        count++;
+                        break;
+                    }
+                    else if(it->second[0] > l && it->second[1] < r){
+                        m.erase(it);
+                        count++;
+                        break;
+                     }
+                }
+            }
+            m2[l] = r - l + 1;
+        }
+        map<int, int>::iterator it2;
+        for(it2 = m2.begin(); it2 != m2.end(); it2++) res.push_back(it2->second);
+        return res;
+    }
+};
