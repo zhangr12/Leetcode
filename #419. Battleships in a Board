@@ -1,0 +1,42 @@
+//BFS method
+class Solution {
+public:
+    int countBattleships(vector<vector<char>>& board) {
+        //BFS
+        // 'L': on list; 'V': visited
+        int res = 0, row = board.size(), col = board[0].size();
+        pair<int, int> temp;
+        for(int i = 0; i < board.size(); i++){
+            for(int j = 0; j < board[0].size(); j++){
+                if(board[i][j] != 'X') continue;
+                res++;
+                queue<pair<int, int>> q;
+                q.push(make_pair(i,j));
+                board[i][j] = 'L';
+                // BFS
+                while(!q.empty()){
+                    temp = q.front();
+                    q.pop();
+                    board[temp.first][temp.second] = 'V';
+                    if(temp.first-1 >= 0 && board[temp.first-1][temp.second] == 'X'){
+                        q.push(make_pair(temp.first-1, temp.second));
+                        board[temp.first-1][temp.second] = 'L';
+                    }
+                    if(temp.first+1 < row && board[temp.first+1][temp.second] == 'X'){
+                        q.push(make_pair(temp.first+1, temp.second));
+                        board[temp.first+1][temp.second] = 'L';
+                    }
+                    if(temp.second-1 >= 0 && board[temp.first][temp.second-1] == 'X'){
+                        q.push(make_pair(temp.first, temp.second-1));
+                        board[temp.first][temp.second-1] = 'L';
+                    }
+                    if(temp.second+1 < col && board[temp.first][temp.second+1] == 'X'){
+                        q.push(make_pair(temp.first, temp.second+1));
+                        board[temp.first][temp.second+1] = 'L';
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
