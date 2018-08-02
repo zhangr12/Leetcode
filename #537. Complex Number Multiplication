@@ -1,0 +1,23 @@
+class Solution {
+public:
+    string complexNumberMultiply(string a, string b) {
+        vector<int> inta, intb;
+        inta = helper(a);
+        intb = helper(b);
+        return to_string(inta[0]*intb[0] - inta[1]*intb[1]) + "+" + to_string(inta[0]*intb[1] + inta[1]*intb[0]) + "i";
+    }
+    
+    vector<int> helper(string a){
+        vector<int> res;
+        int start = 0, i;
+        string temp;
+        for(i = 0; i < a.size(); i++){
+            if(a[i] == '+'){
+                res.push_back(stoi(a.substr(start, i)));
+                break;
+            }
+        }
+        res.push_back(stoi(a.substr(i+1, a.size() - (i+1))));
+        return res;
+    }
+};
