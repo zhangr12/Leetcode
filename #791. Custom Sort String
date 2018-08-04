@@ -1,0 +1,22 @@
+class Solution {
+public:
+    string customSortString(string S, string T) {
+        unordered_map<char, int> m;
+        string other = "";
+        for(char s:S) m[s] = 0;
+        for(char t:T){
+            if(m.find(t) != m.end()){
+                m[t]++;
+            }
+            else{
+                other += t;
+            }
+        }
+        //sort(other.begin(), other.end());
+        string res;
+        for(char s:S){
+            for(int i = 0; i < m[s]; i++) res += s;
+        }
+        return res + other;
+    }
+};
