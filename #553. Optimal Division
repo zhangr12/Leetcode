@@ -1,0 +1,17 @@
+// X1/X2/X3/X4.... is equal to X1/X2*Y, so the idea is to maximize Y
+// we notice that no matter where we put the brackets, X1 always goes to the numerator and X2 is always goes to the denominator
+// so the maximum of Y is in the form X3*X4*X5... which is comes from X1/(X2/X3/X4...) = X1*X3*X4.../X2
+class Solution {
+public:
+    string optimalDivision(vector<int>& nums) {
+        string res;
+        res += to_string(nums[0]);
+        for(int i = 1; i < nums.size(); i++){
+            res +=  "/" + to_string(nums[i]);
+        }
+        if(nums.size() < 3) return res;
+        res.insert(to_string(nums[0]).size() + 1, "(");
+        res += ")";
+        return res;
+    }
+};
