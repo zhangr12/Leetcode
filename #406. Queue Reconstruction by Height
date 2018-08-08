@@ -31,3 +31,27 @@ public:
         return res;
     }
 };
+
+
+//////////////////////////////////
+// solution with same idea but do not use map
+class Solution {
+public:
+    static bool compare(const pair<int, int>& p1, const pair<int, int>& p2){
+        if(p1.first > p2.first){
+            return true;
+        }
+        else if(p1.first == p2.first && p1.second < p2.second){
+            return true;
+        }
+        return false;
+    }
+    
+    vector<pair<int, int>> reconstructQueue(vector<pair<int, int>>& people) {
+        // sort people in proper order as mentioned above
+        sort(people.begin(), people.end(), compare);
+        vector<pair<int, int>> res;
+        for(auto person:people) res.insert(res.begin() + person.second, person);
+        return res;
+    }
+};
