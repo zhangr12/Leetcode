@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int res = 0;
+        // it has s.size() centers
+        for(int i = 0; i < s.size(); i++){
+            // for each center, we check how many palindromics it can form
+            // the palindromic contains even number chars
+            for(int j = 1; i-j+1 >= 0 && i+j < s.size(); j++){
+                if(s[i-j+1] == s[i+j]){
+                    res++;
+                }
+                else{
+                    break;
+                }
+            }
+            // the palindromic contains odd number chars
+            for(int j = 0; i-j >= 0 && i+j<s.size(); j++){
+                if(s[i-j] == s[i+j]){
+                    res++;
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+};
