@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& A) {
+        // if the total length of A is less than 3, just return 0(since the minimum length of arithmetic slices is 3)
+        if (A.size() < 3) return 0;
+        int res = 0, count = 1, crt_diff = A[1] - A[0];
+        for(int i = 2; i < A.size(); i++){
+            if(A[i] - A[i-1] == crt_diff){
+                // count how many same difference do we have between two adjacent integers
+                // i.e. when count = 5, it means we have 6 adjacent numbers satisfies the arithematics slice condition
+                count++;
+            }
+            else{
+                crt_diff = A[i] - A[i-1];
+                // given "count", the total number of arithematic slices is 1 + 2 + 3 + ... + count - 1 = count*(count-1)/2
+                res += count*(count - 1)/2;
+                count = 1;
+            }
+        }
+        // don't forget the last part in A
+        res += count*(count - 1)/2;
+        return res;
+    }
+};
