@@ -16,6 +16,7 @@ public:
         vector<int> res(temperatures.size(), 0);
         int j;
         for(int i = temperatures.size() - 2; i >= 0; i--){
+            // let j point to the next day
             j = i + 1;
             while(true){
                 if(temperatures[i] < temperatures[j]){
@@ -26,9 +27,8 @@ public:
                     res[i] = 0;
                     break;
                 }
-                else{
-                    j += res[j];
-                }
+                // move j to the next possible day
+                j += res[j];
             }
         }
         return res;
