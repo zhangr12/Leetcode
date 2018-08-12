@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<vector<string>> findDuplicate(vector<string>& paths) {
+        unordered_map<string, vector<string>> m;
+        int i, j;
+        string temp_path, temp_content, temp_file;
+        for(auto path: paths){
+            i = 0;
+            j = 0;
+            // find path name
+            while(path[j] != ' '){
+                j++;
+            }
+            temp_path = path.substr(i, j-i);
+            i = j + 1;
+            j = i;
+            // find file name and content
+            while(j < path.size()){
+                while(path[j] != '(') j++;
+                temp_file = path.substr(i, j-i);
+                i = j + 1;
+                j = i;
+                while(path[j] != ')') j++;
+                temp_content = path.substr(i, j-i);
+                i = j + 2;
+                j = i;
+                // write info into m
+                if(m.find(temp_content) == m.end()){
+                    vector<string> temp;
+                    temp.push_back(temp_path + "/" + temp_file);
+                    m[temp_content] = temp;
+                }
+                else{
+                    m[temp_content].push_back(temp_path + "/" + temp_file);
+                }
+            }
+        }
+        vector<vector<string>> res;
+        // iterate through m, if the size of value is greater than 1, this means we find with duplicate content
+        for(auto it = m.begin(); it != m.end(); it++){
+            if(it->second.size() > 1){
+                res.push_back(it->second);
+            }
+        }
+        return res;
+    }
+};
