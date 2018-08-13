@@ -10,6 +10,35 @@
 class Solution {
 public:
     unordered_map<int, int> m;
+    int max_num = INT_MIN;
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        vector<int> res;
+        if(root == NULL) return res;
+        startFrom(root);
+        for(auto it = m.begin(); it != m.end(); it++){
+            if(it->second == max_num) res.push_back(it->first);
+        }
+        return res;
+    }
+    
+    int startFrom(TreeNode* node){
+        if(node == NULL){
+            return 0;
+        }
+        int temp = node->val + startFrom(node->left) + startFrom(node->right);
+        m[temp]++;
+        if(m[temp] > max_num) max_num = m[temp];
+        return temp;
+    }
+};
+
+
+
+/////////////////////////////////////
+// old version, same idea but not concise as the first one
+class Solution {
+public:
+    unordered_map<int, int> m;
     vector<int> findFrequentTreeSum(TreeNode* root) {
         vector<int> res;
         if(root == NULL) return res;
