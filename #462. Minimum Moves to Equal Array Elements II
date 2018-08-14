@@ -1,3 +1,17 @@
+// use median as pivot
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        // choose median as pivot
+        sort(nums.begin(), nums.end());
+        int res = 0, n = nums.size();
+        for(int i = 0; i < n/2; i++) res += nums[n-i-1] - nums[i];
+        return res;
+    }
+};
+
+
+
 // brutal force
 class Solution {
 public:
