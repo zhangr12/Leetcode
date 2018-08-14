@@ -1,0 +1,20 @@
+// brutal force
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        long int pivot = 0, step, n = nums.size(), min_step = INT_MAX;
+        while(pivot < n){
+            step = 0;
+            for(int i = 0; i < pivot; i++){
+                step += nums[pivot] - nums[i];
+            }
+            for(int i = pivot+1; i < n; i++){
+                step += nums[i] - nums[pivot];
+            }
+            if(step < min_step) min_step = step;
+            pivot++;
+        }
+        return min_step;
+    }
+};
