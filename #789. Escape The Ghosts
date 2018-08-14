@@ -1,3 +1,5 @@
+// as long as the ghosts is closer to the target, we return false
+// otherwise, return true
 class Solution {
 public:
     bool escapeGhosts(vector<vector<int>>& ghosts, vector<int>& target) {
