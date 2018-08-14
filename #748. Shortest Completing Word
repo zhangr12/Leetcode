@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string shortestCompletingWord(string licensePlate, vector<string>& words) {
+        // create unordered_map m
+        unordered_map<char, int> m;
+        for(char c:licensePlate){
+            if(c >= 65 && c <= 90){
+                m[c+32]++;
+            }
+            else if(c >= 97 && c <= 122){
+                m[c]++;
+            }
+        }
+        int min_len = INT_MAX;
+        string res;
+        for(auto word:words){
+            // check if word has smaller length
+            if(word.size() < min_len){
+                unordered_map<char, int> m_temp = m;
+                for(char letter:word){
+                    if(m_temp.find(letter) != m_temp.end()) m_temp[letter]--;
+                }
+                // check if we have all the chars that we need
+                bool is_res = true;
+                for(auto it = m_temp.begin(); it != m_temp.end(); it++){
+                    if(it->second > 0){
+                        is_res = false;
+                        break;
+                    }
+                }
+                if(is_res){
+                    min_len = word.size();
+                    res = word;
+                }
+            }
+        }
+        return res;
+    }
+};
