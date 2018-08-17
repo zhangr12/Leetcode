@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        TreeNode *crt = root, *node = new TreeNode(val);
+        if(!crt) return node;
+        while(crt){
+            if(crt->val > val){
+                if(!crt->left){
+                    crt->left = node;
+                    break;
+                }
+                else{
+                    crt = crt->left;
+                }
+            }
+            else{
+                if(!crt->right){
+                    crt->right = node;
+                    break;
+                }
+                else{
+                    crt = crt->right;
+                }
+            }
+        }
+        return root;
+    }
+};
+
+/////////////////////////////////
+// iterative method
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        if(root == NULL){
+            TreeNode* node = new TreeNode(val);
+            return node;
+        }
+        else if(root->val > val){
+            root->left = insertIntoBST(root->left, val);
+        }
+        else{
+            root->right = insertIntoBST(root->right, val);
+        }
+        return root;
+    }
+};
