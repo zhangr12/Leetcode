@@ -1,0 +1,23 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* subtreeWithAllDeepest(TreeNode* root) {
+        return deep(root).second;
+    }
+    
+    pair<int, TreeNode*> deep(TreeNode* node){
+        if(node == NULL) return {0, NULL};
+        pair<int, TreeNode*> l = deep(node->left), r = deep(node->right);
+        if(l.first == r.first) return {l.first + 1, node};
+        if(l.first > r.first) return {l.first + 1, l.second};
+        if(l.first < r.first) return {r.first + 1, r.second};
+    }
+};
