@@ -1,3 +1,4 @@
+// better solution with map::lower_bound
 class MapSum {
 public:
     /** Initialize your data structure here. */
@@ -28,3 +29,41 @@ public:
  * obj.insert(key,val);
  * int param_2 = obj.sum(prefix);
  */
+
+
+///////////////////////////////////////
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    // the first string is the substring(contains the string itself)
+    // the second string record the string generate the substring
+    // in that way, we can change the value when the string's value has been changed
+    unordered_map<string, unordered_map<string, int>> m;
+    MapSum() {
+        
+    }
+    
+    void insert(string key, int val) {
+        string temp;
+        for(int i = 1; i <= key.size(); i++){
+            temp = key.substr(0, i);
+            if(m.find(temp) == m.end()){
+                unordered_map<string, int> m_temp;
+                m_temp[key] = val;
+                m[temp] = m_temp;
+            }
+            else{
+                m[temp][key] = val;
+            }
+        }
+    }
+    
+    int sum(string prefix) {
+        if(m.find(prefix) == m.end()) return 0;
+        int res = 0;
+        for(auto it = m[prefix].begin(); it != m[prefix].end(); it++){
+            res += it->second;
+        }
+        return res;
+    }
+};
