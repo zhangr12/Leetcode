@@ -1,0 +1,30 @@
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    map<string, int> m;
+    MapSum() {
+        
+    }
+    
+    void insert(string key, int val) {
+        m[key] = val;
+    }
+    
+    int sum(string prefix) {
+        int res = 0, n = prefix.size();
+        // here we need to use lower_bound because we need to put the pointer to the right place first 
+        // and then start search forward from there
+        // otherwise we need to search through the whole map, which is expensive and forget to use the advantage of ordered map
+        // map::lower_bound returns an iterator pointing to the first element that is not less than key.
+        // map::upper_bound returns an iterator pointing to the first element that is greater than key.
+        for(auto it = m.lower_bound(prefix); it != m.end() && it->first.substr(0,n) == prefix; it++) res += it->second;
+        return res;
+    }
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum obj = new MapSum();
+ * obj.insert(key,val);
+ * int param_2 = obj.sum(prefix);
+ */
