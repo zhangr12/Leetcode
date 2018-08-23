@@ -1,0 +1,28 @@
+// for visited node we change its value to -1
+class Solution {
+public:
+    int arrayNesting(vector<int>& nums) {
+        int max_len = 0, count = 0, start, prev, temp_len, temp, prev_i = 0;
+        while(count < nums.size()){
+            for(int i = prev_i; i < nums.size(); i++){
+                if(nums[i] >= 0){
+                    prev_i = i+1;
+                    start = nums[i];
+                    prev = nums[i];
+                    temp_len = 1;
+                    count++;
+                    while(start != nums[prev]){
+                        temp_len++;
+                        count++;
+                        temp = prev;
+                        prev = nums[prev];
+                        nums[temp] = -1;
+                    }
+                    nums[i] = -1;
+                    if(temp_len > max_len) max_len = temp_len;
+                }
+            }
+        }
+        return max_len;
+    }
+};
