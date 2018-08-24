@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numRabbits(vector<int>& answers) {
+        unordered_map<int, int> m;
+        for(int num:answers) m[num]++;
+        int res = 0;
+        for(auto it:m){
+            // If x+1 rabbits have same color, then we get x+1 rabbits who all answer x.
+            // now n rabbits answer x.
+            // If n % (x + 1) == 0, we need n / (x + 1) groups of x + 1 rabbits.
+            // If n % (x + 1) != 0, we need n / (x + 1) + 1 groups of x + 1 rabbits.
+            if(it.second%(it.first+1) == 0){
+                res += it.second;
+            }
+            else{
+                res += (it.second/(it.first + 1) + 1)*(it.first + 1);
+            }
+        }
+        return res;
+    }
+};
