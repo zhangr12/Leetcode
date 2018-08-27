@@ -1,3 +1,4 @@
+// Normalise a string to a standard pattern.
 class Solution {
 public:
     vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
