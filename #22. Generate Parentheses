@@ -35,3 +35,26 @@ public:
         return res;
     }    
 };
+
+
+///////////////////////////////////
+// recursive
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        helper(res, "", n, 0);
+        return res;
+    }
+    
+    void helper(vector<string>& res, string s, int n, int m){
+        if(m == 0 && n == 0){
+            res.push_back(s);
+            return;
+        }
+        // when m > 0, this means it is eligible to add ")" to the end of the string
+        if(m > 0) helper(res, s + ")", n, m-1);
+        // we can always add "(" to the end of the string as long as the number of "(" we used is less than n
+        if(n > 0) helper(res, s + "(", n-1, m+1);
+    }
+};
