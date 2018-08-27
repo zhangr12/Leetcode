@@ -13,6 +13,7 @@ public:
     
     string helper(string s){
         unordered_map<char, int> m;
+        // give each char an index, the given index is corresponding to the first time the char shows up
         for(char letter:s){
             if(!m.count(letter)) m[letter] = m.size();
         }
