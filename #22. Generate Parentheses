@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        int l = n, r = n;
+        // first pair store the result string, second pair store the left and right number
+        queue<pair<string, pair<int, int>>> q;
+        pair<string, pair<int, int>> temp;
+        string temp_s;
+        pair<int, int> l_r;
+        q.push({"(",{l-1, r}});
+        while(!q.empty()){
+            temp = q.front();
+            temp_s = temp.first;
+            l_r = temp.second;
+            q.pop();
+            if(l_r.first == 0 && l_r.second == 0){
+                res.push_back(temp_s);
+                continue;
+            }
+            if(l_r.first == 0){
+                l_r.second--;
+                q.push({temp_s + ")", l_r});
+            }
+            else if(l_r.first == l_r.second){
+                l_r.first--;
+                q.push({temp_s + "(", l_r});
+            }
+            else if(l_r.first < l_r.second){
+                q.push({temp_s + "(", {l_r.first-1, l_r.second}});
+                q.push({temp_s + ")", {l_r.first, l_r.second-1}});
+            }
+        }
+        return res;
+    }    
+};
