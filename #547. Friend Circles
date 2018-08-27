@@ -32,3 +32,32 @@ public:
         return res;
     }
 };
+
+
+////////////////////////////////////
+// instead of using unordered_map, we can use set to do the same thing
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        unordered_set<int> s;
+        int res = 0, n = M.size();
+        for(int i = 0; i < n; i++){
+            if(s.find(i) != s.end()) continue;
+            res++;
+            queue<int> q;
+            q.push(i);
+            s.insert(i);
+            while(!q.empty()){
+                int temp = q.front();
+                q.pop();
+                for(int j = 0; j < n; j++){
+                    if(M[temp][j] != 0 && s.find(j) == s.end()){
+                        q.push(j);
+                        s.insert(j);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
