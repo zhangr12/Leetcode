@@ -1,3 +1,4 @@
+// recursive
 class Solution {
 public:
     vector<vector<int>> permute(vector<int>& nums) {
@@ -20,5 +21,45 @@ public:
             temp_nums.erase(temp_nums.begin() + i);
             helper(res, temp_crt_res, temp_nums);
         }
+    }
+};
+
+
+
+////////////////////////////////////
+// BFS
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        queue<pair<vector<int>, vector<int>>> q;
+        // initialize q
+        for(int i = 0; i < nums.size(); i++){
+            vector<int> temp_nums = nums;
+            vector<int> temp_res;
+            temp_res.push_back(temp_nums[i]);
+            temp_nums.erase(temp_nums.begin() + i);
+            q.push(make_pair(temp_res, temp_nums));
+        }
+        pair<vector<int>, vector<int>> temp;
+        vector<int> temp_r, temp_n;
+        while(!q.empty()){
+            temp = q.front();
+            q.pop();
+            temp_r = temp.first;
+            temp_n = temp.second;
+            if(temp_n.size() == 0){
+                res.push_back(temp_r);
+                continue;
+            }
+            for(int i  = 0; i < temp_n.size(); i++){
+                vector<int> temp1 = temp_n;
+                vector<int> temp2 = temp_r;
+                temp2.push_back(temp1[i]);
+                temp1.erase(temp1.begin() + i);
+                q.push(make_pair(temp2, temp1));
+            }
+        }
+        return res;
     }
 };
