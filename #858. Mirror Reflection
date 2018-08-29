@@ -1,0 +1,23 @@
+// use the reflection property of the light, we can transfer the problem into this:
+// assume you have two infinite long mirror, the distance between them is p, 
+// the mirror on the left has receptor number 0 every p distance
+// the mirror on the right has receptor number 0 at every 2np distance and receptor 1 at every (2n+1)p distance
+// a laser ray from the southwest corner first meets the east wall at a distance q from the 0th receptor.
+// Return the number of the receptor that the ray meets first.
+class Solution {
+public:
+    int mirrorReflection(int p, int q) {
+        for(int n = 1; n <= p; n++){
+            // consider receptor 1 and 0 first since the light is from the southwest corner
+            if(((2*n-1)*q)%p == 0){
+                if ((((2*n-1)*q)/p)%2 == 1){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+            }
+            if((2*n*q)%p == 0) return 2;
+        }
+    }
+};
