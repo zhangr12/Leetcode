@@ -1,0 +1,27 @@
+class Solution {
+public:
+    string replaceWords(vector<string>& dict, string sentence) {
+        unordered_set<string> s;
+        for(string word:dict) s.insert(word);
+        int i = 0, j;
+        string res = "", temp;
+        while(i < sentence.size()){
+            bool replaced = false;
+            // sentence.substr(i, j)
+            j = i+1;
+            while(sentence[j] != ' ') j++;
+            temp = sentence.substr(i, j-i);
+            i = j+1;
+            // check if temp can be replaced
+            for(int k = 1; k < temp.size(); k++){
+                if(s.find(temp.substr(0, k)) != s.end()){
+                    res += temp.substr(0, k) + ' ';
+                    replaced = true;
+                    break;
+                }
+            }
+            if(!replaced) res += temp + ' ';
+        }
+        return res.substr(0, res.size() - 1);
+    }
+};
