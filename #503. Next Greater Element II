@@ -1,3 +1,4 @@
+// the second solution has the same idea but is more neat(using only one stack) compare with the first one
 class Solution {
 public:
     vector<int> nextGreaterElements(vector<int>& nums) {
@@ -19,6 +20,31 @@ public:
             }
             idx.push(i);
             s.push(nums2[i]);
+        }
+        return res;
+    }
+};
+
+
+//////////////////////////////////////////
+// we do not need to remember the number and the index
+// we only need to remember the index, since we can always retrive the number as long as we know the index
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        // copy nums, make it [nums, nums]
+        for(int i = 0; i < n; i++) nums.push_back(nums[i]);
+        vector<int> res(n, -1);
+        stack<int> idx;
+        for(int i = 0; i < nums.size(); i++){ 
+            while(!idx.empty() && nums[i] > nums[idx.top()]){
+                if(idx.top() < n){
+                    res[idx.top()] = nums[i];
+                }
+                idx.pop();
+            }
+            idx.push(i);
         }
         return res;
     }
