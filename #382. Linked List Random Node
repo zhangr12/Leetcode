@@ -1,0 +1,73 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+// Reservoir algorithm
+class Solution {
+public:
+    ListNode* node;
+    ListNode* original;
+    /** @param head The linked list's head.
+        Note that the head is guaranteed to be not null, so it contains at least one node. */
+    Solution(ListNode* head) {
+        node = head;
+        original = head;
+    }
+    
+    /** Returns a random node's value. */
+    int getRandom() {
+        int res = node->val, i = 2;
+        node = node->next;
+        while(node != NULL){
+            if(rand()%i == 0) res = node->val;
+            node = node->next;
+            i++;
+        }
+        node = original;
+        return res;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(head);
+ * int param_1 = obj.getRandom();
+ */
+ 
+ 
+ 
+ 
+ ////////////////////////////////
+ // naive algorithm
+ class Solution {
+public:
+    int length = 0;
+    ListNode* node;
+    ListNode* original;
+    /** @param head The linked list's head.
+        Note that the head is guaranteed to be not null, so it contains at least one node. */
+    Solution(ListNode* head) {
+        original = head;
+        node = head;
+        while(node != NULL){
+            length++;
+            node = node->next;
+        }
+        node = head;
+    }
+    
+    /** Returns a random node's value. */
+    int getRandom() {
+        int n = rand()%length, res;
+        for(int i = 0; i < n; i++){
+            node = node->next;
+        }
+        res = node->val;
+        node = original;
+        return res;
+    }
+};
