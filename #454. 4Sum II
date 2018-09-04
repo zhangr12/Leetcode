@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        unordered_map<int, int> m;
+        for(int num1:A){
+            for(int num2:B) m[num1+num2]++;
+        }
+        int res = 0;
+        for(int num1:C){
+            for(int num2:D){
+                if(m.find(-(num1+num2)) != m.end()) res += m[-(num1+num2)];
+            }
+        }
+        return res;
+    }
+};
