@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        unordered_map<string, vector<char>> m;
+        string temp;
+        for(string s:allowed){
+            temp = s.substr(0, 2);
+            if(m.find(temp) != m.end()){
+                m[temp].push_back(s[2]);
+            }
+            else{
+                vector<char> v{s[2]};
+                m[temp] = v;
+            }
+        }
+        
+        return helper(m, bottom, "", 0);
+        
+    }
+    
+    bool helper(unordered_map<string, vector<char>> &m, string bottom, string crt, int idx_b){
+        if(bottom.size() == 2){
+            if(m.find(bottom) != m.end()) return true;
+            return false;
+        }
+        string temp;
+        for(int i = idx_b; i < bottom.size()-1; i++){
+            temp = bottom.substr(i, 2);
+            if(m.find(temp) == m.end()) return false;
+            // change this part to handle m[temp].size() > 1
+            for(int j = 0; j < m[temp].size(); j++){
+                crt += m[temp][j];
+                //cout << crt << endl;
+                if(helper(m, bottom, crt, i+1)) return true;
+                // this if condition is important, if it is the last possible choice, 
+                // then we have to take it anyway, we do not want to delete it before we pass crt into helper(m, crt, "", 0)
+                if(j !=  m[temp].size()-1) crt = crt.substr(0, crt.size()-1);
+            }
+        }
+        //cout << crt << endl;
+        return helper(m, crt, "", 0);
+    }
+};
