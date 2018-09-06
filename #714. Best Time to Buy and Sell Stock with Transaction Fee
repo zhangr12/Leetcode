@@ -3,9 +3,14 @@ public:
     int maxProfit(vector<int>& prices, int fee) {
         int crt_max = prices[0], crt_min = prices[0], res = 0;
         for(int i = 1; i < prices.size(); i++){
+            // update crt_max if current value is greater than crt_max
             if(crt_max < prices[i]) crt_max = prices[i];
+            // if current prices is less than crt_min or less than crt_max-fee
+            // note than we need both conditions here
             if(prices[i] < crt_min || prices[i] < crt_max - fee){
+                // only trade when there is profit
                 if(crt_max - crt_min > fee) res += crt_max - crt_min - fee;
+                // update crt_max and crt_min
                 crt_max = prices[i];
                 crt_min = prices[i];
             }
