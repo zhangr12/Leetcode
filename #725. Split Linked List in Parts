@@ -1,0 +1,53 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<ListNode*> splitListToParts(ListNode* root, int k) {
+        vector<ListNode*> res(k, nullptr);
+        int len = length(root);
+        // e means the number of ListNode for every linked list
+        // f means that the front number of linked list has extra one node
+        int e = len/k, f = 0;
+        if(len > k) f = len%k;
+        ListNode *nxt, *crt = root;
+        for(int i = 0; i < k; i++){
+            res[i] = crt;
+            // if crt is NULL, then we just make the rest of the res to be NULL
+            if(crt == NULL){
+                break;
+            }
+            // if crt != NULL, then there must be at least e nodes in the linked list
+            int count = 1;
+            while(count < e){
+                crt = crt->next;
+                count++;
+            }
+            // now we need to check whether we need to add one extra node to the linked list
+            if(f){
+                crt = crt->next;
+                f--;
+            }
+            // now we need to set crt->next to be NULL, remember to get the address of crt->next first before set it to be NULL
+            nxt = crt->next;
+            crt->next = NULL;
+            crt = nxt;
+        }
+        return res;
+    }
+    
+    int length(ListNode* node){
+        int res = 0;
+        while(node != NULL){
+            res++;
+            node = node->next;
+        }
+        return res;
+    }
+    
+};
