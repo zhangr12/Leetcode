@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// the idea is to first build a son->parent map
+// then use this map to do dfs to find all the target nodes
+class Solution {
+public:
+    unordered_map<TreeNode*, TreeNode*> m;
+    unordered_set<TreeNode*> s;
+    vector<int> res;
+    
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        parent(root);
+        dfs(target, K);
+        return res;
+    }
+    
+    // record each node's parent node
+    void parent(TreeNode* node){
+        if(node == NULL) return;
+        m[node->left] = node;
+        m[node->right] = node;
+        parent(node->left);
+        parent(node->right);
+    }
+    
+    // use dfs to find the node within K distance of target node
+    void dfs(TreeNode* node, int k){
+        if(node == NULL) return;
+        // if we visited this node before
+        if(s.find(node) != s.end()) return;
+        s.insert(node);
+        if(k == 0){
+            res.push_back(node->val);
+            return;
+        }
+        dfs(node->left, k-1);
+        dfs(node->right, k-1);
+        dfs(m[node], k-1);
+    }
+};
