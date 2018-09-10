@@ -54,3 +54,70 @@ public:
     }
     
 };
+
+
+
+//////////////////////////////////////
+// method without modify the input linked list
+// using stacks
+class Solution {
+public:
+    int len1 = 0, len2 = 0;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // use stack to store the two lists seperately
+        stack<int> s1, s2;
+        int len1 = 0, len2 = 0;
+        // write l1 into s1
+        while(l1){
+            len1++;
+            s1.push(l1->val);
+            l1 = l1->next;
+        }
+        // write l2 into s2
+        while(l2){
+            len2++;
+            s2.push(l2->val);
+            l2 = l2->next;
+        }
+        ListNode* res;
+        if(len1 > len2){
+            res = combine(s1, s2);
+        }
+        else{
+            res = combine(s2, s1);
+        }
+        // reverse res
+        ListNode *prev = nullptr, *nxt;
+        while(res){
+            nxt = res->next;
+            res->next = prev;
+            prev = res;
+            res = nxt;
+        }
+        return prev;
+    }
+    // here we assume l1 is the longer one
+    // combine s1 and s2 and create the new linked list
+    // The most insignificant digit comes first and the result linked list
+    ListNode* combine(stack<int> &s1, stack<int> &s2){
+        ListNode *pseudo = new ListNode(0);
+        ListNode *crt = pseudo;
+        int temp, carry = 0;
+        while(!s1.empty()){
+            if(s2.empty()){
+                temp = s1.top() + carry;
+                s1.pop();
+            }
+            else{
+                temp = s1.top() + s2.top() + carry;
+                s1.pop();
+                s2.pop();
+            }
+            crt->next = new ListNode(temp%10);
+            carry = temp/10;
+            crt = crt->next;
+        }
+        if(carry) crt->next = new ListNode(1);
+        return pseudo->next;
+    }
+};
