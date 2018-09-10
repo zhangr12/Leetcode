@@ -1,0 +1,56 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int len1 = 0, len2 = 0;
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* newl1 = Reverse(l1, len1);
+        ListNode* newl2 = Reverse(l2, len2);
+        // make newl1 the longer one
+        if(len1 < len2){
+            ListNode* temp = newl1;
+            newl1 = newl2;
+            newl2 = temp;
+        }
+        // now newl1 is the longer one, we add newl2 to newl1 and then reverse newl1 to get the answer
+        ListNode *crt1 = newl1, *crt2 = newl2, *prev1;
+        int carry = 0, temp_sum;
+        while(crt1){
+            if(crt2 == NULL){
+                temp_sum = crt1->val + carry;
+                crt1->val = temp_sum%10;
+                carry = temp_sum/10;
+                prev1 = crt1;
+                crt1 = crt1->next;
+                continue;
+            }
+            temp_sum = crt1->val + crt2->val + carry;
+            crt1->val = temp_sum%10;
+            carry = temp_sum/10;
+            prev1 = crt1;
+            crt1 = crt1->next;
+            crt2 = crt2->next;
+        }
+        if(carry != 0) prev1->next = new ListNode(1);
+        return Reverse(newl1, len2);
+    }
+    
+    ListNode* Reverse(ListNode* l, int &len){
+        ListNode *prev = nullptr, *nxt;
+        while(l){
+            len++;
+            nxt = l->next;
+            l->next = prev;
+            prev = l;
+            l = nxt;
+        }
+        return prev;
+    }
+    
+};
