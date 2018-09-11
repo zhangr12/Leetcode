@@ -1,0 +1,21 @@
+// the idea is that: no matter how many pieces we divide the number n, we can always assume we divide it into two part
+// i.e. n = n1+n2+n3, then n = (n1+n2)+n3
+// the second observation is that for n = n1+n2, the number we try to find is max(n1*n2) (call it BI, break integer)
+// this problem can be divided into: 1. what is the BI for n1 and 2. what is the BI for n2
+// then we can solve this problem recursively
+// Note that we also need to consider n1 and n2 itself, e.g. ans = max(BI_n1, n1)*max(BI_n2, n2)
+class Solution {
+public:
+    int integerBreak(int n) {
+        unordered_map<int, int> m;
+        m[1] = 1;
+        m[2] = 1;
+        for(int i = 3; i <= n; i++){
+            m[i] = 0;
+            for(int j = 1; j < i/2 + 1; j++){
+                m[i] = max(m[i], max(m[j], j)*max(m[i-j], i-j));
+            }
+        }
+        return m[n];
+    }
+};
