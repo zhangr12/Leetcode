@@ -1,0 +1,26 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// inorder traversal
+class Solution {
+public:
+    int res, num;
+    int kthSmallest(TreeNode* root, int k) {
+        num = k;
+        inorder(root);
+        return res;
+    }
+    
+    void inorder(TreeNode* node){
+        if(node->left) inorder(node->left);
+        num--;
+        if(num == 0) res = node->val;
+        if(node->right) inorder(node->right);
+    }
+};
