@@ -1,6 +1,26 @@
+///////////////////////////
+// neat version
 // basic idea: find all the gaps between bricks and store them in a map
 // map<location of gap, number of gaps>
 // then the answer will be the number of rows minus the largest number of gaps in the map
+class Solution {
+public:
+    int leastBricks(vector<vector<int>>& wall) {
+        unordered_map<int, int> m;
+        int sum = 0, max_gap = 0;
+        for(int i = 0; i < wall.size(); i++){
+            sum = 0;
+            for(int j = 0; j < wall[i].size()-1; j++){
+                m[sum += wall[i][j]]++;
+                if(m[sum] > max_gap) max_gap = m[sum];
+            }
+        }
+        return wall.size() - max_gap;
+    }
+};
+
+
+///////////////////////////////////
 class Solution {
 public:
     int leastBricks(vector<vector<int>>& wall) {
@@ -31,10 +51,6 @@ public:
 
 
 ////////////////////////////////
-// modified, only need to go through the wall matrix once
-// basic idea: find all the gaps between bricks and store them in a map
-// map<location of gap, number of gaps>
-// then the answer will be the number of rows minus the largest number of gaps in the map
 class Solution {
 public:
     int leastBricks(vector<vector<int>>& wall) {
