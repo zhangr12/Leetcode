@@ -28,3 +28,37 @@ public:
         return n-max_gaps;
     }
 };
+
+
+////////////////////////////////
+// modified, only need to go through the wall matrix once
+// basic idea: find all the gaps between bricks and store them in a map
+// map<location of gap, number of gaps>
+// then the answer will be the number of rows minus the largest number of gaps in the map
+class Solution {
+public:
+    int leastBricks(vector<vector<int>>& wall) {
+        // n is the number of rows, m is the number of columns
+        // temp_min record the number of cut at crt position
+        // crt start from 1 to m-1
+        int n = wall.size(), res = INT_MAX, temp_min, crt = 1, row_num = 0;
+        unordered_map<int, int> m;
+        // check if wach row only has one brick
+        for(int i = 0; i < n; i++){
+            row_num = max(row_num, (int)wall[i].size());
+            m[wall[i][0]]++;
+        }
+        if(row_num == 1) return n;
+        for(int i = 0; i < n; i++){
+            for(int j = 1; j < wall[i].size()-1; j++){
+                wall[i][j] += wall[i][j-1];
+                m[wall[i][j]]++;
+            }
+        }
+        int max_gaps = -1;
+        for(auto item:m){
+            if(max_gaps < item.second) max_gaps = item.second;
+        }
+        return n-max_gaps;
+    }
+};
