@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        vector<vector<int>> s(words.size(), vector<int>(26));
+        // use vector with length 26 to record to chars in word
+        for(int i = 0; i < words.size(); i++){
+            for (int j = 0; j < words[i].size(); j++) s[i][words[i][j] - 'a']++;
+        }
+        int res = 0;
+        //
+        for(int i = 0; i < words.size(); i++){
+            for(int j = i+1; j < words.size(); j++){
+                // check if there are duplicate chars between different word
+                // if they do not contain duplicate chars, then check if we need to update the result
+                if(helper(s[i], s[j]) && res < words[i].size()*words[j].size()) res = words[i].size()*words[j].size();
+            }
+        }
+        return res;
+    }
+    
+    // compare two vector to see if there contain duplicate elements
+    bool helper(vector<int> &v1, vector<int> &v2){
+        for(int i = 0; i < 26; i++){
+            if (v1[i] != 0 && v2[i] != 0) return false;
+        }
+        return true;
+    }
+    
+};
