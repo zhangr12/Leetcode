@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        // important observation: there are only 24*60 possible time points
+        // if the length of timePoints is greater than 24*60, then there must be duplicates, hence return 0
+        if(timePoints.size() > 24*60) return 0;
+        vector<int> v(timePoints.size(), 0);
+        hourToMinuts(timePoints, v);
+        sort(v.begin(), v.end());
+        int dis = INT_MAX;
+        for(int i = 1; i < v.size(); i++){
+            if(dis > v[i] - v[i-1]) dis = v[i]-v[i-1];
+        }
+        if(dis > 60*24 - v[timePoints.size()-1] + v[0]) dis = 60*24 - v[timePoints.size()-1] + v[0];
+        return dis;
+    }
+    
+    void hourToMinuts(vector<string>& t, vector<int> &v){
+        for(int i = 0; i < t.size(); i++){
+            v[i] = stoi(t[i].substr(0, 2))*60 + stoi(t[i].substr(3, 2));
+        }
+    }
+};
