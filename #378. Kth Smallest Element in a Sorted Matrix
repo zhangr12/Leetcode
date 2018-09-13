@@ -1,0 +1,22 @@
+class Solution {
+public:
+    struct compare{
+        bool operator()(const vector<int> &v1, const vector<int> &v2){
+            return v1[0] > v2[0];
+        }
+    };
+    
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        priority_queue<vector<int>, vector<vector<int>>, compare> q;
+        for(int i = 0; i < matrix.size(); i++) q.push({matrix[i][0], i, 0});
+        vector<int> temp;
+        for(int i = 0; i < k-1; i++){
+            temp = q.top();
+            q.pop();
+            if(temp[2] == matrix.size()-1) continue;
+            q.push({matrix[temp[1]][temp[2] + 1], temp[1], temp[2] + 1});
+        }
+        temp = q.top();
+        return temp[0]; 
+    }    
+};
