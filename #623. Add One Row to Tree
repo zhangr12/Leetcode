@@ -1,3 +1,55 @@
+// simplify the code, since we only need to worry about the non-NULL node
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int v, int d) {
+        // take care of special case when d == 1
+        if(d == 1){
+            TreeNode* node = new TreeNode(v);
+            node->left = root;
+            return node;
+        }
+        // locate the row first, then record the d-1 th row and d th row
+        // use queue to do level order traversal
+        int depth = 1;
+        queue<TreeNode*> q;
+        q.push(root);
+        TreeNode* temp;
+        while(depth < d-1){
+            int s = q.size();
+            depth++;
+            for(int i = 0; i < s; i++){
+                temp = q.front();
+                q.pop();
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+
+            }
+        }
+        // now we have the d-1 th level nodes in the q
+        // make a new queue to store the d th level
+        // at the same time, change the children of d th level nodes
+        // q1: new level
+        // q2: original d level
+        queue<TreeNode*> q2, q1;
+        TreeNode *temp1, *temp2;
+        int q_size = q.size();
+        for(int i = 0; i < q_size; i++){
+            temp = q.front();
+            q.pop();
+            temp1 = temp->left;
+            temp2 = temp->right;
+            temp->left = new TreeNode(v);
+            temp->right = new TreeNode(v);
+            temp->left->left = temp1;
+            temp->right->right = temp2;
+        }
+        return root;
+    }
+};
+
+
+
+////////////////////////
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
