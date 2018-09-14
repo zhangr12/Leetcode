@@ -1,0 +1,95 @@
+// try to use trackback to solve this problem
+class Solution {
+public:
+    int res = INT_MAX;
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        helper(special, price, needs, 0);
+        
+        return res;
+    }
+    
+    void helper(vector<vector<int>>& special, vector<int>& price, vector<int> needs, int payment){
+        // check if needs has been satisfied
+        int needs_sum = 0;
+        for(int i = 0; i < needs.size(); i++) needs_sum += needs[i];
+        // if it is, return
+        if(needs_sum == 0){
+            // if payment less than res, set res to be payment
+            if(payment < res) res = payment;
+            return;
+        }
+        // for current needs, we can use special offer
+        for(int j = 0; j < special.size(); j++){
+            bool useful = true;
+            vector<int> temp = needs;
+            for(int k = 0; k < needs.size(); k++){
+                if(special[j][k] > needs[k]){
+                    useful = false;
+                    break;
+                }
+                temp[k] -= special[j][k];
+            }
+            if(!useful) continue;
+            helper(special, price, temp, payment+special[j][needs.size()]);
+        }
+        // or we can by them one by one
+        for(int i = 0; i < needs.size(); i++){
+            payment += needs[i]*price[i];
+            needs[i] = 0;
+        }
+        helper(special, price, needs, payment);
+    }
+};
+
+
+//////////////////////////////////
+// time limits exceed
+// the reason is because we should not combine price into special
+// this will only increase the searching space and make the algorithm more expensive
+// because for each time, when we want to buy something individually, we need to go through all the possible special offers
+// this will make the algorithm very inefficiency
+// overall, buy one by one do not need to search at all; on the other hand, in order to use special offer, one need to do a lot of search
+class Solution {
+public:
+    int res = INT_MAX;
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        // write price into special offer
+        for(int i = 0; i < price.size(); i++){
+            vector<int> temp(price.size()+1, 0);
+            temp[i] = 1;
+            temp[price.size()] = price[i];
+            special.push_back(temp);
+        }
+        
+        helper(special, needs, 0);
+        
+        return res;
+    }
+    
+    void helper(vector<vector<int>>& special, vector<int> needs, int payment){
+        // check if needs has been satisfied
+        int needs_sum = 0;
+        for(int i = 0; i < needs.size(); i++) needs_sum += needs[i];
+        // if it is, return
+        if(needs_sum == 0){
+            // if payment less than res, set res to be payment
+            if(payment < res) res = payment;
+            return;
+        }
+        
+        for(int j = 0; j < special.size(); j++){
+            bool useful = true;
+            vector<int> temp = needs;
+            for(int k = 0; k < needs.size(); k++){
+                if(special[j][k] > needs[k]){
+                    useful = false;
+                    break;
+                }
+                temp[k] -= special[j][k];
+            }
+            if(!useful) continue;
+            helper(special, temp, payment+special[j][needs.size()]);
+        }
+    }
+    
+};
