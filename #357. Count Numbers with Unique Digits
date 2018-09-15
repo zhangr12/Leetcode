@@ -12,9 +12,8 @@ class Solution {
 public:
     int countNumbersWithUniqueDigits(int n) {
         if(n == 0) return 1;
-        if(n > 9) return 0;
-        int res = 10, temp = 9;
-        for(int i = 1; i < n; i++){
+        int res = 10, temp = 9, it = min(n, 10);
+        for(int i = 1; i < it; i++){
             temp *= 10-i;
             res += temp;
         }
