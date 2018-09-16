@@ -7,7 +7,6 @@ public:
         // transfor the result into string
         int i = 0, j, denominator = 1, numerator = 0, tempd, tempn;
         while(i < expression.size()){
-            int negative = 1;
             j = i;
             while(expression[j] != '/') j++;
             tempn = stoi(expression.substr(i, j-i));
