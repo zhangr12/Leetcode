@@ -1,0 +1,30 @@
+class Solution {
+public:
+    string fractionAddition(string expression) {
+        // store demoninator and numerator separately
+        // calculate the least common multiple for denominators using Euclidean method
+        // calculate the numerator
+        // transfor the result into string
+        int i = 0, j, denominator = 1, numerator = 0, tempd, tempn;
+        while(i < expression.size()){
+            int negative = 1;
+            j = i;
+            while(expression[j] != '/') j++;
+            tempn = stoi(expression.substr(i, j-i));
+            i = j+1;
+            j = i;
+            while(expression[j] >= '0' && expression[j] <= '9') j++;
+            tempd = stoi(expression.substr(i, j-i));
+            i = j;
+            // now combine with previous n/d
+            // cout << tempn << " " << tempd << endl;
+            numerator = tempn*denominator+tempd*numerator;
+            denominator = denominator*tempd;
+            // cout << denominator << " " << numerator << endl;
+            int g = abs(__gcd(denominator, numerator));
+            denominator /= g;
+            numerator /= g;
+        }
+        return to_string(numerator) + "/" + to_string(denominator);
+    }
+};
