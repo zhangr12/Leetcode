@@ -1,0 +1,43 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        // assume the linked list is n+m, where m is the length of the circle, we need to find n
+        if(head == NULL || head->next == NULL || head->next->next == NULL) return nullptr;
+        // first time meet each other
+        ListNode *n1 = head->next, *n2 = head->next->next;
+        while(n1 != n2){
+            n1 = n1->next;
+            if(n2->next == NULL) return nullptr;
+            n2 = n2->next->next;
+            if(n2 == NULL) return nullptr;
+        }
+        
+        // second time meet each other, calculate m
+        int m = 1;
+        n1 = n1->next;
+        n2 = n2->next->next;
+        while(n1 != n2){
+            n1 = n1->next;
+            n2 = n2->next->next;
+            m++;
+        }
+        
+        // two pointers, one move m steps first, then move both forward until they meet, that is the point we looking for
+        n1 = head;
+        n2 = head;
+        for(int i = 0; i < m; i++) n2 = n2->next;
+        while(n1 != n2){
+            n1 = n1->next;
+            n2 = n2->next;
+        }
+        return n1;
+    }
+};
