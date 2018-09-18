@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        vector<int> p(1001, 0), res;
+        for(int i = 0; i < p.size(); i++) p[i] = i;
+        for(auto e:edges){
+            int n1 = e[0], n2 = e[1];
+            // find n1's root
+            while(n1 != p[n1]) n1 = p[n1];
+            // find n2's root
+            while(n2 != p[n2]) n2 = p[n2];
+            // see if they have the same root
+            if(n1 == n2){
+                res = e;
+            }
+            else{
+                // if they does not share same root, make root of n2 a subtree of root of n1
+                p[n2] = n1;
+            }
+        }
+        return res;
+    }
+};
