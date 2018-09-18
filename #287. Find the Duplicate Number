@@ -5,6 +5,7 @@
 // this means the distance slow has traveled is a*m (since fast's speed is twice slow's speed)
 // now we put fast back to start point, and let slow stay at the meet point, move both of them one step at a time
 // then when fast travel n, slow traveled a*m+n, so they must meet at the start of the circle
+// NOTE: if the range is 0 to n-1, then we should start from the end of the vector
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
