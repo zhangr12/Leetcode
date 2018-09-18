@@ -1,0 +1,23 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+// let the root be level 1
+// then the robber can either rob level 1 and level 3
+// or he can rob level 2
+// now it is clear that we can solve this problem recursively
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        if(root == NULL) return 0;
+        if(!root->left && !root->right) return root->val;
+        if(root->left == NULL) return max(root->val + rob(root->right->left) + rob(root->right->right), rob(root->right));
+        if(root->right == NULL) return max(root->val + rob(root->left->left) + rob(root->left->right), rob(root->left));
+        return max(root->val + rob(root->right->left) + rob(root->left->left) + rob(root->right->right) + rob(root->left->right), rob(root->right) + rob(root->left));
+    }
+};
