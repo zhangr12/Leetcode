@@ -7,6 +7,44 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+
+// Better recursive solution
+// let the root be level 1
+// then the robber can either rob level 1 and level 3
+// or he can rob level 2
+// now it is clear that we can solve this problem recursively
+// to avoid solve subproblems multiple times, we can use a map to store the information for each node
+// this can significantly reduce the runtime from exponential to O(N)
+class Solution {
+public:
+    unordered_map<TreeNode*, int> m;
+    int rob(TreeNode* root) {
+        if(m.find(root) != m.end()) return m[root];
+        int val =0;
+        if(root == NULL){
+            val = 0;
+        }
+        else if(!root->left && !root->right){
+            val = root->val;
+        }
+        else if(root->left == NULL){
+            val = max(root->val + rob(root->right->left) + rob(root->right->right), rob(root->right));
+        }
+        else if(root->right == NULL){
+            val = max(root->val + rob(root->left->left) + rob(root->left->right), rob(root->left));
+        }
+        else{
+            val = max(root->val + rob(root->right->left) + rob(root->left->left) + rob(root->right->right) + rob(root->left->right), rob(root->right) + rob(root->left));
+        }
+        m[root] = val;
+        return val;
+    }
+};
+
+
+
+///////////////////////
+// naive recursive solution
 // let the root be level 1
 // then the robber can either rob level 1 and level 3
 // or he can rob level 2
