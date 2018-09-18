@@ -1,3 +1,26 @@
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(head == NULL || head->next == NULL || head->next->next == NULL) return nullptr;
+        ListNode *n1, *n2;
+        n1 = head->next;
+        n2 = head->next->next;
+        while(n1 != n2){
+            n1 = n1->next;
+            if(n2->next == NULL || n2->next->next == NULL) return nullptr;
+            n2 = n2->next->next;
+        }
+        n2 = head;
+        while(n1 != n2){
+            n1 = n1->next;
+            n2 = n2->next;
+        }
+        return n1;
+    }
+};
+
+
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
