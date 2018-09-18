@@ -2,6 +2,8 @@
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        // for vector p: p[i] = j means j's parent is i
+        // so for node i, its root is p[p[p[p[p[.....p[i]]]]]], until p[j] == j
         vector<int> p(1001, 0), res;
         for(int i = 0; i < p.size(); i++) p[i] = i;
         for(auto e:edges){
