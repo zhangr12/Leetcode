@@ -1,3 +1,10 @@
+// idea: 
+// for fast, we move two steps everytime, for slow, we move one step at a time
+// assume the circle is length m, the straight part has length n
+// when fast and slow meet, the distance fast has traveled is a*m more than slow, here a is a positive number
+// this means the distance slow has traveled is a*m (since fast's speed is twice slow's speed)
+// now we put fast back to start point, and let slow stay at the meet point, move both of them one step at a time
+// then when fast travel n, slow traveled a*m+n, so they must meet at the start of the circle
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
