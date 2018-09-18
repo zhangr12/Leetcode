@@ -6,6 +6,11 @@
 // now we put fast back to start point, and let slow stay at the meet point, move both of them one step at a time
 // then when fast travel n, slow traveled a*m+n, so they must meet at the start of the circle
 // NOTE: if the range is 0 to n-1, then we should start from the end of the vector, since the last element cannot be in the circle
+// Observations:
+// 1. There might be several small loop inside the vector
+// 2. Without duplicate numbers, these small loops have no intersection with each other
+// 3. Duplicate numbers are the key to enter the loop that contains duplicate numbers
+// 4. All we need to do is to find the entrance of the loop
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
