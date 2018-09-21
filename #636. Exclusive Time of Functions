@@ -1,0 +1,58 @@
+// idea: we only need to track which function take which function's time...
+class Solution {
+public:
+    vector<int> exclusiveTime(int n, vector<string>& logs) {
+        if(n == 0) return {};
+        vector<int> res(n, 0);
+        // here we use a stack to remember the id, start and end time for each function
+        stack<vector<int>> s;
+        vector<int> crt, temp;
+        for(int i = 0; i < logs.size(); i++){
+            crt = helper(logs[i]);
+            // whenever we have start, we push it into stack
+            if(crt[1] == 0){
+                s.push(crt);
+            }
+            else{
+                // otherwise, current input must be end and must form a pair with the top element in the stack(otherwise, it is invalid input)
+                temp = s.top();
+                // the life_span for current function is end-start+1
+                int life_span = crt[2] - temp[2] + 1;
+                // add life_span to current function
+                res[crt[0]] += life_span;
+                // pop the top element, since the pair has aleady been recoreded
+                s.pop();
+                // if s is empty, we know that current function takes no one's time
+                if(!s.empty()){
+                    // if it is not, then current function takes the time from the function corresponding to current s.top()
+                    // think like this: f1, f2, f2, f1
+                    // the inner f2 takes its outter function f1's running time, so we need substract f1's running time by f2's running time
+                    temp = s.top();
+                    res[temp[0]] -= life_span;
+                }
+            }
+        }
+        return res;
+    }
+    // help to convert string to integer
+    vector<int> helper(string &log){
+        // res[0], res[1], res[2]: id, start/end, time
+        // start = 0, end = 1
+        vector<int> res(3, 0);
+        int i = 0, j = 1;
+        while(log[j] != ':') j++;
+        res[0] = stoi(log.substr(i, j-i));
+        i = j+1;
+        j = i+1;
+        while(log[j] != ':') j++;
+        if(log.substr(i, j-i) == "start"){
+            res[1] = 0;
+        }
+        else{
+            res[1] = 1;
+        }
+        i = j+1;
+        res[2] = stoi(log.substr(i, log.size()-i));
+        return res;
+    }
+};
