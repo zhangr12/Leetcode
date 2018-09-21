@@ -1,0 +1,41 @@
+// here we use dp and trackback method
+// the method is equal to brutal force, but we use m to remember visited combination to reduce the computational cost from O(n!) to O(2^n)
+class Solution {
+public:
+    unordered_map<int, bool> m;
+    bool canIWin(int maxChoosableInteger, int desiredTotal) {
+        if(maxChoosableInteger >= desiredTotal) return true;
+        if((maxChoosableInteger + 1)*maxChoosableInteger/2 < desiredTotal) return false;
+        return canIWin(0, maxChoosableInteger, desiredTotal);
+    }
+    
+    bool canIWin(int used, int maxChoosableInteger, int desiredTotal){
+        // if desiredTotal <= 0, which means the last one who pick a number won the game, so return false
+        if(desiredTotal <= 0) return false;
+        // if we see current combination before, we can use history data directly
+        if(m.find(used) != m.end()) return m[used];
+        // iterate through all possible combinations
+        for(int i = 1; i <= maxChoosableInteger; i++){
+            // use bit to represent current number i
+            // here, if i = 3, bit = 100, i = 5, bit = 10000, etc.
+            int bit = 1<<i;
+            // check if i has already been used
+            // note that here we do not care the order of the combination, since we only care about the summation
+            if(!(used&bit)){
+                // if for current combination, the second player will lose no mater what, then we return true
+                if(!canIWin(used|bit, maxChoosableInteger, desiredTotal-i)){
+                    // note that we need to remember m[used] here because we are checking for all the possible combinations
+                    // the algorithm first reach the lowest level of the problem, which makes it very easy to reach here
+                    // however, the probability it can reach here is reduced with the level increasing
+                    // remember that the high level problem is determined by its low level sub-problem
+                    // so we need to remember these low level sub-problem in order to do the search efficiently in the future
+                    m[used] = true;
+                    return true;
+                }
+            }
+        }
+        m[used] = false;
+        return false;
+    }
+    
+};
