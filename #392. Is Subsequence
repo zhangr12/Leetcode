@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int i = 0;
+        for(char S:s){
+            // check if current t[i] is equal to S
+            // if it is not, i++. We also need to monitor whether i is in the range [0, t.size())
+            while(t[i] != S && i < t.size()) i++;
+            // if i == t.size() and we are still in the loop, it means we still have char left in s but we used all t already
+            // in this case, we return false
+            if(i == t.size()) return false;
+            // otherwise, t[i] == S, we increase i for next loop
+            i++;
+        }
+        return true;
+    }
+};
