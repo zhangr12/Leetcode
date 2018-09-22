@@ -56,3 +56,43 @@ public:
         return res;
     }
 };
+
+
+
+////////////////////////////////
+// Solution with better format using struct
+#include<sstream>
+
+struct Log{
+    int id;
+    string status;
+    int time;
+};
+
+class Solution {
+public:
+    vector<int> exclusiveTime(int n, vector<string>& logs) {
+        vector<int> res(n, 0);
+        stack<Log> s;
+        string temp1, temp2, temp3;
+        for(auto log:logs){
+            stringstream ss(log);
+            getline(ss, temp1, ':');
+            getline(ss, temp2, ':');
+            getline(ss, temp3, ':');
+            if(temp2 == "start"){
+                Log item = {stoi(temp1), temp2, stoi(temp3)};
+                s.push(item);
+            }
+            else{
+                int life_span = stoi(temp3) - s.top().time + 1;
+                res[s.top().id] += life_span;
+                s.pop();
+                if(!s.empty()){
+                    res[s.top().id] -= life_span;
+                }
+            }
+        }
+        return res;
+    }
+};
