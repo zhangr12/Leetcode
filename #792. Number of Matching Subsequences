@@ -1,0 +1,49 @@
+class Solution {
+public:
+    int numMatchingSubseq(string S, vector<string>& words) {
+        vector<vector<int>> v;
+        for(int i = 0; i < 26; i++){
+            vector<int> s;
+            v.push_back(s);
+        }
+        // v[0] contains all the index of a with increasing order
+        // v[1] contains all the index of b with increasing order, etc.
+        for(int i = 0; i < S.size(); i++) v[S[i]-'a'].push_back(i);
+        int res = 0;
+        for(auto word:words){
+            if(isSubString(v, word)) res++;
+        }
+        return res;
+    }
+    
+    
+    bool isSubString(vector<vector<int>> &v, string &word){
+        int target = -1;
+        for(char w:word){
+            target = binarySearch(v[w-'a'], target);
+            //cout << temp << endl;
+            if(target == -1) return false;
+        }
+        return true;
+    }
+    
+    // v is the index of the char
+    // target is the smallest required index
+    // NOTE here that this is not a typical binary search algorithm since we want to find the next element which is greater than target
+    int binarySearch(vector<int> &v, int target){
+        // does not have index satisfy the condition
+        if(v.size() == 0 || v[v.size()-1] <= target) return -1;
+        if(v[0] > target) return v[0];
+        int l = 0, r = v.size(), mid;
+        while(l != r){
+            mid = l + (r-l)/2;
+            if(v[mid] <= target){
+                l = mid + 1;
+            }
+            else{
+                r = mid;
+            }
+        }
+        return v[r];
+    }
+};
