@@ -30,6 +30,7 @@ public:
     // v is the index of the char
     // target is the smallest required index
     // NOTE here that this is not a typical binary search algorithm since we want to find the next element which is greater than target
+    // https://stackoverflow.com/questions/6553970/find-the-first-element-in-a-sorted-array-that-is-greater-than-the-target
     int binarySearch(vector<int> &v, int target){
         // does not have index satisfy the condition
         if(v.size() == 0 || v[v.size()-1] <= target) return -1;
