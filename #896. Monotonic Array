@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool isMonotonic(vector<int>& A) {
+        if(A.size() <= 1) return true;
+        // find the first element that is not equal to A[0]
+        int i = 1, type;
+        // find the first non-equal element
+        while(A[i] == A[0]){
+            i++;
+            // if we reach the end of the array, this means the whole array is uni-value, return true
+            if(i == A.size()) return true;
+        }
+        // determine whether the array is increasing or decreasing
+        if(A[0] > A[i]){
+            type = -1;
+        }
+        else{
+            type = 1;
+        }
+        for(i; i < A.size(); i++){
+            if(type == -1){
+                if(!monotonic(A[i-1], A[i])) return false;
+            }
+            else{
+                if(!monotonic(A[i], A[i-1])) return false;
+            }
+        }
+        return true;
+    }
+    
+    // i >= j, return true
+    bool monotonic(int i, int j){
+        if(i >= j) return true;
+        return false;
+    }
+};
