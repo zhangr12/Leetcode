@@ -1,4 +1,50 @@
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int n = word1.size(), m = word2.size();
+        // dp[i][j] means the number of chars need to delete for word1.substr(0, i) and word2.substr(0, j)
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+        for(int i = 0; i <= n; i++){
+            for(int j = 0; j <= m; j++){
+                // i: word1's subsequence with length i
+                // j: word2's subsequence with length j
+                // if both of them have length zero
+                // no need to delete
+                if(i == 0 && j == 0){
+                    dp[i][j] = 0;
+                }
+                // one of them has length zero
+                // need to delete the other one
+                else if(i == 0){
+                    dp[i][j] = j;
+                }
+                else if(j == 0){
+                    dp[i][j] = i;
+                }
+                else{
+                    // if the new letter agree with each other
+                    if(word1[i-1] == word2[j-1]){
+                        // the number that we need to delete is equal to subsequence with length i-1 and j-1
+                        dp[i][j] = dp[i-1][j-1];
+                    }
+                    else{
+                        // otherwise, we need to either delete the i th one from subsequence of word1
+                        // or we need to delete the j th one from subsequence of word2
+                        // the result will be 1 delete, plus min(dp[i-1][j], dp[i][j-1])
+                        dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1]);
+                    }
+                }
+            }
+        }
+        return dp[n][m];
+    }
+};
+
+
+
+///////////////////////////////////
 // top down
+// idea is similar with previous solution
 class Solution {
 public:
     int minDistance(string word1, string word2) {
