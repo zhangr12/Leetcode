@@ -1,3 +1,31 @@
+// method use the unique char in each string form digits
+class Solution {
+public:
+    string originalDigits(string s) {
+        vector<string> v{"zero", "six", "eight", "two", "three", "seven", "four", "five", "one", "nine"};
+        vector<char> special{'z', 'x', 'g', 'w', 't', 's', 'u', 'f', 'o', 'i'};
+        vector<int> res(10, 0), v_num{0, 6, 8, 2, 3, 7, 4, 5, 1, 9}, ss(26, 0);
+        for(char S:s) ss[S-'a']++;
+        for(int i = 0; i < 10; i++){
+            int num = ss[special[i]-'a'];
+            if(num == 0) continue;
+            res[v_num[i]] += num;
+            for(int j = 0; j < v[i].size(); j++){
+                ss[v[i][j]-'a'] -= num;
+            }
+        }
+        string result = "";
+        for(int i = 0; i < res.size(); i++){
+            for(int j = 0; j < res[i]; j++) result += to_string(i);
+        }
+        return result;
+    }
+};
+
+
+
+
+//////////////////////////////////
 // track back. Slow and exceed time limit. Can it be further optimized?
 // might need to use map to remember history information?
 class Solution {
