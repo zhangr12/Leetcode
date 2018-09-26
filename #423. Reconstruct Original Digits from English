@@ -1,0 +1,55 @@
+// track back. Slow and exceed time limit. Can it be further optimized?
+// might need to use map to remember history information?
+class Solution {
+public:
+    vector<int> res;
+    string originalDigits(string s) {
+        for(int i = 0; i < 10; i++) res.push_back(0);
+        vector<string> v{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+        vector<vector<int>> nums(9, vector<int>(26, 0));
+        for(int i = 0; i < 9; i++){
+            for(char c:v[i]) nums[i][c-'a']++;
+        }
+        vector<int> ss(26, 0), r(10, 0);
+        for(char S:s) ss[S-'a']++;
+        // track back
+        if(helper(nums, ss, r)){
+            string result = "";
+            for(int i = 0; i < res.size(); i++){
+                for(int j = 0; j < res[i]; j++) result += to_string(i);
+            }
+            return result;
+        }
+        return "";
+        
+    }
+    
+    
+    bool helper(vector<vector<int>> &nums, vector<int> &s, vector<int> r){
+        int sum = 0;
+        for(int i = 0; i < s.size(); i++) sum += s[i];
+        if(sum == 0){
+            for(int i = 0; i < r.size(); i++){
+                if(r[i] > 0) res[i] = r[i];
+            }
+            return true;
+        }
+        for(int i = 0; i < nums.size(); i++){
+            bool valid = true;
+            vector<int> temp = s;
+            for(int j = 0; j < temp.size(); j++){
+                if(nums[i][j] > temp[j]){
+                    valid = false;
+                    break;
+                }
+                temp[j] -= nums[i][j];
+            }
+            if(!valid) continue;
+            r[i]++;
+            if(helper(nums, temp, r)){
+                return true;
+            }
+        }
+        return false;
+    }
+};
