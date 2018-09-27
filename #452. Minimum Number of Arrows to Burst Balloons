@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool compare(const pair<int, int> &p1, const pair<int, int> &p2){
+        if(p1.first > p2.first){
+            return true;
+        }
+        else if(p1.first == p2.first && p1.second > p2.second){
+            return true;
+        }
+        return false;
+    }
+    
+    int findMinArrowShots(vector<pair<int, int>>& points) {
+        if(points.size() == 0) return 0;
+        // first sort the points
+        // first priority: first
+        // second priority: second
+        // order: increasing
+        sort(points.begin(), points.end());
+        int l = points[0].first, r = points[0].second, res = 1;
+        for(int i = 1; i < points.size(); i++){
+            // no common area
+            if(points[i].first > r){
+                res++;
+                l = points[i].first;
+                r = points[i].second;
+            }
+            // update common area
+            // only need to update right for common area
+            // since we sorted the vector, as long as new pair's left is smaller than or equal to right, it is ok
+            else if(points[i].second < r){
+                r = points[i].second;
+            }
+        }
+        return res;
+    }
+};
