@@ -1,0 +1,26 @@
+class Solution {
+public:
+    unordered_map<int, vector<int>> m;
+    vector<int> res;
+    vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
+        res = vector<int>(quiet.size(), -1);
+        for(auto r:richer) m[r[1]].push_back(r[0]);
+        for(int i = 0; i < res.size(); i++) res[i] = dfs(i, quiet);
+        return res;
+    }
+    // this function returns the quietest persopn who is richer than person i
+    int dfs(int i, vector<int>& quiet){
+        // since there is no loop, the structure based on richness is a tree
+        // if we visited res[i], then no need to traverse the subtree whose root node is i again
+        if(res[i] != -1) return res[i];
+        // the person who is equally or richer than person i is person i himself
+        res[i] = i;
+        // if we have no idea about who is richer than person i, we just return i
+        if(m.find(i) == m.end()) return res[i];
+        // visit all the person who is directly richer than person i (those memtioned in richer)
+        for(auto j:m[i]){
+            if(quiet[dfs(j, quiet)] < quiet[res[i]]) res[i] = res[j];
+        }
+        return res[i];
+    }
+};
