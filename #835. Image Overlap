@@ -1,0 +1,26 @@
+// this method takes less time when the matrix is sparse
+class Solution {
+public:
+    int largestOverlap(vector<vector<int>>& A, vector<vector<int>>& B) {
+        vector<pair<int, int>> VA, VB;
+        // record the position of all the non-zero elements in A and B
+        for(int i = 0; i < A.size(); i++){
+            for(int j = 0; j < A[0].size(); j++){
+                if(A[i][j] == 1) VA.push_back({i,j});
+                if(B[i][j] == 1) VB.push_back({i,j});
+            }
+        }
+        map<pair<int, int>, int> m;
+        // consider all possible cases
+        for(int i = 0; i < VA.size(); i++){
+            for(int j = 0; j < VB.size(); j++){
+                // in order to make sure that VA[i] is matching with VB[j]
+                // the matrix A needs to move VA[i].first-VB[j].first on x direction, and VA[i].second-VB[j].second on y direction
+                m[make_pair(VA[i].first-VB[j].first, VA[i].second-VB[j].second)]++;
+            }
+        }
+        int res = 0;
+        for(auto M:m) res = max(res, M.second);
+        return res;
+    }
+};
