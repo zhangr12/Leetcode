@@ -1,0 +1,19 @@
+// can only move down or right
+// total steps is fixed, which is m + n -2
+// we need to find different way to insert m-1 elements into a m+n-2 length array
+// note that here we can always choose to find the position for m-1 or n-1 elements first
+// since one of them is fixed, the other is automatically fixed
+// this is very helper when the grid is in long rectangular shape
+// Also not that we need to set res to long int type to avoid overflow
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if(m == 0 || n == 0) return 0;
+        long int total_steps = m + n -2, res = 1;
+        if(m > n) m = n;
+        for(int i = 0; i < m-1; i++) res *= (total_steps - i);
+        cout << res << endl;
+        for(int i = 1; i <= m-1; i++) res /= i;
+        return res;
+    }
+};
