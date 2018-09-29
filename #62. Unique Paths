@@ -1,7 +1,7 @@
 // can only move down or right
 // total steps is fixed, which is m + n -2
 // we need to find different way to insert m-1 elements into a m+n-2 length array
-// note that here we can always choose to find the position for m-1 or n-1 elements first
+// note that here we can always choose to find the position for m-1 or n-1 elements first, C^(m+n-2)_(m-1) or C^(m+n-2)_(n-1)
 // since one of them is fixed, the other is automatically fixed
 // this is very helper when the grid is in long rectangular shape
 // Also not that we need to set res to long int type to avoid overflow
