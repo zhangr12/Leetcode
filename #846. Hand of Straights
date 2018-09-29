@@ -1,3 +1,30 @@
+// this is better solution compare with the second one
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int W) {
+        if(hand.size()%W != 0) return false;
+        map<int, int> m;
+        for(int h:hand) m[h]++;
+        // the cards have been sorted already since we use map
+        for(auto M:m){
+            // if number of card is still greater than zero
+            if(M.second > 0){
+                // we decrease the number of cards by M.second for its M consecutive cards
+                for(int i = 0; i < W; i++){
+                    // here we do not need to check whether M.first exist because if it is not exist, then m[M.first+i] == 0
+                    // this means after m[M.first + i] -= M.second, m[M.first + i] < 0, so we return false
+                    m[M.first + i] -= M.second;
+                    if(m[M.first + i] < 0) return false;
+                }
+            }
+        }
+        return true;
+    }
+};
+
+
+
+////////////////////////////////////////
 class Solution {
 public:
     bool isNStraightHand(vector<int>& hand, int W) {
