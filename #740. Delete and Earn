@@ -1,6 +1,43 @@
 class Solution {
 public:
     int deleteAndEarn(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        map<int, int> m;
+        for(int num:nums) m[num]++;
+        map<int, int>::iterator crt = m.begin(), prev = m.begin();
+        // strategy1 is always one step behind strategy2
+        int strategy1 = 0, strategy2 = crt->first*crt->second;
+        crt++;
+        while(crt != m.end()){
+            // for current number, if it does not form a consequence with previous number
+            // make strategy1 move forward one step(become strategy2), then add crt->first*crt->second to strategy2
+            if(crt->first - prev->first != 1){
+                strategy1 = strategy2;
+                strategy2 += crt->first*crt->second;
+            }
+            // if it form a consequence with previous number
+            // then we have two choices:
+            // 1. we use current number: strategy1 + crt->first*crt->second
+            // 2. we do not use current number: strategy2
+            // the bigger one is the result for the new strategy2
+            // make strategy1 equal to the original strategy2
+            else{
+                int temp = strategy2;
+                strategy2 = max(strategy2, strategy1 + crt->first*crt->second);
+                strategy1 = temp;
+            }
+            prev = crt;
+            crt++;
+        }
+        return max(strategy1, strategy2);
+    }
+};
+
+
+//////////////////////////////////////
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
         map<int, int> m;
         for(int num:nums) m[num]++;
         map<int, int>::iterator start = m.begin(), end;
