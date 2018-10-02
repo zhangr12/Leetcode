@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        map<int, int> m;
+        for(int num:nums) m[num]++;
+        map<int, int>::iterator start = m.begin(), end;
+        int strategy1 = 0, strategy2 = 0, res = 0;
+        while(start != m.end()){
+            end = start;
+            int i = 0;
+            // detect if we have consequence
+            while(end != m.end() && end->first - i == start->first){
+                i++;
+                end++;
+            }
+            // if i == 1, means does not form a consequence
+            if(i == 1){
+                res += start->first*start->second;
+                start++;
+            }
+            else{
+                // house robber problem
+                int strategy1 = 0, strategy2 = start->first*start->second;
+                start++;
+                while(start != end){
+                    int temp = strategy2;
+                    strategy2 = max(strategy1 + start->first*start->second, strategy2);
+                    strategy1 = temp;
+                    start++;
+                }
+                res += max(strategy1, strategy2);
+            }
+        }
+        return res;
+    }
+};
