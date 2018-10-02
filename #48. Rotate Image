@@ -1,0 +1,22 @@
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        for(int i = 0; i < n; i++){
+            rotate(matrix, i, n);
+        }
+    }
+    
+    // rotate the matrix layer by layer, like an onion
+    void rotate(vector<vector<int>> & m, int i, int n){
+        int temp;
+        // for this part, draw a picture and everything will becomes clear
+        for(int j = 0; j <= n-2-2*i; j++){
+            temp = m[i+j][n-1-i];
+            m[i+j][n-1-i] = m[i][i+j];
+            m[i][i+j] = m[n-1-i-j][i];
+            m[n-1-i-j][i] = m[n-1-i][n-1-i-j];
+            m[n-1-i][n-1-i-j] = temp;
+        }
+    }
+};
