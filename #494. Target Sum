@@ -6,6 +6,32 @@ public:
         return subsetSum(nums, (S+total)/2);
     }
     
+    // 1D DP
+    int subsetSum(vector<int> &nums, int target){
+        vector<int> dp(target+1, 0);
+        // unless 2D dp, we do not need to consider initialization a lot in 1D version
+        dp[0] = 1;
+        
+        for(int num:nums){
+            // this part handles the possible case when num == 0
+            // since we always have chance to reach dp[0] and double it when num == 0
+            for(int i = target; i >= num; i--) dp[i] += dp[i-num];
+        }
+        return dp[target];
+    }
+};
+
+
+
+//////////////////////////////
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        if(S > total || (S+total)%2 != 0) return 0;
+        return subsetSum(nums, (S+total)/2);
+    }
+    
     // 2D DP: need to carefully initialize the dp matrix
     int subsetSum(vector<int> &nums, int target){
         // dp[i][j] means how many j we can get from subset nums[0]~nums[i-1]
