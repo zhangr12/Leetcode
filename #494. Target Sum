@@ -64,3 +64,24 @@ public:
         return dp[nums.size()][target];
     }
 };
+
+
+/////////////////////////////////
+// DFS method with memory
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        unordered_map<int, int> m1;
+        // when we do not put any number in there, the current sum is considered to be 0
+        m1[0] = 1;
+        for(int num:nums){
+            unordered_map<int, int> m2;
+            for(auto item:m1){
+                m2[item.first + num] += item.second;
+                m2[item.first - num] += item.second;
+            }
+            m1 = m2;
+        }
+        return m1[S];
+    }
+};
