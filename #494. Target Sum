@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        if(S > total || (S+total)%2 != 0) return 0;
+        return subsetSum(nums, (S+total)/2);
+    }
+    
+    // 2D DP: need to carefully initialize the dp matrix
+    int subsetSum(vector<int> &nums, int target){
+        // dp[i][j] means how many j we can get from subset nums[0]~nums[i-1]
+        vector<vector<int>> dp(nums.size() + 1, vector<int>(target + 1, 0));
+        
+        // initialization
+        // target is 0 and no element, then only one case: pick nothing
+        dp[0][0] = 1;
+        for(int i = 1; i < nums.size() + 1; i++){
+            // the way to achive 0 is the same as previous subset
+            if(nums[i-1] != 0){
+                dp[i][0] = dp[i-1][0];
+            }
+            // if current element is zero, then we have twice as much as dp[i-1][0]'s combination
+            else{
+                if(nums[i-1] == 0) dp[i][0] = dp[i-1][0]*2;
+            }
+        };
+        // start fill other part of the dp matrix
+        for(int i = 1; i < nums.size() + 1; i++){
+            for(int j = 1; j < target + 1; j++){
+                // the number of possible combination is as much as dp[i-1][j], note that we do not consider nums[i-1] now
+                dp[i][j] += dp[i-1][j];
+                if(j-nums[i-1] >= 0){
+                    // consider use nums[i-1]
+                    dp[i][j] += dp[i-1][j-nums[i-1]];
+                }
+            }
+        }
+        return dp[nums.size()][target];
+    }
+};
