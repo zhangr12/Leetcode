@@ -1,0 +1,68 @@
+class MyCalendar {
+    map<int, int> books;
+public:
+    bool book(int start, int end) {
+        auto next = books.lower_bound(start); // first element with key not go before k (i.e., either it is equivalent or goes after).
+        // nothing in the books
+        if(books.size() == 0){
+            books[start] = end;
+            return true;
+        }
+        // start greater than current start
+        // only need to check the last interval(--next in this case)
+        if(next == books.end() && overlap(--next, {start, end})){
+            books[start] = end;
+            return true;
+        }
+        // start less than or equal to current start
+        // only need to check the first interval
+        if(next == books.begin() && overlap(next, {start, end})){
+            books[start] = end;
+            return true;
+        }
+        // needs to check interval before overlap and interval after overlap
+        if(overlap(next, {start, end}) && overlap(--next, {start, end})){
+            books[start] = end;
+            return true;
+        }
+        return false;
+    }
+    
+    bool overlap(map<int, int>::iterator it1, pair<int, int> p){
+        if(max(it1->first, p.first) < min(it1->second, p.second)) return false;
+        return true;
+    }
+    
+    
+};
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * bool param_1 = obj.book(start,end);
+ */
+ 
+ 
+ /////////////////////////////////////
+ // brutal force
+ class MyCalendar {
+public:
+    vector<pair<int, int>> v;
+    MyCalendar() {
+        
+    }
+    
+    bool book(int start, int end) {
+        for(int i = 0; i < v.size(); i++){
+            if(max(v[i].first, start) < min(v[i].second, end)) return false;
+        }
+        v.push_back({start, end});
+        return true;
+    }
+};
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar obj = new MyCalendar();
+ * bool param_1 = obj.book(start,end);
+ */
