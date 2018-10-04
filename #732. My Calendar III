@@ -1,0 +1,32 @@
+class MyCalendarThree {
+public:
+    map<int, int> s, e;
+    MyCalendarThree() {
+        
+    }
+    
+    int book(int start, int end) {
+        s[start]++;
+        e[end]++;
+        int crt = 0, max_overlap = 0;
+        map<int, int>::iterator its = s.begin(), ite = e.begin();
+        while(its != s.end()){
+            if(its->first < ite->first){
+                crt += its->second;
+                its++;
+                max_overlap = max(crt, max_overlap);
+            }
+            else{
+                crt -= ite->second;
+                ite++;
+            }
+        }
+        return max_overlap;
+    }
+};
+
+/**
+ * Your MyCalendarThree object will be instantiated and called as such:
+ * MyCalendarThree obj = new MyCalendarThree();
+ * int param_1 = obj.book(start,end);
+ */
