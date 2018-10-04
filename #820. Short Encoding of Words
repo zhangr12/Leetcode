@@ -1,0 +1,63 @@
+// solution use trie
+// define TrieNode
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> next;
+};
+
+
+class Solution {
+public:
+    int minimumLengthEncoding(vector<string>& words) {
+        // put the reversed word into a trie
+        // remember the depth at each end of the word
+        // at the very end, check whether end of word is a leaf, if it is, add its depth into result
+        TrieNode* root = new TrieNode;
+        vector<pair<TrieNode*, int>> leaves;
+        set<string> w(words.begin(), words.end());
+        for(string word:w){
+            // always start at root
+            TrieNode* crt = root;
+            for(int i = word.size()-1; i >= 0; i--){
+                // check if current char in already in current TrieNode's next
+                // if not, create a new TrieNode for current char
+                if(crt->next.find(word[i]) == crt->next.end()) crt->next[word[i]] = new TrieNode;
+                // move to current TrieNode's next node
+                crt = crt->next[word[i]];
+            }
+            // at the very end, remember the location of first(it is first because we push the word into trie reversely) char of word
+            // and its corresponding depth (in our trie, the depth is the size of the word plus 1(because we need to add # if we want to code it))
+            leaves.push_back({crt, word.size() + 1});
+        }
+        int res = 0;
+        for(auto item:leaves){
+            // check whether the node on trie is a leaf node
+            // note that we only want the leaf node, since if its not, then the word can be some other word's suffix
+            if(item.first->next.size() == 0) res += item.second;
+        }
+        return res;
+    }
+};
+
+
+
+
+//////////////////////////////
+// brutal force
+class Solution {
+public:
+    int minimumLengthEncoding(vector<string>& words) {
+        if(words.size() == 0) return 0;
+        unordered_set<string> s(words.begin(), words.end());
+        string temp;
+        for(string word:words){
+            for(int i = 0; i < word.size()-1; i++){
+                temp = word.substr(word.size()-1-i, i+1);
+                if(s.find(temp) != s.end()) s.erase(temp);
+            }
+        }
+        int res = s.size();
+        for(auto S:s) res += S.size();
+        return res;
+    }
+};
