@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        helper(nums, res, 0, {});
+        return res;
+    }
+    
+    void helper(vector<int> &nums, vector<vector<int>> &res, int i, vector<int> temp){
+        res.push_back(temp);
+        if(i == nums.size()) return;
+        int start = i;
+        for(i; i < nums.size(); i++){
+            // skip duplicate element
+            // the first duplicate element will create all the valid subsets contains this element
+            if(i > start && nums[i] == nums[i-1]) continue;
+            temp.push_back(nums[i]);
+            helper(nums, res, i+1, temp);
+            temp.pop_back();
+        }
+    }
+};
