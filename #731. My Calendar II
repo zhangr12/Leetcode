@@ -42,6 +42,7 @@ public:
         s[start]++;
         e[end]++;
         int crt = 0;
+        // only need to check up to s.lower_bound(end)
         map<int, int>::iterator it_s = s.begin(), it_e = e.begin(), end_search = s.lower_bound(end);
         while(it_s != end_search){
             if(it_s->first < it_e->first){
