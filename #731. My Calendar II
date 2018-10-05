@@ -1,0 +1,70 @@
+class MyCalendarTwo {
+public:
+    // two vectors
+    // books keeps tracking for all the valid books
+    // overlaps keeps tracking for all the existing overlaps
+    vector<pair<int, int>> books, overlaps;
+    MyCalendarTwo() {
+        
+    }
+    
+    bool book(int start, int end) {
+        // if overlap with existing overlap, then false
+        for(auto o:overlaps){
+            if(max(o.first, start) < min(o.second, end)) return false;
+        }
+        // otherwise, write the new overlap into overlaps
+        for(auto b:books){
+            if(max(b.first, start) < min(b.second, end)) overlaps.push_back({max(b.first, start), min(b.second, end)});
+        }
+        // update books
+        books.push_back({start, end});
+        return true;
+    }
+};
+
+/**
+ * Your MyCalendarTwo object will be instantiated and called as such:
+ * MyCalendarTwo obj = new MyCalendarTwo();
+ * bool param_1 = obj.book(start,end);
+ */
+ 
+ //////////////////////////////////
+ //
+class MyCalendarTwo {
+public:
+    map<int, int> s, e;
+    MyCalendarTwo() {
+        
+    }
+    
+    bool book(int start, int end) {
+        s[start]++;
+        e[end]++;
+        int crt = 0;
+        map<int, int>::iterator it_s = s.begin(), it_e = e.begin(), end_search = s.lower_bound(end);
+        while(it_s != end_search){
+            if(it_s->first < it_e->first){
+                crt += it_s->second;
+                it_s++;
+                if(crt >= 3) break;
+            }
+            else{
+                crt -= it_e->second;
+                it_e++;
+            }
+        }
+        if(crt >= 3){
+            s[start]--;
+            e[end]--;
+            return false;
+        }
+        return true;
+    }
+};
+
+/**
+ * Your MyCalendarTwo object will be instantiated and called as such:
+ * MyCalendarTwo obj = new MyCalendarTwo();
+ * bool param_1 = obj.book(start,end);
+ */
