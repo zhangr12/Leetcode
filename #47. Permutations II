@@ -1,0 +1,46 @@
+// back trace
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        helper(nums, res, {});
+        return res;
+    }
+    
+    void helper(vector<int> nums, vector<vector<int>> &res, vector<int> temp){
+        if(nums.size() == 0){
+            res.push_back(temp);
+            return;
+        }
+        
+        for(int i = 0; i < nums.size(); i++){
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            int crt = nums[i];
+            temp.push_back(crt);
+            nums.erase(nums.begin() + i);
+            helper(nums, res, temp);
+            temp.pop_back();
+            nums.insert(nums.begin() + i, crt);
+        }
+    }
+    
+};
+
+
+/////////////////////////////////
+//STL
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> copy_nums = nums;
+        res.push_back(nums);
+        while(true){
+            next_permutation(nums.begin(), nums.end());
+            if(nums == copy_nums) break;
+            res.push_back(nums);
+        }
+        return res;
+    }
+};
