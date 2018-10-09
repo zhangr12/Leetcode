@@ -1,0 +1,25 @@
+class Solution {
+public:
+    double new21Game(int N, int K, int W) {
+        if(N > W+K-1 || K == 0 || N == 0) return 1;
+        vector<double> dp(K+W, 0);
+        double sum = 0;
+        dp[0] = 1;
+        for(int i = 1; i < K; i++){
+            sum += dp[i-1];
+            if(i-W > 0) sum -= dp[i-W-1];
+            dp[i] = sum/(W+0.0);
+        }
+        sum += dp[K-1];
+        for(int i = K; i < W+K; i++){
+            if(i-W > 0) sum -= dp[i-W-1];
+            dp[i] = sum/(W+0.0);
+        }
+        double res = 0;
+        for(int i = K; i < dp.size(); i++){
+            if(i > N) break;
+            res += dp[i];
+        }
+        return res;
+    }
+};
