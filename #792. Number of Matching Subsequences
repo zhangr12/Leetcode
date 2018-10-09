@@ -1,3 +1,33 @@
+// use lower_bound
+class Solution {
+public:
+    int numMatchingSubseq(string S, vector<string>& words) {
+        vector<vector<int>> v(26, vector<int>(1, -1));
+        for(int i = 0; i < S.size(); i++) v[S[i]-'a'].push_back(i);
+        int res = 0;
+        for(auto word:words){
+            if(helper(v, word)) res++;
+        }
+        return res;
+    }
+    
+    
+    bool helper(vector<vector<int>> &v, string word){
+        int target = 0;
+        for(char w:word){
+            if(v[w-'a'].size() == 1) return false;
+            auto nxt = lower_bound(v[w-'a'].begin(), v[w-'a'].end(), target);
+            if(nxt == v[w-'a'].end()) return false;
+            target = *nxt + 1;
+        }
+        return true;
+    }
+    
+};
+
+
+//////////////////////////
+// write lower_bound
 class Solution {
 public:
     int numMatchingSubseq(string S, vector<string>& words) {
