@@ -1,0 +1,38 @@
+class Solution {
+public:
+    double largestSumOfAverages(vector<int>& A, int K) {
+        // dynamic programming
+        // dp is a k y A.size() matrix
+        // dp[i][j] means the largest sum of average for sub-vector A[0]~A[i] with partition number j+1
+        // initialization: dp[i][i] = sum(A[0~i]), dp[i][0] = sum(A[0~i])/(i+1)
+        // trasition formular: note that the last element either belongs to the last set or itself is a set
+        // if itself is a set: dp[i][j] = dp[i-1][j-1] + A[i]
+        // if belongs to last set, then dp[i][j] = max(dp[i-l][j-1] + average(A[i-l+1], ..., A[i]) as long as i-l >= j-1)
+        vector<vector<double>> dp(A.size(), vector<double>(K, 0));
+        double sum = 0;
+        // initialization
+        for(int i = 0; i < K; i++){
+            sum += A[i];
+            dp[i][i] = sum;
+            dp[i][0] = sum/(i+1);
+        }
+        for(int i = K; i < A.size(); i++){
+            sum += A[i];
+            dp[i][0] = sum/(i+1);
+        }
+        // fill matrix with transition matrix
+        for(int j = 1; j < K; j++){
+            for(int i = j+1; i < A.size(); i++){
+                double temp_sum = A[i], temp = INT_MIN;
+                int l = 1;
+                while(i-l >= j-1){
+                    temp = max(dp[i-l][j-1] + temp_sum / l, temp);
+                    temp_sum += A[i-l];
+                    l++;
+                }
+                dp[i][j] = temp;
+            }
+        }
+        return dp[A.size()-1][K-1];
+    }
+};
