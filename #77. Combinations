@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        helper(res, {}, n, 0, k);
+        return res;
+    }
+    
+    void helper(vector<vector<int>> &res, vector<int> temp, int n, int start, int k){
+        if(k == 0){
+            res.push_back(temp);
+            return;
+        }
+        // we only need to consider up to n-k because we need at least k elements left in the subsequence
+        // consider n = 5 and k = 3
+        // then in order, the first element can be 1, 2, 3. It cannot be 4 because there is not enough elements left(only 4 and 5)
+        // in this case, if k is close to n, it can save us a lot of time by abandon the impossible combination at the beginning
+        for(int i = start; i <= n-k; i++){
+            temp.push_back(i+1);
+            helper(res, temp, n, i+1, k-1);
+            temp.pop_back();
+        }
+        return;
+    }
+};
