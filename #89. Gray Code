@@ -1,0 +1,11 @@
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> res(1, 0);
+        for(int i = 0; i < n; i++){
+            int size = res.size(), addition = pow(2, i);
+            for(int i = size-1; i >=0; i--) res.push_back(res[i] + addition);
+        }
+        return res;
+    }
+};
