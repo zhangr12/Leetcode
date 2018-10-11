@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<pair<string, string>> equations, vector<double>& values, vector<pair<string, string>> queries) {
+        unordered_map<string, unordered_map<string, double>> m;
+        for(int i = 0; i < equations.size(); i++){
+            m[equations[i].first][equations[i].first] = 1;
+            m[equations[i].second][equations[i].second] = 1;
+            m[equations[i].first][equations[i].second] = values[i];
+            m[equations[i].second][equations[i].first] = 1/values[i];
+        }
+        for(auto k:m){
+            for(auto i:k.second){
+                for(auto j:k.second) m[i.first][j.first] = m[i.first][k.first]*m[k.first][j.first];
+            }
+        }
+        vector<double> res;
+        for(auto q:queries){
+            string q1 = q.first, q2 = q.second;
+            if(m.find(q1) == m.end() || m[q1].find(q2) == m[q1].end()){
+                res.push_back(-1);
+            }
+            else{
+                res.push_back(m[q1][q2]);
+            }
+        }
+        return res;
+    }
+};
