@@ -7,7 +7,69 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+ 
+// use unordered_map to avoid repeated search
+class Solution {
+public:
+    unordered_map<TreeNode*, int> m;
+    int rob(TreeNode* root) {
+        if(!root) return 0;
+        int l = 0, r = 0, ll = 0, lr = 0, rl = 0, rr = 0;
+        if(m.find(root->left) != m.end()){
+            l = m[root->left];
+        }
+        else{
+            l = rob(root->left);
+            m[root->left] = l;
+        }
+        if(m.find(root->right) != m.end()){
+            r = m[root->right];
+        }
+        else{
+            r = rob(root->right);
+            m[root->right] = r;
+        }
+        if(root->left){
+            if(m.find(root->left->left) != m.end()){
+                ll = m[root->left->left];
+            }
+            else{
+                ll = rob(root->left->left);
+                m[root->left->left] = ll;
+            }
+            if(m.find(root->left->right) != m.end()){
+                lr = m[root->left->right];
+            }
+            else{
+                lr = rob(root->left->right);
+                m[root->left->right] = lr;
+            }
+        }
+        if(root->right){
+            if(m.find(root->right->left) != m.end()){
+                rl = m[root->right->left];
+            }
+            else{
+                rl = rob(root->right->left);
+                m[root->right->left] = rl;
+            }
+            if(m.find(root->right->right) != m.end()){
+                rr = m[root->right->right];
+            }
+            else{
+                rr = rob(root->right->right);
+                m[root->right->right] = rr;
+            }
+        }
+        return max(root->val + ll + lr + rr + rl, r + l);
+    }
+};
 
+
+
+
+
+////////////////////////////////////
 // Better recursive solution
 // let the root be level 1
 // then the robber can either rob level 1 and level 3
