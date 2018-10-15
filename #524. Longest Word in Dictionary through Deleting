@@ -1,0 +1,31 @@
+class Solution {
+public:
+    string findLongestWord(string s, vector<string>& d) {
+        string res = "";
+        // this line is critical to improve the runtime performance
+        // with this line, we can stop to search word with length k once we found the first qualified word with length k
+        sort(d.begin(), d.end());
+        unordered_map<char, vector<int>> m;
+        for(int i = 0; i < s.size(); i++) m[s[i]].push_back(i);
+        for(auto w:d){
+            if(w.size() < res.size()) continue;
+            if(!canGetFromDeleting(m, w)) continue;
+            if(w.size() > res.size() || w < res){
+                res = w;
+            }
+        }
+        return res;
+    }
+    
+    bool canGetFromDeleting(unordered_map<char, vector<int>> &m, string &w){
+        if(w.size() == 0) return false;
+        int start = -1;
+        for(int i = 0; i < w.size(); i++){
+            if(m.find(w[i]) == m.end()) return false;
+            auto it = upper_bound(m[w[i]].begin(), m[w[i]].end(), start);
+            if(it == m[w[i]].end()) return false;
+            start = *it;
+        }
+        return true;
+    }
+};
