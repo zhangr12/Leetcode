@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        if(nums.size() == 1) return nums[0];
+        int n = nums.size();
+        return max(houseRobber(nums, 1, n), houseRobber(nums, 0, n-1));
+    }
+    
+    // calculate the amount of money if we start at house[start] and end at house[end]
+    int houseRobber(vector<int> &nums, int start, int end){
+        // include means we rob the current house
+        // exclude means we do not rob current house
+        int include = 0, exclude = 0, temp;
+        for(int i = start; i < end; i++){
+            temp = include;
+            include = max(exclude + nums[i], include);
+            exclude = temp;
+        }
+        return max(include, exclude);
+    }
+};
