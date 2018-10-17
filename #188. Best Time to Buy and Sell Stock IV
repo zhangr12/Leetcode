@@ -15,10 +15,15 @@ public:
             // length k+1 is because the trasection numbers we could have is from 0 to k
             vector<int> T0(k+1, 0), T1(k+1, INT_MIN);
             for(int price:prices){
+                // T0k1: initialize: no stock and no trasection, 0
+                // T1k depends on T1[j]
                 int T0k1 = 0, T1k;
                 for(int j = 1; j < k+1; j++){
                     // before update T1[j], remember T1[j] for later use
                     T1k = T1[j];
+                    // at the end of today, we have 1 stock: two possible cases:
+                    // 1. we have carry one stock from previous day
+                    // 2. we do not have stock in previous day, we buy 1 today
                     T1[j] = max(T1[j], T0k1 - price);
                     // before update T0[j], remember T0[j] for the use in next loop
                     T0k1 = T0[j];
