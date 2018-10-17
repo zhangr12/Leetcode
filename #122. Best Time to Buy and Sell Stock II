@@ -1,6 +1,28 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
+        // T_ik0: the maximum profit we can have by the end of the ith day, if we make k transections and hold no stock
+        // T_ik1: the maximum profit we can have by the end of the ith day, if we make k transections and hold 1 stock
+        // initialization: for day -1, we do not have any profit, so its 0
+        // initialization: for day -1, there is no chance that we can hold 1 stock, initialize it to -inf
+        int T_ik0 = 0, T_ik1 = INT_MIN, temp;
+        for(int price:prices){
+            temp = T_ik0;
+            // since there is no number of transection limits, this means T[i][k][0] = T[i][k-1][0] and T[i][k][1] = T[i][k-1][1]
+            // at day i, if we do not want hold any stock by the end of the day, then we can either make no mvoe or we can sell one stock if we hold one stock from privious day
+            // similar to T_ik1
+            T_ik0 = max(T_ik0, T_ik1 + price);
+            T_ik1 = max(T_ik1, temp - price);
+        }
+        return T_ik0;
+    }
+};
+
+
+///////////////////////////////////////
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
         int res = 0;
         for(int i = 1; i < prices.size(); i++){
             if (prices[i] > prices[i-1]) res += prices[i] - prices[i-1];
