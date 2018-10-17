@@ -1,6 +1,25 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
+        // T_i10: the maximum profit we can get by the end of day i, if we do not hold any stock and did 1 transection
+        // T_i11: same, byt hold 1 stock by the end of day i
+        // note that T_i00 = 0, T_i01 is invalid
+        int T_i10 = 0, T_i11 = INT_MIN;
+        for(int price:prices){
+            // hols no stock by the end of day 1, we can either sell the stock if we have one in previous day, or we can do nothing if we have 1 trasection in previous day and no stock carried over
+            // T_i11 is similar
+            T_i10 = max(T_i10, T_i11 + price);
+            T_i11 = max(T_i11, -price);
+        }
+        return T_i10;
+    }
+};
+
+
+/////////////////////////////////
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
         if (prices.size() < 2) return 0;
         int res = 0, crt_min = prices[0];
         for(int i = 1; i < prices.size(); i++){
