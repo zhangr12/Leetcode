@@ -1,0 +1,16 @@
+// the idea is similar with other stock problems
+// the only difference is that we need to remember T_(i-2)10 since we cannot buy stock next day
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        // initialize T_old10 and T_older10 to be 0
+        int T_old10 = 0, T_older10 = 0, T_i10 = 0, T_i11 = INT_MIN;
+        for(int price:prices){
+            T_old10 = T_i10;
+            T_i10 = max(T_i10, T_i11 + price);
+            T_i11 = max(T_i11, T_older10 - price);
+            T_older10 = T_old10;
+        }
+        return T_i10;
+    }
+};
