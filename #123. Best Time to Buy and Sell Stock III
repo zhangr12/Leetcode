@@ -1,0 +1,16 @@
+//https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int T_i10 = 0, T_i20 = 0, T_i11 = INT_MIN, T_i21 = INT_MIN, temp11, temp10;
+        for(int price:prices){
+            temp11 = T_i11;
+            temp10 = T_i10;
+            T_i11 = max(temp11, -price);
+            T_i10 = max(temp10, temp11 + price);
+            T_i20 = max(T_i21 + price, T_i20);
+            T_i21 = max(T_i21, temp10 - price);
+        }
+        return max(T_i10, T_i20);
+    }
+};
