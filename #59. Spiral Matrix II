@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        vector<vector<int>> m(n, vector<int>(n, 0));
+        // the idea is simple, imagine we are a robot walking spirally in the matrix
+        // the order is first move to left, then whenever reach the edge of the matrix or meet a visited element, we turn right
+        // left->down->right->up
+        // (0, 1) -> (1, 0) -> (0, -1) -> (-1, 0)
+        // below vector plays a role of state transition machine
+        vector<vector<int>> status{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        // initial state is 0, initial position is (0, 0), initial addition is (0, 1)
+        int crt_st = 0, x = 0, y = 0, add_x = 0, add_y = 1;
+        for(int i = 0; i < pow(n,2); i++){
+            m[x][y] = i+1;
+            // reach edge or visited element, turn
+            if(x+add_x < 0 || y+add_y < 0 || x+add_x >= n || y+add_y >= n || m[x+add_x][y+add_y] != 0){
+                crt_st = (crt_st+1)%4;
+                add_x = status[crt_st][0];
+                add_y = status[crt_st][1];
+            }
+            x += add_x;
+            y += add_y;
+        }
+        return m;
+    }
+};
