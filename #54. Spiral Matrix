@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if(matrix.size() == 0) return {};
+        // keep tracking the edge of the remaining matrix using colStart, colEnd, rowStart, rowEnd
+        int m = matrix.size(), n = matrix[0].size(), colStart = 0, colEnd = n-1, rowStart = 0, rowEnd = m-1, i = 0;
+        vector<int> res(m*n, 0);
+        
+        while(true){
+            if(i >= m*n) break;
+            for(int j = colStart; j <= colEnd; j++){
+                //cout << rowStart << " " << j << endl;
+                res[i] = matrix[rowStart][j];
+                i++;
+            }
+            rowStart++;
+            if(i >= m*n) break;
+            for(int j = rowStart; j <= rowEnd; j++){
+                //cout << j << " " << colEnd << endl;
+                res[i] = matrix[j][colEnd];
+                i++;
+            }
+            colEnd--;
+            if(i >= m*n) break;
+            for(int j = colEnd; j >= colStart; j--){
+                //cout << rowEnd << " " << j << endl;
+                res[i] = matrix[rowEnd][j];
+                i++;
+            }
+            rowEnd--;
+            if(i >= m*n) break;
+            for(int j = rowEnd; j >= rowStart; j--){
+                //cout << j << " " << colStart << endl;
+                res[i] = matrix[j][colStart];
+                i++;
+            }
+            colStart++;
+        }
+        return res;
+    }
+};
