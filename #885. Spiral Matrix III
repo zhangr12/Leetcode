@@ -1,0 +1,42 @@
+// the moving pattern is:
+// left, down, right, up, left, down, right, up, etc.
+// steps: 1 1 2 2 3 3 4 4 etc.
+// idx:   0 1 2 3 4 5 6 7 etc.
+// so we use steps_count to keep tracking the steps for each phase, the relation is steps = idx/2+1
+class Solution {
+public:
+    vector<vector<int>> spiralMatrixIII(int R, int C, int r0, int c0) {
+        int count = 0,  steps_count = 0, add_x = 0, add_y = 1, temp;
+        vector<vector<int>> m(R*C, vector<int>(2, 0));
+        m[count][0] = r0;
+        m[count][1] = c0;
+        count++;
+        bool creating = true;
+        while(creating){
+            for(int i = 0; i < steps_count/2 + 1; i++){
+                // keep tracking whether we have enough elements or not
+                if(count >= R*C){
+                    creating = false;
+                    break;
+                }
+                // move
+                r0 += add_x;
+                c0 += add_y;
+                // check whether we are in m or not
+                if(r0 < 0 || c0 < 0 || r0 >= R || c0 >= C) continue;
+                // if yes, record the position
+                m[count][0] = r0;
+                m[count][1] = c0;
+                // increase the count
+                count++;
+            }
+            // increase the steps
+            steps_count++;
+            // turn right
+            temp = add_x;
+            add_x = add_y;
+            add_y = -temp;
+        }
+        return m;
+    }
+};
