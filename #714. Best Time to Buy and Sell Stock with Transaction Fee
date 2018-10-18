@@ -1,6 +1,23 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices, int fee) {
+        // the idea is the same as infinite transection
+        // the difference is that we need to pay transection fee every time we buy a stock
+        int T_ik0 = 0, T_ik1 = INT_MIN, temp;
+        for(int price:prices){
+            temp = T_ik0;
+            T_ik0 = max(T_ik0, T_ik1 + price);
+            T_ik1 = max(T_ik1, temp - price - fee);
+        }
+        return T_ik0;
+    }
+};
+
+
+//////////////////////////////////
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
         int crt_max = prices[0], crt_min = prices[0], res = 0;
         for(int i = 1; i < prices.size(); i++){
             // update crt_max if current value is greater than crt_max
