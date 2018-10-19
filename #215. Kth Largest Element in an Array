@@ -1,0 +1,14 @@
+class Compare {
+public:
+    bool operator () (int a, int b){
+        return a > b;
+    }
+};
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end(), Compare());
+        return nums[k-1];
+    }
+};
