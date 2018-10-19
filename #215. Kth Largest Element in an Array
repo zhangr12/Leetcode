@@ -1,6 +1,27 @@
 class Compare {
 public:
     bool operator () (int a, int b){
+        // in this way, the priority queue is in increasing order, i.e. the top element is the smallest one
+        return a > b;
+    }
+};
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, Compare> q;
+        for(int num:nums){
+            q.push(num);
+            if(q.size() > k) q.pop();
+        }
+        return q.top();
+    }
+};
+
+////////////////////////////////////////
+class Compare {
+public:
+    bool operator () (int a, int b){
         return a > b;
     }
 };
