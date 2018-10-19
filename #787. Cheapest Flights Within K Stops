@@ -1,3 +1,55 @@
+class Compare {
+public:
+    bool operator() (vector<int> &a, vector<int> &b){
+        return a[0] > b[0];
+    }
+};
+
+class Solution {
+public:
+    // Modified Dijkstra's Algorithm
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        if(src == dst) return 0;
+        unordered_map<int, vector<vector<int>>> m;
+        // from f[0] to f[1] price is f[2]
+        for(auto f:flights) m[f[0]].push_back({f[1], f[2]});
+        if(m.find(src) == m.end()) return -1;
+        // price, city, stops
+        priority_queue<vector<int>, vector<vector<int>>, Compare> q;
+        q.push({0, src, -1});
+        vector<int> temp;
+        vector<vector<int>> temp2;
+        // Note: we do not need to record the lowest prices since we are not only trying to find the lowest price
+        // we try to find the lowest price within K stops
+        while(!q.empty()){
+            temp = q.top();
+            q.pop();
+            int price = temp[0], crt = temp[1], stops = temp[2];
+            // do not need to continue the search if the stops number is greater than K
+            if(stops > K) continue;
+            // since we always get the cheapest price from the priority queue and the flight ticket is always positive
+            // so we do not need to finish traversal the map
+            // we can return dst once we find it
+            if(crt == dst) return price;
+            temp2 = m[crt];
+            for(int i = 0; i < temp2.size(); i++){
+                // in this problem, we are not doing a typical Dijkstra's Algorithm, so we don't need to do the push only when the price is lower than before
+                // because it is possible that when we first reach city i, the price is lower but the stop number is high
+                // so we could not reach the destination with in K stops
+                // next time when we reach city i, the price is not the cheapest, but the stop number is small
+                // in this case, we also want to consider the second visit
+                int nxt = temp2[i][0], price_nxt = temp2[i][1];
+                q.push({price + price_nxt, nxt, stops + 1});
+            }
+        }
+        return -1;
+    }
+};
+
+
+
+
+//////////////////////////////
 class Solution {
 public:
     // Bellman-Ford Algorithm
