@@ -1,36 +1,32 @@
-class Compare
-{
+class Compare {
 public:
-    bool operator() (pair<int, int> &a, pair<int, int> &b)
-    {
-        return a.first > b.first;
+    bool operator() (vector<int> &a, vector<int> &b){
+        return a[0] > b[0];
     }
 };
 
+// Dijkstra's Algorithm
 class Solution {
 public:
     int minPathSum(vector<vector<int>>& grid) {
-        // Dijkstra Algorithm
-        priority_queue<pair<int, int>, vector<pair<int, int>>, Compare> q;
         int m = grid.size(), n = grid[0].size();
         vector<vector<int>> dis(m, vector<int>(n, INT_MAX));
         dis[0][0] = grid[0][0];
-        q.push({grid[0][0], 0});
-        pair<int, int> crt;
-        int x, y;
+        priority_queue<vector<int>, vector<vector<int>>, Compare> q;
+        q.push({dis[0][0], 0, 0});
+        vector<int> temp;
         while(!q.empty()){
-            crt = q.top();
+            temp = q.top();
             q.pop();
-            x = crt.second/n;
-            y = crt.second%n;
-            if(x == m-1 && y == n-1) return dis[x][y];
-            if(x+1 < m && dis[x+1][y] > dis[x][y] + grid[x+1][y]){
+            int dist = temp[0], x = temp[1], y = temp[2];
+            if(x == m-1 && y == n-1) return dist;
+            if(x + 1 < m && dis[x+1][y] > dis[x][y] + grid[x+1][y]){
                 dis[x+1][y] = dis[x][y] + grid[x+1][y];
-                q.push({dis[x+1][y], (x+1)*n + y});
+                q.push({dis[x+1][y], x+1, y});
             }
-            if(y+1 < n && dis[x][y+1] > dis[x][y] + grid[x][y+1]){
+            if(y + 1 < n && dis[x][y+1] > dis[x][y] + grid[x][y+1]){
                 dis[x][y+1] = dis[x][y] + grid[x][y+1];
-                q.push({dis[x][y+1], x*n+y+1});
+                q.push({dis[x][y+1], x, y+1});
             }
         }
     }
