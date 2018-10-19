@@ -1,0 +1,20 @@
+class Solution {
+public:
+    // Bellman-Ford Algorithm
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        vector<int> dis(n, pow(10, 8)), prev;
+        dis[src] = 0;
+        int res = pow(10, 8);
+        // run for K+1 times to find the K stop connection
+        for(int i = 0; i < K+1; i++){
+            prev = dis;
+            for(auto f:flights){
+                // we need to use prev since we need exactly i stops
+                // the results in prev is for i-1 stops
+                dis[f[1]] = min(dis[f[1]], prev[f[0]] + f[2]);
+                if(f[1] == dst && dis[f[1]] < res) res = dis[f[1]];
+            }
+        }
+        return res == pow(10, 8) ? -1 : res;
+    }
+};
