@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        if(k == 1) return true;
+        int sum = 0;
+        for(int num:nums) sum += num;
+        if(sum%k != 0) return false;
+        int target = sum/k;
+        // make sure no single element greater than target
+        for(int num:nums){
+            if(num > target) return false;
+        }
+        vector<int> visited(nums.size(), 0);
+        return helper(nums, visited, target, k, 0, 0);
+    }
+    
+    bool helper(vector<int> &nums, vector<int> visited, int target, int k, int crt_sum, int start){
+        // if only 1 group left and all the previous group's sum equal to k
+        // then return true
+        if(k == 1) return true;
+        
+        for(int i = start; i < nums.size(); i++){
+            // if visited or nums[i] is too large, continue
+            if(visited[i] != 0 || crt_sum + nums[i] > target) continue;
+            // copy visited
+            // set element i as used
+            visited[i] = 1;
+            // if we can form a group with sum target
+            if(crt_sum + nums[i] == target){
+                // only need to find the rest k-1 group, crt_sum = 0, start = 0(since we may skip some elements because they cannot be added to previous group)
+                if(helper(nums, visited, target, k-1, 0, 0)) return true;
+            }
+            else{
+                // otherwise, we start from i+1 and keep searching
+                if(helper(nums, visited, target, k, crt_sum + nums[i], i + 1)) return true;
+            }
+            visited[i] = 0;
+        }
+        return false;
+    }
+    
+};
