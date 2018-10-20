@@ -6,6 +6,74 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ // replace temp%10 with temp >= 10 ? temp - 10 : temp can make the code more efficiency
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        if(!l1) return l2;
+        if(!l2) return l1;
+        // modify l1
+        // if l1  and l2 end at the same time, if no carry, return, if carry exist, add a new node to the end
+        // if l2 end first, keep updating l1 if carry is non-zero
+        // if l1 end first, put the rest part of l2 to l1 and updating according to carry
+        int carry = 0, temp;
+        ListNode *crt1 = l1, *crt2 = l2, *prev1, *prev2;
+        while(crt1 && crt2){
+            temp = crt1->val + crt2->val + carry;
+            carry = temp/10;
+            // replace temp%10 with temp >= 10 ? temp - 10 : temp can make the code more efficiency
+            crt1->val = temp >= 10 ? temp - 10 : temp;
+            prev1 = crt1;
+            prev2 = crt2;
+            crt1 = crt1->next;
+            crt2 = crt2->next;
+        }
+        if(!crt1 && !crt2){
+            if(!carry) return l1;
+            prev1->next = new ListNode(1);
+            return l1;
+        }
+        if(!crt2){
+            if(!carry) return l1;
+            while(crt1){
+                temp = crt1->val + carry;
+                crt1->val = temp >= 10 ? temp - 10 : temp;
+                carry = temp/10;
+                prev1 = crt1;
+                crt1 = crt1->next;
+            }
+            if(carry) prev1->next = new ListNode(1);
+            return l1;
+        }
+        if(!crt1){
+            prev1->next = crt2;
+            while(crt2){
+                temp = crt2->val + carry;
+                crt2->val = temp >= 10 ? temp - 10 : temp;
+                carry = temp/10;
+                prev2 = crt2;
+                crt2 = crt2->next;
+            }
+            if(carry) prev2->next = new ListNode(1);
+            return l1;
+        }
+    }
+};
+
+
+
+
+
+
+/////////////////////////////////
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
