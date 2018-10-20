@@ -1,0 +1,15 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        // idea: record the jump power jp for current step
+        // jp = max(jp-1, nums[i])
+        // if(jp == 0) return false
+        // initialize: jp = 1 (start from -1, always has the power to jump from -1 to 0)
+        int jp = 1;
+        for(int i = 0; i < nums.size() - 1; i++){
+            jp = max(jp-1, nums[i]);
+            if(jp == 0) return false;
+        }
+        return true;
+    }
+};
