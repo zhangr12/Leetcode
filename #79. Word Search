@@ -1,3 +1,34 @@
+// fast! beat 99.9% of the code
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        // modify board to record to visited place
+        for(int i = 0; i < board.size(); i++){
+            for(int j = 0; j < board[0].size(); j++){
+                if(helper(board, word, 0, i, j)) return true;
+            }
+        }
+        return false;
+    }
+    
+    bool helper(vector<vector<char>>& board, string &word, int crt, int x, int y){
+        // return true if reach the end of word
+        if(crt == word.size()) return true;
+        // check if this is a valid position and check if this position has been visited before
+        if(x < 0 || x >= board.size() || y < 0 || y > board[0].size() || board[x][y] != word[crt]) return false;
+        // if this position is good, mark it as visited on the board
+        board[x][y] += 60;
+        // check all the positions around current position, if any of them can reach the end of word, return true
+        if(helper(board, word, crt+1, x+1, y) || helper(board, word, crt+1, x, y+1) || helper(board, word, crt+1, x-1, y) || helper(board, word, crt+1, x, y-1)) return true;
+        // if no path through this position can reach the end of word, unmark this position(since we may use this position the later search)
+        board[x][y] -= 60;
+        return false;
+    }
+};
+
+
+
+
 // super slow...
 class Solution {
 public:
