@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        // use queue to record which number should we excuete next
+        // if it is a number, push into queue
+        // if it is an operator O, then p1 = q.pop(), p2 = q.pop(), result for this operator is q2 O q1
+        stack<int> q;
+        vector<int> nums;
+        for(string t:tokens){
+            if(t == "+"){
+                nums = getNum(q);
+                q.push(nums[1] + nums[0]);
+            }
+            else if(t == "-"){
+                nums = getNum(q);
+                q.push(nums[1] - nums[0]);
+            }
+            else if(t == "/"){
+                nums = getNum(q);
+                q.push(nums[1] / nums[0]);
+            }
+            else if(t == "*"){
+                nums = getNum(q);
+                q.push(nums[1] * nums[0]);
+            }
+            else{
+                q.push(stoi(t));
+            }
+        }
+        return q.top();
+    }
+    
+    vector<int> getNum(stack<int> &q){
+        vector<int> res(2, 0);
+        res[0] = q.top();
+        q.pop();
+        res[1] = q.top();
+        q.pop();
+        return res;
+    }
+};
