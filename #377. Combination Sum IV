@@ -1,0 +1,41 @@
+// bottom up
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<int> dp(target+1, 0);
+        dp[0] = 1;
+        for(int i = 1; i < dp.size(); i++){
+            for(int j = 0; j < nums.size(); j++){
+                // remember that each number in nums is different
+                // when nums[j] can be part of i, we check the history information for how many combinations are there for i-nums[j]
+                if(nums[j] <= i) dp[i] += dp[i-nums[j]];
+            }
+        }
+        return dp[target];
+    }
+};
+
+
+/////////////////////////////////
+// top down
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        unordered_map<int, int> m;
+        return helper(nums, target, m);
+    }
+    
+    int helper(vector<int> &nums, int target, unordered_map<int, int> &m){
+        if(m.find(target) != m.end()) return m[target];
+        if(target == 0) return 1;
+        
+        int res  = 0;
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] > target) break;
+            res += helper(nums, target - nums[i], m);
+        }
+        m[target] = res;
+        return res;
+    }
+};
