@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        // idea: first find correct place for the elements with maximum frequency: (max_freq-1)*(n+1)+1
+        // note that we use max_freq-1 because for the last max_freq element, we only need 1 extra interval to finish it
+        // i.e. AAA n = 2  AXXAXXA
+        // if there is only one max_freq element, we are done
+        // if there are more than one max_freq elements, let's say max_freq_num elements with frequency max_freq
+        // then we need another max_freq_num-1 intervals for these tasks
+        // we need -1 because we already use one element with max_freq
+        // so the last formular is (max_freq-1)*(n+1) + 1 + max_freq_num - 1
+        // the smallest size is always tasks.size()
+        vector<int> v(26, 0);
+        for(char c:tasks) v[c-'A']++;
+        int max_freq = 0;
+        for(int V:v) max_freq = max(V, max_freq);
+        int max_freq_num = 0;
+        for(int V:v) if(V == max_freq) max_freq_num++;
+        return max((int)tasks.size(), (max_freq-1)*(n+1)+max_freq_num);
+    }
+};
