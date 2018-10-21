@@ -1,3 +1,45 @@
+// idea: the problem is actually try to decide how many negative numbers we want to include in our subarray
+// if there are even number of negative numbers, we want to include all of them in the subarray
+// if there are odd number of negative numbers, we want to abandon either the one at the start or the one at the end
+// also we need to consider that the result might be a single element in nums
+// we can do this by two passes, one start from the beginning, one start from the end, and keep tracking the multiply result
+// if there are even number of negative numbers, the result from two passes will be the same
+// if there are odd number of negative numbers, the first pass can give us the result when we ignore the last negative number
+// the second pass can give us the result when we ignore the first negative number
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int n = nums.size(), res = INT_MIN, temp = 1;
+        // two passes
+        for(int i = 0; i < n; i++){
+            if(nums[i] == 0){
+                res = max(res, 0);
+                temp = 1;
+            }
+            else{
+                temp *= nums[i];
+                res = max(res, temp);
+            }
+        }
+        temp = 1;
+        for(int i = n-1; i >= 0; i--){
+            if(nums[i] == 0){
+                res = max(res, 0);
+                temp = 1;
+            }
+            else{
+                temp *= nums[i];
+                res = max(res, temp);
+            }
+        }
+        return res;
+    }
+};
+
+
+
+//////////////////////////////
 // brutal force
 class Solution {
 public:
