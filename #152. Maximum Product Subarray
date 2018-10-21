@@ -1,0 +1,17 @@
+// brutal force
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int n = nums.size(), res = INT_MIN, temp;
+        for(int i = 0; i < n; i++){
+            temp = nums[i];
+            if(res < temp) res = temp;
+            for(int j = i+1; j < n; j++){
+                temp *= nums[j];
+                if(res < temp) res = temp;
+            }
+        }
+        return res;
+    }
+};
