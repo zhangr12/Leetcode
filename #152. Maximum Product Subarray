@@ -1,3 +1,22 @@
+// one pass solution
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int crtMax, crtMin, prevMax = nums[0], prevMin = nums[0], globalMax = nums[0];
+        for(int i = 1; i < nums.size(); i++){
+            // current max can come from: current number, previous max multiply current number, or previous min multiply current number
+            crtMax = max(nums[i], max(prevMax*nums[i], prevMin*nums[i]));
+            crtMin = min(nums[i], min(prevMax*nums[i], prevMin*nums[i]));
+            globalMax = max(globalMax, crtMax);
+            prevMax = crtMax;
+            prevMin = crtMin;
+        }
+        return globalMax;
+    }
+};
+
+
+///////////////////////////////
 // idea: the problem is actually try to decide how many negative numbers we want to include in our subarray
 // if there are even number of negative numbers, we want to include all of them in the subarray
 // if there are odd number of negative numbers, we want to abandon either the one at the start or the one at the end
