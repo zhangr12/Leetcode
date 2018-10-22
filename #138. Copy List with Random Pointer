@@ -6,6 +6,56 @@
  *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
  * };
  */
+ // idea from: https://leetcode.com/problems/copy-list-with-random-pointer/discuss/43491/A-solution-with-constant-space-complexity-O(1)-and-linear-time-complexity-O(N)
+ // three pass solution, O(N) time complexity, O(1) space complexity
+ // first pass insert the new node into original list
+ // second pass, write information of random pointer for copied node
+ // third pass, extract information from modified node and restore the original list
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        // step one, create new node and insert into original list
+        RandomListNode *crt = head, *nxt;
+        while(crt){
+            nxt = crt->next;
+            RandomListNode *copy = new RandomListNode(crt->label);
+            crt->next = copy;
+            copy->next = nxt;
+            crt = nxt;
+        }
+        
+        // step two, write information into random pointer in new node
+        crt = head;
+        while(crt){
+            // the if condition is important since crt->random can be nullptr
+            if(crt->random) crt->next->random = crt->random->next;
+            crt = crt->next->next;
+        }
+        
+        // extract new list and restore the original list
+        RandomListNode* pseudoHead = new RandomListNode(0);
+        crt = head;
+        RandomListNode* crt2 = pseudoHead;
+        while(crt){
+            nxt = crt->next->next;
+            
+            crt2->next = crt->next;
+            
+            crt->next = nxt;
+            
+            crt = nxt;
+            
+            crt2 = crt2->next;
+        }
+        return pseudoHead->next;
+    }
+};
+
+
+
+//////////////////////////////////////
+// idea using unordered_map to remember relation between old node and new node
+// O(N) time complexity, O(N) space complexity
 class Solution {
 public:
     RandomListNode *copyRandomList(RandomListNode *head) {
@@ -33,14 +83,6 @@ public:
 
 //////////////////////////////
 //original thought, not as clear as the first one
-/**
- * Definition for singly-linked list with a random pointer.
- * struct RandomListNode {
- *     int label;
- *     RandomListNode *next, *random;
- *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
- * };
- */
 class Solution {
 public:
     RandomListNode *copyRandomList(RandomListNode *head) {
