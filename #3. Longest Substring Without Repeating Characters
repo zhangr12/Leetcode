@@ -13,7 +13,6 @@ public:
             // at this point, we have two s[r] in substring and v[s[r]] == 1, note that s[r] is the only duplicate char in current substring
             // now we try to find another s[r] with in range [l,r]
             while(s[l] != s[r]){
-                //cout << s[l] << endl;
                 v[s[l]]--;
                 l++;
             }
