@@ -1,0 +1,47 @@
+// idea from https://leetcode.com/problems/wiggle-sort-ii/discuss/77678/3-lines-Python-with-Explanation-Proof
+// Roughly speaking I put the smaller half of the numbers on the even indexes and the larger half on the odd indexes.
+//I want:
+
+//Odd-index numbers are larger than their neighbors.
+//Since I put the larger numbers on the odd indexes, clearly I already have:
+
+//Odd-index numbers are larger than or equal to their neighbors.
+//Could they be "equal to"? That would require some number M to appear both in the smaller and the larger half. It would be the largest in the smaller half and the smallest in the larger half. Examples again, where S means some number smaller than M and L means some number larger than M.
+
+//Small half:  M . S . S . S      Small half:  M . S . S . S .
+//Large half:  . L . L . M .      Large half:  . L . L . L . M
+//--------------------------      --------------------------
+//Together:    M L S L S M S      Together:    M L S L S L S M
+//You can see the two M are quite far apart. Of course M could appear more than just twice, for example:
+
+//Small half:  M . M . S . S      Small half:  M . S . S . S .
+//Large half:  . L . L . M .      Large half:  . L . M . M . M
+//--------------------------      --------------------------
+//Together:    M L M L S M S      Together:    M L S M S M S M
+class Solution {
+public:
+    void wiggleSort(vector<int>& nums) {
+        int n = nums.size();
+        
+        sort(nums.begin(), nums.end());
+        vector<int> res(n, 0);
+        // S S M M M L L
+        // M M S S    (smaller half on even index)
+        // L L M      (larger half on odd index)
+        // M L M L S M S
+        int mid = (nums.size()-1)/2;
+        int i = mid, j = nums.size() - 1, crt = 0;
+        while(crt < nums.size()){
+            if(crt%2 == 0){
+                res[crt] = nums[i];
+                i--;
+            }
+            else{
+                res[crt] = nums[j];
+                j--;
+            }
+            crt++;
+        }
+        nums = res;
+    }
+};
