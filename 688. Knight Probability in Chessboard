@@ -1,0 +1,31 @@
+class Solution {
+public:
+    double knightProbability(int N, int K, int r, int c) {
+        vector<vector<double>> dp1(N, vector<double>(N, 1));
+        int x, y;
+        vector<vector<int>> moves{{1,2},{1,-2},{-1,-2},{-1,2},{2,1},{-2,1},{2,-1},{-2,-1}};
+        for(int n = 0; n < K; n++){
+            vector<vector<double>> dp2(N, vector<double>(N, 0));
+            for(int i = 0; i < N; i++){
+                for(int j = 0; j < N; j++){
+                    for(int k = 0; k < 8; k++){
+                        x = i + moves[k][0];
+                        y = j + moves[k][1];
+                        // the total number of possible combinations that end at {i,j} after k steps is equal to
+                        // the total number of possible combinations that end at {i,j} + move after k-1 steps
+                        if(valid(x, y, N)) dp2[i][j] += dp1[x][y];
+                    }
+                }
+            }
+            dp1 = dp2;
+        }
+        // each time there is 8 possible directions that we can move
+        // totally is pow(8, K) combinations
+        return dp1[r][c]/pow(8,K);
+    }
+    // check whether x and y is on board
+    bool valid(int x, int y, int N){
+        if(x < N && y < N && x >= 0 && y >= 0) return true;
+        return false;
+    }
+};
