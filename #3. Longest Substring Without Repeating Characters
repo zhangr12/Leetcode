@@ -9,9 +9,9 @@ public:
                 res = max(res, r-l+1);
                 r++;
             }
-            // at this point, we have two s[r] in substring and v[s[r]] == 1
             if(r == s.size()) break;
-            // try to locate the other s[r]
+            // at this point, we have two s[r] in substring and v[s[r]] == 1, note that s[r] is the only duplicate char in current substring
+            // now we try to find another s[r] with in range [l,r]
             while(s[l] != s[r]){
                 //cout << s[l] << endl;
                 v[s[l]]--;
