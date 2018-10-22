@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        vector<int> v(256, 0);
+        int l = 0, r = 0, res = 0;
+        while(r < s.size()){
+            while(v[s[r]] == 0 && r < s.size()){
+                v[s[r]]++;
+                res = max(res, r-l+1);
+                r++;
+            }
+            // at this point, we have two s[r] in substring and v[s[r]] == 1
+            if(r == s.size()) break;
+            // try to locate the other s[r]
+            while(s[l] != s[r]){
+                //cout << s[l] << endl;
+                v[s[l]]--;
+                l++;
+            }
+            // now s[l] == s[r]
+            // increase both l and r
+            l++;
+            r++;
+        }
+        return res;
+    }
+};
