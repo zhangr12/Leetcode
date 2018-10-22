@@ -5,6 +5,7 @@ public:
         vector<int> dp(target+1, 0);
         dp[0] = 1;
         for(int i = 1; i < dp.size(); i++){
+            // this is the key part to guarantee to have all the combinations, j always start from 0
             for(int j = 0; j < nums.size(); j++){
                 // remember that each number in nums is different
                 // when nums[j] can be part of i, we check the history information for how many combinations are there for i-nums[j]
@@ -14,7 +15,6 @@ public:
         return dp[target];
     }
 };
-
 
 /////////////////////////////////
 // top down
