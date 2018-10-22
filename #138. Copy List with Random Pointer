@@ -1,0 +1,68 @@
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct RandomListNode {
+ *     int label;
+ *     RandomListNode *next, *random;
+ *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        unordered_map<RandomListNode*, RandomListNode*> m;
+        auto crt = head;
+        // only deep copy all the nodes' label
+        while(crt){
+            // connect old node with new node
+            m[crt] = new RandomListNode(crt->label);
+            crt = crt->next;
+        }
+        crt = head;
+        // deep copy the next and random pointer
+        while(crt){
+            // new node's next equal to old node's next's corresponding new node
+            m[crt]->next = m[crt->next];
+            // new node's random equal to old node's random's corresponding new node
+            m[crt]->random = m[crt->random];
+            crt = crt->next;
+        }
+        return m[head];
+    }
+};
+
+
+//////////////////////////////
+//original thought, not as clear as the first one
+/**
+ * Definition for singly-linked list with a random pointer.
+ * struct RandomListNode {
+ *     int label;
+ *     RandomListNode *next, *random;
+ *     RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    RandomListNode *copyRandomList(RandomListNode *head) {
+        // use unordered_map to estabulish relation between old node and new node
+        // we loop twice, first time copy the val and next
+        // second time, use the unordered_map to copy the random
+        unordered_map<RandomListNode*, RandomListNode*> m;
+        RandomListNode* head2 = new RandomListNode(0);
+        RandomListNode *crt = head, *crt2 = head2;
+        while(crt != NULL){
+            crt2->next = new RandomListNode(crt->label);
+            crt2 = crt2->next;
+            m[crt] = crt2;
+            crt = crt->next;
+        }
+        // copy the random pointer
+        crt = head, crt2 = head2->next;
+        while(crt){
+            if(crt->random != nullptr) crt2->random = m[crt->random];
+            crt = crt->next;
+            crt2 = crt2->next;
+        }
+        return head2->next;
+    }
+};
