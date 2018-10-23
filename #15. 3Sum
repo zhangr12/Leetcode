@@ -1,3 +1,45 @@
+//a better solution based on the idea of two sum
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        // fix one, find two, skip duplicate
+        int i = 0, n = nums.size();
+        while(i < n){
+            // note that here for left we start from i+1 to avoid duplicate result
+            int l = i+1, r = n-1;
+            while(l < r){
+                int sum = nums[i] + nums[l] + nums[r];
+                if(sum == 0){
+                    res.push_back({nums[i], nums[l], nums[r]});
+                    
+                    // skip duplicate nums[l]
+                    while(l < r && nums[l] == nums[l+1]) l++;
+                    l++;
+                    // skip duplicate nums[r]
+                    while(l < r && nums[r] == nums[r-1]) r--;
+                    r--;
+                }
+                else if(sum < 0){
+                    l++;
+                }
+                else{
+                    r--;
+                }
+            }
+            // skip duplicate nums[i]
+            while(i+1 < n && nums[i] == nums[i+1]) i++;
+            i++;
+        }
+        return res;
+    }
+};
+
+
+
+////////////////////////////
+// original solution, a little bit tedious
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
