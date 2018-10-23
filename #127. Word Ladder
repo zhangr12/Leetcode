@@ -1,0 +1,67 @@
+class Compare{
+public:
+    bool operator() (pair<int, string> &p1, pair<int, string> &p2){
+        return p1.first > p2.first;
+    }
+};
+
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        // idea: build graph and use Dijkstra's algorithm
+        // build graph
+        wordList.push_back(beginWord);
+        unordered_map<string, vector<string>> m;
+        buildGraph(wordList, m);
+        // use unordered_map to record distance
+        unordered_map<string, int> dist;
+        for(string w:wordList) dist[w] = INT_MAX;
+        if(dist.find(endWord) == dist.end()) return 0;
+        dist[beginWord] = 1;
+        // in priority_queue, we need to store distance and current word
+        priority_queue<pair<int, string>, vector<pair<int, string>>, Compare> q;
+        q.push({1, beginWord});
+        while(!q.empty()){
+            pair<int, string> crt = q.top();
+            q.pop();
+            int crt_dis = crt.first;
+            string crt_word = crt.second;
+            if(crt_word == endWord) return crt_dis;
+            // no word has one dis with current word
+            if(m.find(crt_word) == m.end()) continue;
+            for(int i = 0; i < m[crt_word].size(); i++){
+                string nxt_word = m[crt_word][i];
+                //cout << crt_word << " " << nxt_word << " " << dist[nxt_word] << endl;
+                if(dist[nxt_word] > crt_dis + 1){
+                    dist[nxt_word] = crt_dis + 1;
+                    q.push({crt_dis + 1, nxt_word});
+                }
+            }
+        }
+        return 0;
+    }
+    
+    
+    void buildGraph(vector<string>& wordList, unordered_map<string, vector<string>> &m){
+        for(string w1:wordList){
+            for(string w2:wordList){
+                if(distOne(w1, w2)){
+                    //cout << w1 << " " << w2 << endl;
+                    m[w1].push_back(w2);
+                }
+            }
+        }
+    }
+    
+    bool distOne(string &s1, string &s2){
+        int dis = 0;
+        for(int i = 0; i < s1.size(); i++){
+            if(s1[i] != s2[i]) dis++;
+            if(dis > 1) return false;
+        }
+        if(dis == 1) return true;
+        return false;
+    }
+    
+};
