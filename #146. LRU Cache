@@ -1,0 +1,41 @@
+// STL solution! Elegant and efficient
+class LRUCache {
+public:
+    // idea: linked list + unordered_map + STL
+    int max_capacity;
+    unordered_map<int, list<pair<int, int>>::iterator> myMap;
+    list<pair<int, int>> myList;
+    LRUCache(int capacity) {
+        max_capacity = capacity;
+    }
+    
+    int get(int key) {
+        if(myMap.count(key) == 0) return -1;
+        myList.splice(myList.begin(), myList, myMap[key]);
+        return myMap[key]->second;
+    }
+    
+    void put(int key, int value) {
+        // if key exist, update current key and move current pair to the beginning of myList
+        if(myMap.count(key) == 1){
+            myMap[key]->second = value;
+            myList.splice(myList.begin(), myList, myMap[key]);
+            return;
+        }
+        if(myList.size() == max_capacity){
+            int key_to_delete = myList.back().first;
+            myList.pop_back();
+            myMap.erase(key_to_delete);
+        }
+        myList.emplace(myList.begin(), key, value);
+        myMap[key] = myList.begin();
+        return;
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
