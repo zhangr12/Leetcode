@@ -1,9 +1,11 @@
-// STL solution! Elegant and efficient
 class LRUCache {
 public:
     // idea: linked list + unordered_map + STL
     int max_capacity;
     unordered_map<int, list<pair<int, int>>::iterator> myMap;
+    // cannot use forward_list here because forward_list cannot insert element from the end 
+    // and we cannot just erase one element in forward_list, we have to also erase all the elements after the pointed element(this is not a problem for this question)
+    // of cause we can alwyas first move to last element and then erase it, but that is a O(N)-time, because forward_list is not random-accessible, so we need to use advance(forward_list.begin(), max_capacity), also forward+list does not have size() function, which means we need to use another number to keep tacking its size, which makes the code complex, redundant and low efficient.
     list<pair<int, int>> myList;
     LRUCache(int capacity) {
         max_capacity = capacity;
