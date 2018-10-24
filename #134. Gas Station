@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        // idea: three pass
+        // first pass: generate the p vector(this pass can be eliminate if want O(1) space)
+        // second pass: find the index that can give us the maximum residual gas
+        // third pass: varify that we can make the loop from the maxIdx, if we cannot, then return -1
+        int maxGas = 0, maxIdx = 0, tempGas = 0, tempIdx = 0, idx, n = gas.size();
+        vector<int> p(n, 0);
+        for(int i = 0; i < n; i++) p[i] = gas[i] - cost[i];
+        // run for two rounds
+        for(int i  = 0; i < 2*n; i++){
+            // if i is greater than n-1, we know we are doing the second round, take mod n in this case
+            if(i > n-1){
+                idx - i%n;
+            }
+            else{
+                idx = i;
+            }
+            // tempGas start from 0
+            // if tempGas + p[idx] < 0, this means p[idx] must be zero, we reset the tempGas to 0 and point tempIx to next element
+            tempGas += p[idx];
+            if(tempGas < 0){
+                tempGas = 0;
+                tempIdx = idx + 1;
+            }
+            // if tempGas is greater than maxGas
+            // set tempGas as maxGas and tempIdx as maxIdx
+            if(tempGas > maxGas){
+                maxGas = tempGas;
+                maxIdx = tempIdx;
+            }
+        }
+        //cout << maxIdx << endl;
+        // now we have the idx that can give us the maxGas, start from maxIdx and check whether we can finish the whole loop
+        int length = 0, start = maxIdx, power = 0;
+        while(length < n){
+            power += p[start%n];
+            if(power < 0) return -1;
+            start++;
+            length++;
+        }
+        return maxIdx;
+    }
+};
