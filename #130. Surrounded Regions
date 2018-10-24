@@ -1,0 +1,63 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        if(board.size() == 0) return;
+        // idea: find all the 'O' regions on the board that has connection to the border
+        // traverse the border twice. The first pass use BFS to mark all the 'O' region connected to border as 'V'
+        // the second pass change all the 'V' to 'O' change all the 'O' to 'X'
+        // O(1) space(modify the board matrix) and O(N^2) runtime
+        int m = board.size(), n = board[0].size();
+        for(int i = 0; i < m; i++){
+            if(board[i][0] == 'O') BFS(board, i, 0);
+            if(board[i][n-1] == 'O') BFS(board, i, n-1);
+        }
+        for(int i = 0; i < n; i++){
+            if(board[0][i] == 'O') BFS(board, 0, i);
+            if(board[m-1][i] == 'O') BFS(board, m-1, i);
+        }
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(board[i][j] == 'V'){
+                    board[i][j] = 'O';
+                }
+                else{
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        return;
+    }
+    
+    void BFS(vector<vector<char>>& board, int x, int y){
+        int m = board.size(), n = board[0].size();
+        queue<pair<int, int>> q;
+        q.push({x, y});
+        pair<int, int> crt;
+        while(!q.empty()){
+            crt = q.front();
+            q.pop();
+            int crt_x = crt.first, crt_y = crt.second;
+            // O: unvisited
+            // V: visited
+            board[crt_x][crt_y] = 'V';
+            //cout << crt_x << " " << crt_y << endl;
+            if(crt_x-1 >= 0 && board[crt_x-1][crt_y] == 'O'){
+                q.push({crt_x-1, crt_y});
+                board[crt_x-1][crt_y] = 'V';
+            }
+            if(crt_x+1 < m && board[crt_x+1][crt_y] == 'O'){
+                q.push({crt_x+1, crt_y});
+                board[crt_x+1][crt_y] = 'V';
+            }
+            if(crt_y-1 >= 0 && board[crt_x][crt_y - 1] == 'O'){
+                q.push({crt_x, crt_y-1});
+                board[crt_x][crt_y-1] = 'V';
+            }
+            if(crt_y+1 < n && board[crt_x][crt_y + 1] == 'O'){
+                q.push({crt_x, crt_y+1});
+                board[crt_x][crt_y+1] = 'V';
+            }
+        }
+        return;
+    }
+};
