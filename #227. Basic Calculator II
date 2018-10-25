@@ -1,0 +1,63 @@
+class Solution {
+public:
+    int calculate(string s) {
+        // idea: two passes: 1st pass store the +-operator and numbers in the deque.
+        // In the first pass, when we meet * or / we read the next element and the last element pushed in qNum to do operator on them and then push back to qNum
+        // in the secon pass, read deque from front, and read qOp at the same time to determine whether we should plus or minus
+        // use deque to store numbers and intermediate results
+        deque<int> qNum;
+        queue<string> qOp;
+        int i = 0;
+        while(i < s.size()){
+            string nxt = nextElement(s, i);
+            if(nxt == "END") break;
+            if(nxt == "+" || nxt == "-"){
+                qOp.push(nxt);
+            }
+            else if(nxt == "*" || nxt == "/"){
+                int num2 = stoi(nextElement(s, i));
+                int num1 = qNum.back();
+                qNum.pop_back();
+                if(nxt == "*"){
+                    qNum.push_back(num1 * num2);
+                }
+                else{
+                    qNum.push_back(num1 / num2);
+                }
+            }
+            else{
+                qNum.push_back(stoi(nxt));
+            }
+        }
+        
+        while(qNum.size() > 1){
+            int num1 = qNum.front();
+            qNum.pop_front();
+            int num2 = qNum.front();
+            qNum.pop_front();
+            if(qOp.front() == "+"){
+                qNum.push_front(num1 + num2);
+            }
+            else{
+                qNum.push_front(num1 - num2);
+            }
+            qOp.pop();
+        }
+        return qNum.front();
+    }
+    
+    string nextElement(string &s, int &crt){
+        while(crt < s.size() && s[crt] == ' ') crt++;
+        if(crt == s.size()) return "END";
+        
+        if(s[crt] < '0' || s[crt] > '9'){
+            crt++;
+            return s.substr(crt-1, 1);
+        }
+        // s[crt] is a numnber
+        int start = crt;
+        while(crt < s.size() && s[crt] >= '0' && s[crt] <= '9') crt++;
+        return s.substr(start, crt - start);
+    }
+    
+};
