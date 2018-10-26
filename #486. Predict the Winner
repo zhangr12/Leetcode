@@ -1,6 +1,46 @@
 class Solution {
 public:
     bool PredictTheWinner(vector<int>& nums) {
+        int n = nums.size();
+        if(n%2 == 0) return true;
+        
+        // dp with size n by n
+        // dp[i][j] means how much the player 1 can win if the array is [i,j]
+        // initialization: dp[i][i] = nums[i] (if there is only one number, then player 1 will when after choose this number)
+        // transition formular: player 1 choose i: a = nums[i] + min(game(nums[i+1, j-1]), game(i+2, j));
+        // if player 1 choose j: b = nums[j] + min(game(nums[i, j-2]), game(nums[i+1, j-1]));
+        // dp[i][j] = max(a, b)
+        // explain: since both player1 and player2 are both perfect players, after player 1 choose i, player 2 will take either i+1 or j, whichever can give him/her the best result, so what left for player1 is min(game(nums[i+1, j-1]), game(nums[i+2, j]))
+        // similar if player 1 choose j
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        
+        for(int i = 0; i < n; i++) dp[i][i] = nums[i];
+        
+        int res = helper(nums, 0, n-1, dp);
+        
+        // here we need to make sure the number on the right is not round down
+        // for example, if total is 7, then player get 3, 7/2 = 3, which gives us true, but it is a false case
+        return res >= accumulate(nums.begin(), nums.end(), 0)/(double)2;
+    }
+    
+    
+    int helper(vector<int> &nums, int i, int j, vector<vector<int>> &dp){
+        if(dp[i][j] != -1) return dp[i][j];
+        if(i > j || j < 0 || i > nums.size() - 1) return 0;
+        
+        int a = nums[i] + min(helper(nums, i+1, j-1, dp), helper(nums, i+2, j, dp));
+        int b = nums[j] + min(helper(nums, i, j-2, dp), helper(nums, i+1, j-1, dp));
+        dp[i][j] = max(a, b);
+        return dp[i][j];
+    }
+};
+
+
+
+/////////////////////////////
+class Solution {
+public:
+    bool PredictTheWinner(vector<int>& nums) {
         if(nums.size()%2 == 0) return true;
         int n = nums.size();
         // matrix dp record the difference between the player1 and player2
