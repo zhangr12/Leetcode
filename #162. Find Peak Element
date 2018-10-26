@@ -10,10 +10,10 @@ public:
             int mid1 = low + (high-low)/2;
             int mid2 = mid1 + 1;
             if(nums[mid1] > nums[mid2]){
-                high = mid1;
+                high = mid1; //a potential peak found on the left, since it is decreasing right
             }
             else{
-                low = mid2;
+                low = mid2; //a potential peak found on the right, since it is increasing now
             }
         }
         return low;
