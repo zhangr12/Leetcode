@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return -1;
+        if(n == 1) return 0;
+        if(n == 2 && nums[0] == nums[1]) return -1;
+        // check left boundary
+        if(nums[0] > nums[1]) return 0;
+        if(nums[n-2] < nums[n-1]) return n-1;
+        
+        long int l = nums[0], r = nums[2];
+        
+        for(int i = 1; i < nums.size()-1; i++){
+            if(nums[i] > l && nums[i] > r) return i;
+            l = nums[i];
+            r = nums[i+2];
+        }
+    }
+};
