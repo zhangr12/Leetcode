@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        if(checkRowAndColumn(board) && checkSmallMatrics(board)) return true;
+        return false;
+    }
+    
+    bool checkRowAndColumn(vector<vector<char>> &b){
+        // check each row
+        for(int i = 0; i < 9; i++){
+            unordered_set<int> s;
+            for(int j = 0; j < 9; j++){
+                if(b[i][j] == '.') continue;
+                if(s.count(b[i][j])) return false;
+                s.insert(b[i][j]);
+            }
+        }
+        // check each column
+        for(int j = 0; j < 9; j++){
+            unordered_set<int> s;
+            for(int i = 0; i < 9; i++){
+                if(b[i][j] == '.') continue;
+                if(s.count(b[i][j])) return false;
+                s.insert(b[i][j]);
+            }
+        }
+        return true;
+    }
+    
+    bool checkSmallMatrics(vector<vector<char>> &b){
+        if(checkSmallMatrix(b, 0, 0) && checkSmallMatrix(b, 0, 3) && checkSmallMatrix(b, 0, 6) && checkSmallMatrix(b, 3, 0) && checkSmallMatrix(b, 3, 3) && checkSmallMatrix(b, 3, 6) && checkSmallMatrix(b, 6, 0) && checkSmallMatrix(b, 6, 3) && checkSmallMatrix(b, 6, 6)) return true;
+        return false;
+    }
+    
+    
+    
+    bool checkSmallMatrix(vector<vector<char>> &b, int i, int j){
+        unordered_set<char> s;
+        for(int m = i; m < i+3; m++){
+            for(int n = j; n < j+3; n++){
+                if(b[m][n] == '.') continue;
+                if(s.count(b[m][n])) return false;
+                s.insert(b[m][n]);
+            }
+        }
+        return true;
+    }
+};
