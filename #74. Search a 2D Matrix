@@ -2,6 +2,10 @@ class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
         if(matrix.size() == 0 || matrix[0].size() == 0) return false;
+        // idea: start from the first row. Each time look at the last element, if the last element in current row is less than target
+        // move to next row since the last element is the largest element in the whole row
+        // if the last element in current row is greater than target
+        // use binary search to find the target in current row
         int n = matrix.size(), m = matrix[0].size()-1, row = 0;
         while(row < n){
             if(matrix[row][m] == target) return true;
