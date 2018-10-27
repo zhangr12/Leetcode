@@ -1,0 +1,13 @@
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.size() == 0 || matrix[0].size() == 0) return false;
+        int n = matrix.size(), m = matrix[0].size()-1, row = 0;
+        while(row < n){
+            if(matrix[row][m] == target) return true;
+            if(matrix[row][m] > target) return binary_search(matrix[row].begin(), matrix[row].end(), target);
+            if(matrix[row][m] < target) row++;
+        }
+        return false;
+    }
+};
