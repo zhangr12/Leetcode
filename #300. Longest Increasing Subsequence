@@ -1,15 +1,16 @@
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
+        // use res to store the longest increasing subsequence
         vector<int> res;
         for(int num:nums){
+            // find current number's location in res
             auto it = lower_bound(res.begin(), res.end(), num);
-            if(it == res.end()){
-                res.push_back(num);
-            }
-            else{
-                *it = num;
-            }
+            // if current number is bigger than all the numbers in res, we simply push it into res
+            if(it == res.end()) res.push_back(num);
+            // if current number is smaller than or equal to some element nums[k] in res, replace nums[k] with current number
+            // by doing this we can guarantee we always have the highest probability to include next on coming number in the res
+            else *it = num;
         }
         return res.size();
     }
