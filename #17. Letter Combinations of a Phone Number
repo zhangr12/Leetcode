@@ -1,0 +1,28 @@
+// two vector & two pointers
+// let res1 points to temp1, res2 points to temp2
+// each time, use vector corresponding to res1 to record the result from previous layer
+// use res2 to record the result from current layer
+// swap res1 and res2 at the end of each loop
+// make the vector corresponding to res2 as empty vector
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if(digits.size() == 0) return {};
+        vector<string> dic{"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        vector<string> temp1 = {""}, temp2 = {}, *res1, *res2;
+        
+        res1 = &temp1;
+        res2 = &temp2;
+        
+        for(int i = 0; i < digits.size(); i++){
+            for(char j:dic[digits[i]-'2']){
+                for(int k = 0; k < res1->size(); k++){
+                    res2->push_back((*res1)[k] + j);
+                }
+            }
+            swap(res1, res2);
+            *res2 = {};
+        }
+        return *res1;
+    }
+};
