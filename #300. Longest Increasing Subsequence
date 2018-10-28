@@ -12,6 +12,10 @@ public:
             // by doing this we can guarantee we always have the highest probability to include next on coming number in the res
             else *it = num;
         }
+        //for(int num:res) cout << num <<endl;
+        // it is worth to note that the numbers in res does note guarantee to be a valid LIS, but its length is the same with the valid LIS
+        // consider the example, 0, 8, 4, 12, 2
+        // the res is 0, 2, 12, which is not valid(since 2 comes after 12), however, its length is the same with LIS which is 0 4 12
         return res.size();
     }
 };
