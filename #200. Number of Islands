@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        // BFS
+        // set visited place to 0
+        if(grid.size() == 0 || grid[0].size() == 0) return 0;
+        
+        int m = grid.size(), n = grid[0].size(), res = 0;
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == '1'){
+                    res++;
+                    BFS(grid, i, j);
+                }
+            }
+        }
+        return res;
+    }
+    
+    void BFS(vector<vector<char>> &grid, int x, int y){
+        grid[x][y] = '0';
+        queue<pair<int, int>> q;
+        q.push({x,y});
+        int m = grid.size(), n = grid[0].size();
+        while(!q.empty()){
+            pair<int, int> crt = q.front();
+            q.pop();
+            int crt_x = crt.first, crt_y = crt.second;
+            if(crt_x - 1 >= 0 && grid[crt_x-1][crt_y] == '1'){
+                q.push({crt_x-1, crt_y});
+                grid[crt_x-1][crt_y] = '0';
+            }
+            if(crt_y - 1 >= 0 && grid[crt_x][crt_y-1] == '1'){
+                q.push({crt_x, crt_y-1});
+                grid[crt_x][crt_y-1] = '0';
+            }
+            if(crt_x + 1 < m && grid[crt_x+1][crt_y] == '1'){
+                q.push({crt_x+1, crt_y});
+                grid[crt_x+1][crt_y] = '0';
+            }
+            if(crt_y + 1 < n && grid[crt_x][crt_y+1] == '1'){
+                q.push({crt_x, crt_y+1});
+                grid[crt_x][crt_y+1] = '0';
+            }
+        }
+    }
+};
