@@ -1,3 +1,31 @@
+// static DP method. Much faster than traditional dp since we store the reuse dp vector from previous test cases
+// since in the test case we will call this function for multiple times, so it is better to make dp a static type
+// if we make dp a static type, the space for dp will get allocated for the lifetime of the program, which means we can avoid a lot of recalculation
+class Solution {
+public:
+    int numSquares(int n) {
+        if(n < 0) return -1;
+        // dp[i] means minimum number of perfect numbers that are needed to make number i
+        static vector<int> dp{0};
+        // if dp.size() > n, then we already have the answer
+        // otherwise, we keep spanning dp until its length is n+1
+        while(dp.size() <= n){
+            // next number we can to calculate is dp.size() since dp starts from 0
+            int crt_num = dp.size(), i = 1, temp = INT_MAX;
+            // for each number i, possible combinations are: dp[i-j*j] + 1 for j*j <= i
+            while(i*i <= crt_num){
+                temp = min(temp, 1 + dp[crt_num - i*i]);
+                i++;
+            }
+            dp.push_back(temp);
+        }
+        
+        return dp[n];
+    }
+};
+
+
+///////////////////////////////////
 // dp method with complexity O(N^2)
 class Solution {
 public:
