@@ -10,6 +10,49 @@
 class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        // use two stacks
+        // let root be at level 1
+        // when push even level nodes into stack, the order is left-right
+        // when push odd level nodes into stack,the order is right-left
+        vector<vector<int>> res;
+        if(!root) return res;
+        stack<TreeNode*> s1, s2, *crt_level, *nxt_level;
+        s1.push(root);
+        crt_level = &s1;
+        nxt_level = &s2;
+        TreeNode* node;
+        int level = 1;
+        while(!s1.empty() || !s2.empty()){
+            level++;
+            vector<int> temp;
+            while(!crt_level->empty()){
+                node = crt_level->top();
+                crt_level->pop();
+                temp.push_back(node->val);
+                if(level%2 == 0){
+                    if(node->left) nxt_level->push(node->left);
+                    if(node->right) nxt_level->push(node->right);
+                }
+                else{
+                    if(node->right) nxt_level->push(node->right);
+                    if(node->left) nxt_level->push(node->left);
+                }
+            }
+            res.push_back(temp);
+            swap(crt_level, nxt_level);
+        }
+        return res;
+    }
+};
+ 
+
+
+
+
+/////////////////////////////////
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         // normal level order traversal, assume root is at level 1
         // then for node at even level, we reverse it before store is in res
         vector<vector<int>> res;
