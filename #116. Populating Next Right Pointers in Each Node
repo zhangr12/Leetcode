@@ -38,6 +38,24 @@ public:
 };
 
 
+////////////////////////////
+// another simpler recursive solution
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        if(!root) return;
+        
+        if(root->left) root->left->next = root->right;  // since it is perfect binary tree, if left exists, right must also exists
+        if(root->right && root->next) root->right->next =root->next->left; // need to check whether root->next exist. If not, we do not need to do anything since the default value of next is null
+        
+        connect(root->left);
+        connect(root->right);
+        return;
+    }
+};
+
+
+
 //////////////////////////////
 class Solution {
 public:
