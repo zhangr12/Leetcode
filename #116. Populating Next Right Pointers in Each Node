@@ -8,6 +8,39 @@
  */
 class Solution {
 public:
+    // recursive method
+    void connect(TreeLinkNode *root) {
+        if(!root) return;
+        helper(root->left, root->right, nullptr);
+        return;
+    }
+    
+    
+    void helper(TreeLinkNode* l, TreeLinkNode* r, TreeLinkNode* nxt_l){
+        // since it is perfect binary tree, if left does not exist, then we reach the end
+        if(!l) return;
+        // let l point to r
+        l->next = r;
+        // let r point to nxt_l
+        r->next = nxt_l;
+        // call helper again to connect nodes on next level
+        helper(l->left, l->right, r->left);
+        // if nnxt_l exist, we connect rr with nxt_ll
+        if(nxt_l){
+            helper(r->left, r->right, nxt_l->left);
+        }
+        // else we connect rr with nullptr
+        else{
+            helper(r->left, r->right, nullptr);
+        }
+        return;
+    }
+};
+
+
+//////////////////////////////
+class Solution {
+public:
     void connect(TreeLinkNode *root) {
         // level order traversal with using two vectors and two pointers
         // note that this is not a constant space solution
