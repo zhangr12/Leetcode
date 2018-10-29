@@ -1,0 +1,26 @@
+class Solution {
+public:
+    // divide the string s with the first rear frequent char
+    int longestSubstring(string s, int k) {
+        set<char> unique_s(s.begin(), s.end());
+        
+        for(auto c:unique_s){
+            if(count(s.begin(), s.end(), c) < k){
+                stringstream ss(s);
+                int res = 0;
+                while(ss){
+                    string temp = nextSubString(ss, c);
+                    res = max(res, longestSubstring(temp, k));
+                }
+                return res;
+            }
+        }
+        return s.size();
+    }
+    
+    string nextSubString(stringstream &s, char stop){
+        string w;
+        getline(s, w, stop);
+        return w;
+    }
+};
