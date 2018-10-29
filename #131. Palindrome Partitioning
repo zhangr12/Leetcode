@@ -33,3 +33,56 @@ public:
     }
     
 };
+
+
+/////////////////////////////
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        if(s.size() == 0) return {{}};
+        
+        int n = s.size();
+        
+        // dp is a three dimentional vector
+        // dp[i] stores all possible Palindrome Partitioning for substring s[0~i] in the form <vector<vector<string>>
+        // each possible Palindrome Partitioning is a vector<string>
+        vector<vector<vector<string>>> dp;
+        // initialization
+        // with one char only, the only possible palindrome partitioning is s[0] itself
+        dp.push_back({{s.substr(0, 1)}});
+        
+        // for s[0~i], including i
+        for(int i = 1; i < s.size(); i++){
+            // store current information in temp
+            vector<vector<string>> temp;
+            // first check whether s[0~i] itself is a palindrome partitioning
+            if(isPalindrome(s.substr(0, i+1))) temp.push_back({s.substr(0, i+1)});
+            // now check all the possible combinations
+            // dp[0] + s[1~i], dp[1] + s[2~i], ..., dp[i-1]+s[i]
+            for(int j = 1; j <= i; j++){
+                if(isPalindrome(s.substr(j, i-j+1))){
+                    // cout << "!!" << s.substr(j, i-j+1) << endl;
+                    // note here that dp[j-1] is in form vector<vector<string>>
+                    for(int k = 0; k < dp[j-1].size(); k++){
+                        vector<string> temp1 = dp[j-1][k];
+                        temp1.push_back(s.substr(j, i-j+1));
+                        temp.push_back(temp1);
+                    }
+                }
+            }
+            dp.push_back(temp);
+        }
+        return dp[n-1];
+    }
+    
+    
+    bool isPalindrome(string s){
+        int i = 0, j = s.size() - 1;
+        while(i<j){
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+};
