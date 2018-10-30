@@ -1,0 +1,36 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    static bool Compare(Interval &i1, Interval &i2){
+        return i1.start < i2.start;
+    }
+    
+    vector<Interval> merge(vector<Interval>& intervals) {
+        // sort intervals, let the start point be in increasing order
+        // we should not sort based on end points. Consider the case: [[2,3],[4,5],[6,7],[8,9],[1,10]], the valid answer should be [[1, 10]]
+        vector<Interval> res;
+        if(intervals.size() == 0) return res;
+        sort(intervals.begin(), intervals.end(), Compare);
+        
+        Interval crt = intervals[0];
+        for(int i = 1; i < intervals.size(); i++){
+            if(crt.end >= intervals[i].start){
+                crt.end = max(intervals[i].end, crt.end);
+            }
+            else{
+                res.push_back(crt);
+                crt = intervals[i];
+            }
+        }
+        res.push_back(crt);
+        return res;
+    }
+};
