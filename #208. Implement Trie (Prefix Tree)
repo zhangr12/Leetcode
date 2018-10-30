@@ -1,0 +1,63 @@
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> next;
+    bool is_end;
+    
+    TrieNode(){
+        is_end = false;
+    }
+};
+
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        root = new TrieNode;
+    }
+    
+    ~Trie(){
+        delete root;
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        crt = root;
+        for(char w:word){
+            if(crt->next.find(w) == crt->next.end()) crt->next[w] = new TrieNode;
+            crt = crt->next[w];
+        }
+        crt->is_end = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        crt = root;
+        for(char w:word){
+            if(crt->next.find(w) == crt->next.end()) return false;
+            crt = crt->next[w];
+        }
+        if(crt->is_end) return true;
+        return false;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        crt = root;
+        for(char p:prefix){
+            if(crt->next.find(p) == crt->next.end()) return false;
+            crt = crt->next[p];
+        }
+        return true;
+    }
+private:
+    TrieNode* crt;
+    TrieNode* root;
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * bool param_2 = obj.search(word);
+ * bool param_3 = obj.startsWith(prefix);
+ */
