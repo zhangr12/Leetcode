@@ -1,0 +1,11 @@
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if(nums.size() == 0) return {-1, -1};
+        auto it_low = lower_bound(nums.begin(), nums.end(), target);
+        // If all the element in the range compare less than val, the function returns last, which is nums.end() in this case.
+        if(it_low == nums.end() || *it_low != target) return {-1, -1};
+        auto it_up = upper_bound(nums.begin(), nums.end(), target);
+        return {it_low - nums.begin(), it_up - nums.begin() - 1};
+    }
+};
