@@ -9,6 +9,38 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // one pass solution
+        // three pointer p1 and p2 and one pseudo head ph and prev(points to pseudo head at the beginning)
+        // p1 = head, mvoe it for n steps first
+        // then move p2, prev and p1 together one step at a time until p1 is null
+        // now p2 is pointing to the node that need to be removed
+        ListNode *p1, *p2, *prev;
+        ListNode *pseudo_head = new ListNode(0);
+        pseudo_head->next = head;
+        p1 = head;
+        p2 = head;
+        prev = pseudo_head;
+        
+        for(int i = 0; i < n; i++) p1 = p1->next;
+        
+        while(p1 != NULL){
+            p1 = p1->next;
+            p2 = p2->next;
+            prev = prev->next;
+        }
+        prev->next = p2->next;
+        
+        return pseudo_head->next;
+    }
+}; 
+ 
+ 
+ 
+ 
+////////////////////////////
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
         if(!head) return head;
         // two pass solution
         // first pass count the length of linked list, assume it is N
