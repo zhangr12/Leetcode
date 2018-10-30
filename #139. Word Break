@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        // dp with size n+1, where n = s.size()
+        // dp[i]: whether we can form s[0,i] by using strings in wordDict
+        // initialization: dp[0] = true
+        // transition formular: dp[i] = dp[i] || (s[i-j+1, i] in wordDict && dp[i-j])
+        if(s.size() == 0) return true;
+        if(wordDict.size() == 0) return false;
+        unordered_set<string> wordDic(wordDict.begin(), wordDict.end());
+        int n = s.size();
+        vector<bool> dp(n, false);
+        
+        dp[0] = true;
+        // for string s[0, i-1], we can split it into two parts: s.substr(j, i-j) and s.substr(0, j)
+        // for s.substr(j, i-j) we can check whether it is in wordDic
+        // for s,substr(0, j) we can use history information in dp[j]
+        for(int i = 1; i <= n; i++){
+            string temp = s.substr(0, i);
+            if(wordDic.count(temp)){
+                dp[i] = true;
+                continue;
+            }
+            for(int j = 0; j < i; j++){
+                string temp = s.substr(j, i-j);
+                if(wordDic.count(temp) && dp[j]){
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+};
