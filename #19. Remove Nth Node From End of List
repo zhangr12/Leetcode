@@ -1,0 +1,37 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(!head) return head;
+        // two pass solution
+        // first pass count the length of linked list, assume it is N
+        // in second pass, remove N-n+1 th node
+        int N = 0;
+        ListNode *crt = head, *prev;
+        while(crt){
+            N++;
+            crt = crt->next;
+        }
+        int i = 1;
+        ListNode *pseudo_head = new ListNode(0);
+        pseudo_head->next = head;
+        prev = pseudo_head;
+        crt = head;
+        while(i < N-n+1){
+            prev = crt;
+            crt = crt->next;
+            i++;
+        }
+        crt = crt->next;
+        prev->next = crt;
+        return pseudo_head->next;
+        
+    }
+};
