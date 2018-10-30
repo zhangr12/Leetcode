@@ -1,33 +1,40 @@
+// topological sorting
 class Solution {
 public:
     bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
-        // idea: in graph[i], we store the courses which have i as their prerequisite
+        // graph[i] stores all the courses which has i as their prerequisites
         vector<vector<int>> graph(numCourses);
-        vector<int> degree(numCourses, 0);
+        // indegree[i] stores the number of prerequisites(in-degree) of course i
+        vector<int> indegree(numCourses);
         
         for(auto p:prerequisites){
             graph[p.second].push_back(p.first);
-            degree[p.first]++;
+            // here we do not need to check duplicate, since for this problem there is no duplicate edges
+            indegree[p.first]++;
         }
-        // we use queue to store the finished courses
+        
+        int finished = 0;
         queue<int> q;
-        for(int i = 0; i < degree.size(); i++){
-            if(degree[i] == 0) q.push(i);
-        }
-        // pass stores the numbers of finished courses
-        int pass = 0;
-        while(!q.empty()){
-            // each time, pop out one finished course
-            int tmp = q.front();
-            q.pop();
-            pass++;
-            // check which course has this course as its prerequisite
-            for(auto u:graph[tmp]){
-                degree[u]--;
-                if(degree[u] == 0) q.push(u);
+        // store finished courses
+        for(int i = 0; i < numCourses; i++){
+            if(indegree[i] == 0){
+                finished++;
+                q.push(i);
             }
         }
-        if(pass == numCourses) return true;
-        return false;
+        // use q to do topological sorting
+        while(!q.empty()){
+            int crt = q.front();
+            q.pop();
+            for(auto u:graph[crt]){
+                indegree[u]--;
+                if(indegree[u] == 0){
+                    q.push(u);
+                    finished++;
+                }
+            }
+        }
+        return finished == numCourses;
+        
     }
 };
