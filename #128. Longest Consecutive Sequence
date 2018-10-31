@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        // idea: first turn nums into unordered_set. O(N)
+        // then for each num in set s, check whether it is the first number of a consecutive sequence(check whether num-1 exist or not)
+        // if it is not, skip
+        // if it is, check how far we can go, count the numbers and then compare with best
+        unordered_set<int> s(nums.begin(), nums.end());
+        
+        int best = 0;
+        for(auto num:s){
+            if(s.count(num-1) == 0){
+                int crt = 0;
+                while(s.count(num)){
+                    num++;
+                    crt++;
+                }
+                best = max(best, crt);
+            }
+        }
+        return best;
+    }
+};
