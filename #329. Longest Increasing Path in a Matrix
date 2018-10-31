@@ -1,0 +1,83 @@
+// DP with memory
+class Solution {
+public:
+    int res = 0;
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.size() == 0) return 0;
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> dp(m, vector<int>(n, 0)), direction{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                BFS(matrix, dp, direction, {i, j});
+            }
+        }
+        return res;
+    }
+    
+    void BFS(vector<vector<int>>& m, vector<vector<int>> &dp, vector<vector<int>> &direction, pair<int, int> crt){
+        int x = crt.first, y = crt.second, row = m.size(), col = m[0].size();
+        if(dp[x][y] != 0) return;
+        int maxLen = 0;
+        for(auto d:direction){
+            int nxt_x = x + d[0], nxt_y = y + d[1];
+            if(nxt_x < 0 || nxt_x >= row || nxt_y < 0 || nxt_y >= col || m[nxt_x][nxt_y] >= m[x][y]) continue;
+            BFS(m, dp, direction, {nxt_x, nxt_y});
+            maxLen = max(maxLen, dp[nxt_x][nxt_y]);
+        }
+        dp[x][y] = 1 + maxLen;
+        if(res < dp[x][y]) res = dp[x][y];
+        return;
+    }
+    
+};
+
+
+////////////////////////////
+// correct solution but Memory Limit Exceeded
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        // idea: start from a local minimum, perform BFS
+        int res = 0;
+        for(int i = 0; i < matrix.size(); i++){
+            for(int j = 0; j < matrix[0].size(); j++){
+                if(validStart(matrix, i, j)){
+                    res = max(res, BFS(matrix, {i, j}));
+                }
+            }
+        }
+        return res;
+    }
+    
+    // greedy BFS: each time only push the minimum valid number around current position into q
+    int BFS(vector<vector<int>> &m, pair<int, int> start){
+        queue<pair<int, int>> q;
+        q.push(start);
+        int res = 0, q_size;
+        pair<int, int> crt;
+        while(!q.empty()){
+            q_size = q.size();
+            res++;
+            for(int i = 0; i < q_size; i++){
+                crt = q.front();
+                q.pop();
+                int x = crt.first, y = crt.second;
+                if(x-1 >= 0 && m[x-1][y] > m[x][y]) q.push({x-1, y});
+                if(y-1 >= 0 && m[x][y-1] > m[x][y]) q.push({x, y-1});
+                if(x+1 < m.size() && m[x+1][y] > m[x][y]) q.push({x+1, y});
+                if(y+1 < m[0].size() && m[x][y+1] > m[x][y]) q.push({x, y+1});
+            }
+        }
+        return res;
+    }
+    
+    // a valid start must be a local minimum
+    bool validStart(vector<vector<int>> & m, int i, int j){
+        if(i-1 >= 0 && m[i-1][j] < m[i][j]) return false;
+        if(j-1 >= 0 && m[i][j-1] < m[i][j]) return false;
+        if(i+1 < m.size() && m[i+1][j] < m[i][j]) return false;
+        if(j+1 < m[0].size() && m[i][j+1] < m[i][j]) return false;
+        return true;
+    }
+};
