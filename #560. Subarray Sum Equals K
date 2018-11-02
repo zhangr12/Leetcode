@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        // idea: let s[i~j] denote the sum of sequence s[i]~s[j]
+        // note that: s[i~j] = s[0,j] - s[0,i]
+        // we want to know how many s[i~j] == k
+        if(nums.size() == 0) return 0;
+        unordered_map<int, int> m;
+        int sum = 0, res = 0;
+        // it is possible that num itself == k, so we need m[0] = 1
+        m[0] = 1;
+        for(int num:nums){
+            // everytime, we calculate s[0~j]
+            sum += num;
+            // check if there is any s[0~i] for i <= j such that s[0~i] == s[0~j] - k
+            // if there is A s[0~i] == s[0~j] - k, then the sequence ending with j has A continues sequence with sum == k
+            if(m.count(sum - k)) res += m[sum-k];
+            // remember current sum so that we can use it later
+            m[sum] += 1;
+        }
+        return res;
+    }
+};
