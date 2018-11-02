@@ -13,7 +13,7 @@ public:
             // everytime, we calculate s[0~j]
             sum += num;
             // check if there is any s[0~i] for i <= j such that s[0~i] == s[0~j] - k
-            // if there is A s[0~i] == s[0~j] - k, then the sequence ending with j has A continues sequence with sum == k
+            // if there is A s[0~i] == s[0~j] - k, then the sequence ending with j has A continues subsequence which has summation equal to k
             if(m.count(sum - k)) res += m[sum-k];
             // remember current sum so that we can use it later
             m[sum] += 1;
