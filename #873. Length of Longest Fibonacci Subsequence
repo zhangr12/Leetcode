@@ -1,0 +1,30 @@
+// if it is hard to find the solution but relatively easy to verify the solution, then explore all possible solutions might be a good idea
+class Solution {
+public:
+    int lenLongestFibSubseq(vector<int>& A) {
+        // Note: two start number fix a Fibonacci sequence
+        // idea: assume the Fibonacci sequence start at A[i]
+        // for each A[j] with j > i, we check based on these two start numbers, how far can we go to form a Fibonacci sequence
+        // we use unordered_set to fulfill this check process
+        // increasing j and i until we explore all the possible combinations
+        if(A.size() <= 2) return 0;
+        unordered_set<int> s(A.begin(), A.end());
+        
+        int res = 0, first, second;
+        
+        for(int i = 0; i < A.size()-2; i++){
+            for(int j = i+1; j < A.size()-1; j++){
+                first = A[i];
+                second = A[j];
+                int temp_len = 2;
+                while(s.count(first+second)){
+                    swap(first, second);
+                    second += first;
+                    temp_len++;
+                }
+                res = max(res, temp_len);
+            }
+        }
+        return res == 2 ? 0 : res;
+    }
+};
