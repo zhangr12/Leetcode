@@ -1,0 +1,55 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<string> ss;
+        stack<int> si;
+        
+        string res = "";
+        int i = 0;
+        
+        while(i < s.size()){
+            // s[i] is number
+            if(s[i] >= '0' && s[i] <= '9'){
+                si.push(nxtInt(s, i));
+                //cout << si.top() << endl;
+            }
+            // s[i] == ']'
+            else if(s[i] == ']'){
+                string temp = res;
+                for(int j = 0; j < si.top() - 1; j++) res += temp;
+                // this is important, since we need to combine current information with previous information
+                res = ss.top() + res;
+                ss.pop();
+                si.pop();
+                i++;
+            }
+            // s[i] == '['
+            // save current res since we are going to start a new bracket, remember current res is at the top of the stack
+            else if(s[i] == '['){
+                ss.push(res);
+                res = "";
+                i++;
+            }
+            else{
+                // use +=, since after bracket, we might have another string coming
+                res += nxtString(s, i);
+            }
+        }
+        return res;
+    }
+    
+    string nxtString(string &s, int &i){
+        // s[i] is not between '0' and '9'
+        int crt = i;
+        while((s[i] < '0' || s[i] > '9') && s[i] != '[' && s[i] != ']') i++;
+        return s.substr(crt, i-crt);
+        
+    }
+    
+    int nxtInt(string &s, int &i){
+        // s[i] is between '0' and '9'
+        int crt = i;
+        while(s[i] >= '0' && s[i] <= '9') i++;
+        return stoi(s.substr(crt, i-crt));
+    }
+};
