@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int maxCoins(vector<int>& nums) {
+        int N = nums.size();
+        // since we assume nums[-1] = nums[N] = 1, for convenience, we add 1 at both end of nums
+        nums.insert(nums.begin(), 1);
+        nums.insert(nums.end(), 1);
+        // for convenience, dp matrix's size is nums.size(), by using this setting, we do not need to worry about boundary problem
+        // dp[i][j] means the subproblem of vector nums[i]~nums[j], inclusing both i and j, with ends nums[i-1] and nums[j+1]
+        vector<vector<int>> dp(nums.size(), vector<int>(nums.size(), 0));
+        // k is the length of the subarray [i,j]
+        for(int k = 1; k <= N; k++){
+            // i is the start
+            for(int i = 1; i <= N-k+1; i++){
+                // j is the end
+                int j = i+k-1;
+                // we assume we burst balloon mid at the very end
+                for(int mid = i; mid <= j; mid++){
+                    // note that when we calculate dp[i][mid-1] we assume the end is nums[i-1] and nums[mid]
+                    dp[i][j] = max(dp[i][j], dp[i][mid-1] + dp[mid+1][j] + nums[i-1]*nums[mid]*nums[j+1]);
+                }
+            }
+        }
+        return dp[1][N];
+    }
+};
