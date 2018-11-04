@@ -1,3 +1,25 @@
+// Shift non-zero values as far forward as possible
+// Fill remaining space with zeros
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int insertPos = 0;
+        for(int num:nums){
+            if(num != 0){
+                nums[insertPos] = num;
+                insertPos++;
+            }
+        }
+        while(insertPos < nums.size()){
+            nums[insertPos] = 0;
+            insertPos++;
+        }
+    }
+};
+
+
+
+////////////////////////////////////
 // always move j to the next zero explicitly
 class Solution {
 public:
@@ -37,7 +59,7 @@ public:
                 nums[i] = nums[j];
                 nums[j] = temp;
                 j++;
-            }283. Move Zeroes
+            }
         }
     }
 };
