@@ -9,10 +9,7 @@ public:
     int next(int n) {
         int res;
         while(n){
-            // find next exist element
-            while(crt_pos < len_A && pA[crt_pos] == 0){
-                crt_pos += 2;
-            }
+            while(crt_pos < len_A && pA[crt_pos] == 0) crt_pos += 2;
             if(crt_pos == len_A) return -1;
             if(n > pA[crt_pos]){
                 n -= pA[crt_pos];
@@ -20,12 +17,11 @@ public:
             }
             else{
                 pA[crt_pos] -= n;
-                res = pA[crt_pos+1];
+                res = pA[crt_pos + 1];
                 n = 0;
             }
-            //cout << crt_pos << endl;
         }
-        return crt_pos == len_A ? -1 : res;
+        return res;
     }
 private:
     vector<int> pA;
