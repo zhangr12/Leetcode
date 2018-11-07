@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int numUniqueEmails(vector<string>& emails) {
+        set<string> S;
+        for(auto s:emails){
+            string temp = normalize(s);
+            //cout << temp << endl;
+            S.insert(temp);
+        }
+        return S.size();
+    }
+    
+    string normalize(string &s){
+        stringstream ss(s);
+        string temp;
+        getline(ss, temp, '@');
+        string res;
+        for(int i = 0; i < temp.size(); i++){
+            if(s[i] == '+') break;
+            if(s[i] == '.') continue;
+            res += s[i];
+        }
+        res += '@';
+        getline(ss, temp);
+        res += temp;
+        return res;
+    }
+};
