@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> sortArrayByParityII(vector<int>& A) {
+        // i points to even position
+        // j points to odd position
+        int i = 0, j = 1, n = A.size();
+        while(i < n && j < n){
+            // find the next invalid i and j
+            while(i < n && A[i]%2 == 0) i += 2;
+            while(j < n && A[j]%2 == 1) j += 2;
+            // check if i and j is valid
+            if(i >= n && j >= n) break;
+            // swap A[i] and A[j]
+            swap(A[i], A[j]);
+        }
+        return A;
+    }
+};
