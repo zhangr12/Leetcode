@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> sortArrayByParity(vector<int>& A) {
+        if(A.size() == 0) return {};
+        // i is pointer to even number
+        // j is pointer to odd number
+        int odd = 0, even = 0;
+        while(even < A.size()){
+            if(A[even]%2 == 0){
+                swap(A[even], A[odd]);
+                odd++;
+            }
+            even++;
+        }
+        return A;
+    }
+};
