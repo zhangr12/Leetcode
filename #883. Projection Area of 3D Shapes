@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int projectionArea(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        int xy = 0, yz = 0, xz = 0;
+        for(int i = 0; i < m; i++){
+            int temp = 0;
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] > 0) xy++;
+                temp = max(temp, grid[i][j]);
+            }
+            xz += temp;
+        }
+        
+        for(int j = 0; j < n; j++){
+            int temp = 0;
+            for(int i = 0; i < m; i++){
+                temp = max(temp, grid[i][j]);
+            }
+            yz += temp;
+        }
+        return xy + yz + xz;
+    }
+};
