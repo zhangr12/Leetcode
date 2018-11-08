@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numSpecialEquivGroups(vector<string>& A) {
+        // idea: for each string s in A
+        // move char on even index to the front and sort them
+        // move char on odd index to the end and sort them
+        // store them in unordered_set<string> and return the size of set
+        if(A.size() == 0) return 0;
+        unordered_set<string> s;
+        for(string a:A){
+            string even = "", odd = "";
+            for(int i = 0; i < a.size(); i++){
+                if(i%2){
+                    odd += a[i];
+                }
+                else{
+                    even += a[i];
+                }
+            }
+            sort(even.begin(), even.end());
+            sort(odd.begin(), odd.end());
+            s.insert(even + odd);
+        }
+        return s.size();
+    }
+};
