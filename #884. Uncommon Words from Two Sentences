@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string A, string B) {
+        // need to find word in A not in B and word in B not in A
+        // idea: store word in A and B in setA and setB
+        // iterate through setA to find word not in B
+        // iterate setB to find word not in A
+        stringstream AA(A), BB(B);
+        unordered_map<string, int> mapA, mapB;
+        while(AA) mapA[nextWord(AA)]++;
+        while(BB) mapB[nextWord(BB)]++;
+        vector<string> res;
+        for(auto it:mapA){
+            if(mapB.count(it.first) == 0 && it.second == 1) res.push_back(it.first);
+        }
+        for(auto it:mapB){
+            if(mapA.count(it.first) == 0 && it.second == 1) res.push_back(it.first);
+        }
+        return res;
+    }
+    
+    string nextWord(stringstream &ss){
+        string w;
+        getline(ss, w, ' ');
+        return w;
+    }
+};
