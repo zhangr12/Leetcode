@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isLongPressedName(string name, string typed) {
+        if(name.size() > typed.size()) return false;
+        
+        // two pointer and one prevChar recorder
+        if(name[0] != typed[0]) return false;
+        char prev = typed[0];
+        int j = 1;
+        for(int i = 1; i < name.size(); i++){
+            if(j >= typed.size()) return false;
+            if(name[i] != typed[j]){
+                while(j < typed.size() && typed[j] == prev) j++;
+                if(j >= typed.size()) return false;
+                if(typed[j] != name[i]) return false;
+                prev = typed[j];
+                j++;
+            }
+            else{
+                prev = typed[j];
+                j++;
+            }
+        }
+        return true;
+    }
+};
