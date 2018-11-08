@@ -2,6 +2,31 @@ class Solution {
 public:
     vector<string> uncommonFromSentences(string A, string B) {
         // need to find word in A not in B and word in B not in A
+        // idea: store word in A and B in a map, count how many times it appears
+        // return those word only appears once
+        stringstream AA(A), BB(B);
+        unordered_map<string, int> m;
+        while(AA) m[nextWord(AA)]++;
+        while(BB) m[nextWord(BB)]++;
+        vector<string> res;
+        for(auto it:m){
+            if(it.second == 1) res.push_back(it.first);
+        }
+        return res;
+    }
+    
+    string nextWord(stringstream &ss){
+        string w;
+        getline(ss, w, ' ');
+        return w;
+    }
+};
+
+///////////////////////////////
+class Solution {
+public:
+    vector<string> uncommonFromSentences(string A, string B) {
+        // need to find word in A not in B and word in B not in A
         // idea: store word in A and B in setA and setB
         // iterate through setA to find word not in B
         // iterate setB to find word not in A
