@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int binaryGap(int N) {
+        // idea: use bool to indicate we have more than 2 ones
+        // whenever we meet a 0, increase distance by 1
+        // whenever we meet a 1, if we have meet more than 2 ones, compare current dis with res and reset dis to be 1
+        // if its the first one, set dis to be 1
+        int res = 0, count = 0, dis = 0;
+        while(N){
+            if(N%2 == 0){
+                dis++;
+            }
+            else{
+                count++;
+                if(count >= 2) res = max(res, dis);
+                dis = 1;
+            }
+            N /= 2;
+        }
+        return res;
+    }
+};
