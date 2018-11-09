@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int reachNumber(int target) {
+        int steps = 0, sum = 0;
+        // the problem is symmetric to 0
+        target = abs(target);
+        while(sum < target){
+            steps++;
+            sum += steps;
+        }
+        if(sum == target) return steps;
+        int res = sum - target;
+        // if res is an even number, we can simply change res/2's sign to minus
+        if(res%2 == 0) return steps;
+        // residual is odd, we need to make it an even number
+        if(res%2){
+            // if steps + 1 is an odd number, we can add it to res and make res a even number, then make res/2's sign to minus
+            if((steps+1)%2) return steps + 1;
+            // if steps + 1 is an even number, we can add steps + 1 and steps + 2 to res to make res an even number, then make subtract res/2's sign to minus
+            return steps + 2;
+        }
+    }
+};
