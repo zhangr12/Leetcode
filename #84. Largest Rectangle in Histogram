@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        // same idea as problem 907
+        // we use monotone stack to find out the dominate region for heights[i]
+        // here the dominate region is defined as: in the region, heights[i] is strictly smaller than elements on left and heights[i] is smaller than or equal to the elements on right
+        // then we go through heights[i] once and multiply heights[i] with the width of dominate region of heights[i]
+        int n = heights.size();
+        
+        if(n == 0) return 0;
+        
+        stack<pair<int, int>> sl, sr;
+        vector<int> left(n, 0), right(n, 0);
+        // left
+        for(int i = 0; i < n; i++){
+            int temp = 1;
+            while(!sl.empty() && sl.top().first > heights[i]){
+                temp += sl.top().second;
+                sl.pop();
+            }
+            sl.push({heights[i], temp});
+            left[i] = temp;
+        }
+        // right
+        for(int i = n-1; i >= 0; i--){
+            int temp = 1;
+            while(!sr.empty() && sr.top().first >= heights[i]){
+                temp += sr.top().second;
+                sr.pop();
+            }
+            sr.push({heights[i], temp});
+            right[i] = temp;
+        }
+        int res = INT_MIN;
+        for(int i = 0; i < n; i++) res = max(res, heights[i]*(left[i] + right[i] - 1));
+        
+        return res;
+        
+    }
+};
