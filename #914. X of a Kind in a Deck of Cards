@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool hasGroupsSizeX(vector<int>& deck) {
+        unordered_map<int, int> m;
+        for(int card:deck) m[card]++;
+        int minCard = INT_MAX;
+        for(auto it:m) minCard = min(minCard, it.second);
+        if(minCard == 1) return false;
+        int i = 2;
+        while(i <= minCard){
+            //cout << i << endl;
+            // if i is minCard's dividor
+            if(i*(minCard/i) == minCard){
+                // check whether i is all other numbers' dividor
+                int count = 0;
+                for(auto it:m){
+                    if(i*(it.second/i) == it.second){
+                        count++;
+                    }
+                    else{
+                        break;
+                    }
+                }
+                //cout << count << endl;
+                if(count == m.size()) return true;
+            }
+            i++;
+        }
+        return false;
+    }
+};
