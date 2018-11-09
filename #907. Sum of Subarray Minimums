@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& A) {
+        // idea: for element i, find how far it can dominate to left and right
+        // here dominate means A[i] is the smallest number in the range A[i-left+1] and A[i+right-1]
+        // store the results in left and right, left[i] indicates how many numbers strickly bigger than A[i] to the left
+        // right[i] means how many numbers >= A[i] to the right
+        
+        // Note that this is important, if we require both end to be greater than or equal to, then we will overcount some interval
+        // for example, for 3 1 4 5 1, we will count 1 4 5 1 twice
+        // if we require both end to be strickly bigger, then we will  loss some interval
+        // for example, for 3 1 4 5 1, we will count not count 1 4 5 1 at all
+        // this is the reason that we need one side to be > the other side to be >=
+        // it is doesn't matter which side is > which side is >=
+        
+        // then the result is sum(A[i]*left[i]*right[i])
+        // to find the dominate region, we use monotonic stack
+        int n = A.size();
+        stack<pair<int, int>> sl, sr;
+        vector<int> left(n, 1), right(n, 1);
+        // left
+        for(int i = 0; i < n; i++){
+            int temp = 1;
+            while(!sl.empty() && A[sl.top().first] >= A[i]){
+                temp += sl.top().second;
+                sl.pop();
+            }
+            left[i] = temp;
+            sl.push({i, temp});
+        }
+        // right
+        for(int i = n-1; i >= 0; i--){
+            int temp = 1;
+            while(!sr.empty() && A[sr.top().first] > A[i]){
+                temp += sr.top().second;
+                sr.pop();
+            }
+            right[i] = temp;
+            sr.push({i, temp});
+        }
+        int res = 0, mod = pow(10, 9) + 7;
+        for(int i = 0; i < n; i++){
+            // cout << left[i] << " " << right[i] << endl;
+            res = (res + A[i]*left[i]*right[i])%mod;
+        }
+        return res;
+    }
+};
