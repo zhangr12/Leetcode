@@ -1,3 +1,21 @@
+// using __gcd from STL
+class Solution {
+public:
+    bool hasGroupsSizeX(vector<int>& deck) {
+        unordered_map<int, int> m;
+        for(int card:deck) m[card]++;
+        int res = 0;
+        for(auto it:m){
+            res = __gcd(it.second, res);
+            if(res == 1) return false;
+        }
+        return true;
+    }
+};
+
+
+////////////////////////////
+// same idea but not using __gcd from STL
 class Solution {
 public:
     bool hasGroupsSizeX(vector<int>& deck) {
