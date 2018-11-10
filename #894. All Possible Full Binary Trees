@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea: recursive solution
+    // for total N node, each time take 1 node to be root, then the possible number of node in left subtree is 1, 3, 5, ...
+    // accordingly, the possibe number of node in right subtree is N-1-1, N-1-3, N-1-5,...(note we minus an extra 1 since we used one node to be root)
+    vector<TreeNode*> allPossibleFBT(int N) {
+        vector<TreeNode*> res;
+        // if only one node, then just one possible case
+        if(N == 1){
+            TreeNode* node = new TreeNode(0);
+            res.push_back(node);
+            return res;
+        }
+        N--;
+        for(int i = 1; i < N; i += 2){
+            // possible number of node on left subtree
+            vector<TreeNode*> left = allPossibleFBT(i);
+            // possible number of node on right subtree
+            vector<TreeNode*> right = allPossibleFBT(N-i);
+            // take all combinations of left and right
+            for(auto l:left){
+                for(auto r:right){
+                    TreeNode* crt = new TreeNode(0);
+                    // here we clone the left tree because we do not want two different trees use the same memory location
+                    crt->left = clone(l);
+                    crt->right = clone(r);
+                    res.push_back(crt);
+                }
+            }
+        }
+        return res;
+    }
+    
+    TreeNode* clone(TreeNode* root){
+        TreeNode* newRoot = new TreeNode(0);
+        newRoot->left = root->left ? clone(root->left) : nullptr;
+        newRoot->right = root->right ? clone(root->right) : nullptr;
+        return newRoot;
+    }
+};
