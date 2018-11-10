@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& A) {
+        // dp with size m by n where m is A.size(), n is A[0].size()
+        // note that we do not need to create new matrix, we can just modify A
+        // initialization: no need, start from second row
+        // transition formular: A[i][j] = min(A[i-1][j-1], A[i-1][j], A[i-1][j+1]) + A[i][j]
+        // return min(A[m-1][j]) for all j in [0, n-1)
+        int m = A.size(), n = A[0].size();
+        for(int i = 1; i < m; i++){
+            for(int j = 0; j < n; j++){
+                int temp = INT_MAX;
+                if(j-1 >= 0 && A[i-1][j-1] < temp) temp = A[i-1][j-1];
+                if(j+1 < n && A[i-1][j+1] < temp) temp = A[i-1][j+1];
+                if(A[i-1][j] < temp) temp = A[i-1][j];
+                A[i][j] += temp;
+            }
+        }
+        int res = INT_MAX;
+        for(int j = 0; j < n; j++) res = min(res, A[m-1][j]);
+        return res;
+    }
+};
