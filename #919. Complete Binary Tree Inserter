@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class CBTInserter {
+public:
+    CBTInserter(TreeNode* root) {
+        ROOT = root;
+        prev.push_back(root);
+        prevIdx = 0;
+        bool cont = true;
+        while(cont){
+            for(prevIdx; prevIdx < prev.size(); prevIdx++){
+                if(!prev[prevIdx]->left){
+                    cont = false;
+                    break;
+                }
+                else{
+                    crt.push_back(prev[prevIdx]->left);
+                }
+                if(!prev[prevIdx]->right){
+                    cont = false;
+                    break;
+                }
+                else{
+                    crt.push_back(prev[prevIdx]->right);
+                }
+            }
+            if(prevIdx == prev.size()){
+                prevIdx = 0;
+                prev = crt;
+                crt = {};
+            }
+        }
+    }
+    
+    int insert(int v) {
+        int res;
+        if(!prev[prevIdx]->left){
+            prev[prevIdx]->left = new TreeNode(v);
+            crt.push_back(prev[prevIdx]->left);
+            res = prev[prevIdx]->val;
+        }
+        else{
+            prev[prevIdx]->right = new TreeNode(v);
+            crt.push_back(prev[prevIdx]->right);
+            res = prev[prevIdx]->val;
+            prevIdx++;
+            if(prevIdx == prev.size()){
+                prev = crt;
+                crt = {};
+                prevIdx = 0;
+            }
+        }
+        return res;
+    }
+    
+    TreeNode* get_root() {
+        return ROOT;
+    }
+private:
+    vector<TreeNode*> prev, crt;
+    TreeNode* ROOT;
+    int prevIdx;
+};
+
+/**
+ * Your CBTInserter object will be instantiated and called as such:
+ * CBTInserter obj = new CBTInserter(root);
+ * int param_1 = obj.insert(v);
+ * TreeNode* param_2 = obj.get_root();
+ */
