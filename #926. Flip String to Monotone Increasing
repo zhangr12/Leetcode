@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int minFlipsMonoIncr(string S) {
+        // dp with size S.size()*2
+        // dp[i][0] means the minimum flips if we only consider S[0~i] and want the ith digit to be 0
+        // dp[i][1] means the minimum flips if we only consider S[0~i] and want the ith digit to be 1
+        // initialization: dp[0][0] = 0 if S[0] == 0, 1 if S[0] == 1
+        // dp[0][1] == 0 if S[0] == 1, 1 if S[0] == 0
+        // transition formular: dp[i][0] = dp[i-1][0] + (S[i] != 0)
+        // dp[i][1] = min(dp[i-1][1], dp[i-1][0]) + (S[i] != 1)
+        int n = S.size();
+        if(n == 0) return 0;
+        // note that we only need one previous step's result in order to calculate the result for next step
+        // so we actually do not need to use a matrix to remember all the information
+        // we only need to remember results from previous one step
+        int dp00, dp01, dp11, dp10;
+        // initialize dp00 and dp01
+        dp00 = S[0] == '0' ? 0 : 1;
+        dp01 = S[0] == '1' ? 0 : 1;
+        for(int i = 1; i < n; i++){
+            if(S[i] == '0'){
+                dp10 = dp00;
+                dp11 = min(dp01, dp00) + 1;
+            }
+            else{
+                dp10 = dp00 + 1;
+                dp11 = min(dp01, dp00);
+            }
+            dp00 = dp10;
+            dp01 = dp11;
+        }
+        return min(dp10, dp11);
+    }
+};
