@@ -1,0 +1,40 @@
+class Compare{
+public:
+    bool operator()(pair<string, int> &p1, pair<string, int> &p2){
+        if(p1.second < p2.second) return false;
+        if(p1.second > p2.second) return true;
+        if(p1.first < p2.first) return true;
+        return false;
+    }
+};
+
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        // priority queue
+        // the prioroity_queue q put the least frequent string on top, if there are two or more strings are least frequent strings, the one with large alphabetical order is on the top
+        // first we use an unordered_map to get the frequent for each strings (O(N) space, O(N) time)
+        // then we push the {string, frequent} pair into q
+        // everytime after the push, we check the size of q, if the size is greater than k, we pop out the top element(which is the onw with least frequent and larger alphabet order)
+        // repeat this process until we finish traverse the unordered_map
+        priority_queue<pair<string, int>, vector<pair<string, int>>, Compare> q;
+        unordered_map<string, int> m;
+        for(string word:words) m[word]++;
+        for(auto it:m){
+            // first push it->first and it->second into q
+            q.push({it.first, it.second});
+            // if q's size is greater than k, pop top element
+            if(q.size() > k) q.pop();
+        }
+        //auto it = q.top();
+        //cout << it.first << " " << it.second << endl;
+        vector<string> res(k);
+        for(int i = k-1; i >= 0; i--){
+            auto it = q.top();
+            q.pop();
+            res[i] = it.first;
+        }
+        return res;
+        
+    }
+};
