@@ -1,0 +1,47 @@
+// similar solution to 3Sum
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        // three pointers
+        sort(nums.begin(), nums.end());
+        int res = 0, n = nums.size();
+        for(int i = n-1; i >= 0; i--){
+            int j = 0, k = i-1;
+            while(j < k){
+                if(nums[j] + nums[k] > nums[i]){
+                    res += k-j;
+                    k--;
+                }
+                else{
+                    j++;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+/////////////////////////////////
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        // first note if a, b and c can form a triangle, then they must satisft a + b > c
+        // idea: we can first sort the array in increasing order
+        // we first fix i, which various from 0 to n-1, where n is the nums.size()
+        // then for j in range [i+1, n-2]
+        // we use binary search to find the it = lower_bound(nums.begin() + j, nums.end(), nums[i] + nums[j])
+        // then the number of combinations we can get for fixed i and j is: it - nums.begin() - j
+        int res = 0, n = nums.size();
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < n-2; i++){
+            for(int j = i+1; j < n-1; j++){
+                auto it = lower_bound(nums.begin() + j + 1, nums.end(), nums[i] + nums[j]);
+                if(it - nums.begin() - j - 1 > 0){
+                    res += it - nums.begin() - j - 1;
+                }
+            }
+        }
+        return res;
+    }
+};
