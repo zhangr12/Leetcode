@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findLength(vector<int>& A, vector<int>& B) {
+        // take convolution between A and B
+        // thenfind the Maximum Length of Repeated Subarray for each discrete convolution
+        if(A.size() == 0 || B.size() == 0) return 0;
+        int m = A.size(), n = B.size(), res = 0;
+        for(int k = 1; k < m+n; k++){
+            int temp = 0;
+            for(int i = 0; i < n; i++){
+                int idx = k-n+i;
+                if(idx >= 0 && idx < m){
+                    if(A[idx] == B[i]){
+                        temp++;
+                        res = max(res, temp);
+                    }
+                    else{
+                        temp = 0;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
