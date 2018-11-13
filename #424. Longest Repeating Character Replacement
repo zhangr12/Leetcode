@@ -1,0 +1,28 @@
+// sliding window
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        if(s.size() == 0) return 0;
+        int res = 0, start = 0, end = 0;
+        vector<int> w(26, 0);
+        while(end < s.size()){
+            w[s[end]-'A']++;
+            // we want to change all the letters to dominatee char
+            // the total number of needed changes is length of window - number of dominate chars
+            // if it is greater than k, we keep pop start out until the numberof needed changes is less than k
+            while(end - start + 1 - dominate(w) > k){
+                w[s[start]-'A']--;
+                start++;
+            }
+            res = max(res, end-start+1);
+            end++;
+        }
+        return res;
+    }
+    // check number of dominate chars
+    int dominate(vector<int> &v){
+        int res = 0;
+        for(int num:v) res = max(res, num);
+        return res;
+    }
+};
