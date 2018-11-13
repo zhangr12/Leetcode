@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // idea: first go through B and find out the condition for a string to be the "universal" string
+    // then go through string A and fidn which string satisfy the above universal condition
+    vector<string> wordSubsets(vector<string>& A, vector<string>& B) {
+        vector<int> vB(26, 0);
+        for(string word:B){
+            vector<int> temp(26, 0);
+            for(char w:word) temp[w-'a']++;
+            for(int i = 0; i < 26; i++){
+                if(temp[i] > vB[i]) vB[i] = temp[i];
+            }
+        }
+        vector<string> res;
+        for(string word:A){
+            vector<int> temp(26, 0);
+            for(char w:word) temp[w-'a']++;
+            bool isUni = true;
+            for(int i = 0; i < 26; i++){
+                if(temp[i] < vB[i]){
+                    isUni = false;
+                    break;
+                }
+            }
+            if(isUni) res.push_back(word);
+        }
+        return res;
+    }
+};
