@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int minEatingSpeed(vector<int>& piles, int H) {
+        // binary search
+        // the minimum speed is max(sum/H, 1), here we need to use max because H might be bigger than sum. (sum is the total number of bananas)
+        // the maximum speed is the maximum number in piles
+        // then we use binary search to find the smallest speed that Koko need to use to eat all the bananas!
+        int sum = 0, r = INT_MIN;
+        for(int p:piles){
+            sum += p;
+            r = max(r, p);
+        }
+        int l = max(sum/H, 1);
+        // need to find smallest number which Koko needs to eat all bananas
+        // when l == r, we know we find the answer
+        while(l < r){
+            // find middle point
+            int mid = l + (r-l)/2;
+            // if Koko use mid as her speed, how long its going to take for her to eat all the bananas
+            int h = hours(piles, mid);
+            // if required time is bigger than H, then we know that the speed is not enough, we move left to mid + 1
+            if(h > H){
+                l = mid + 1;
+            }
+            // if required time is smaller than or equal to H, we know that probably Koko can eat slower
+            // since we are not sure whether mid is the answer or not, we need to keep mid in the search region
+            else{
+                r = mid;
+            }
+        }
+        return l;
+    }
+    // find the hours Koko need to spend if she want to eat all the bananas with speed K
+    int hours(vector<int>& piles, int K){
+        int res = 0;
+        for(int p:piles){
+            if(p%K){
+                res += p/K + 1;
+            }
+            else{
+                res += p/K;
+            }
+        }
+        return res;
+    }
+    
+};
