@@ -1,0 +1,18 @@
+// The rand7() API is already defined for you.
+// int rand7();
+// @return a random integer in the range 1 to 7
+
+class Solution {
+public:
+    // 7*(rand7()-1)+rand7()-1 has equal probability to get numbers from 0 to 48
+    // we want uniformly generate numbers from 1 to 10
+    // this means we want to have equaly number of 1,2,3,...,10 in our pool
+    // in order to do that, we need t chop off 8 from 48 to make it a 40
+    // then we can use modular to create equal number of 0~9
+    // add 1 to make it 1~10
+    int rand10() {
+        int temp = 40;
+        while(temp >= 40) temp = 7*(rand7()-1) + rand7()-1;
+        return temp%10 + 1;
+    }
+};
