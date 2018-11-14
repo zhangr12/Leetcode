@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<string> ambiguousCoordinates(string S) {
+        // note the input is in the form "(123)", sign...
+        vector<string> res;
+        int n = S.size();
+        for(int i = 1; i < n-2; i++){
+            vector<string> l = helper(S.substr(1, i)), r = helper(S.substr(i+1, n-2-i));
+            for(int j = 0; j < l.size(); j++){
+                for(int k = 0; k < r.size(); k++){
+                    //cout << l[j] << endl;
+                    //cout << r[k] << endl;
+                    res.push_back("(" + l[j] + ", " + r[k] + ")");
+                }
+            }
+        }
+        return res;
+    }
+    
+    
+    // need to handle zeros carefully
+    vector<string> helper(string S){
+        int n = S.size();
+        // ""
+        if(n == 0) return {};
+        // 0
+        if(n == 1) return {S};
+        // 0xxx0
+        if(S[0] == '0' && S[n-1] == '0') return {};
+        // 0xxxx
+        if(S[0] == '0' && S[n-1] != '0') return {"0." + S.substr(1, n-1)};
+        // xxxx0
+        if(S[n-1] == '0') return {S};
+        vector<string> res{S};
+        for(int i = 1; i < n; i++) res.push_back(S.substr(0, i) + "." + S.substr(i, n-i));
+        return res;
+    }
+    
+};
