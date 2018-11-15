@@ -1,0 +1,62 @@
+class Solution {
+public:
+    // BFS
+    int openLock(vector<string>& deadends, string target) {
+        unordered_set<string> visited, dead(deadends.begin(), deadends.end());
+        if(dead.count("0000")) return -1;
+        queue<string> q;
+        q.push("0000");
+        visited.insert("0000");
+        int steps = 0;
+        while(!q.empty()){
+            int num = q.size();
+            for(int i = 0; i < num; i++){
+                string crt = q.front();
+                if(crt == target) return steps;
+                q.pop();
+                for(int i = 0; i < 4; i++){
+                    if(crt[i] == '0'){
+                        string temp = crt.substr(0, i) + "9" + crt.substr(i+1);
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                        temp = crt.substr(0, i) + "1" + crt.substr(i+1);
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                    }
+                    else if(crt[i] == '9'){
+                        string temp = crt.substr(0, i) + "8" + crt.substr(i+1);
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                        temp = crt.substr(0, i) + "0" + crt.substr(i+1);
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                    }
+                    else{
+                        string temp = crt;
+                        temp[i] += 1;
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                        temp = crt;
+                        temp[i] -= 1;
+                        if(visited.count(temp) == 0 && dead.count(temp) == 0){
+                            q.push(temp);
+                            visited.insert(temp);
+                        }
+                    }
+                }
+            }
+            steps++;
+        }
+        return -1;
+    }
+};
