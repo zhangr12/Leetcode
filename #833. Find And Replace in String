@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string findReplaceString(string S, vector<int>& indexes, vector<string>& sources, vector<string>& targets) {
+        // m contains all the valid replacement
+        // the first int is the start index
+        // int the pair, the second int is the end index, the string is the replacement
+        unordered_map<int, pair<int, string>> m;
+        for(int i = 0; i < indexes.size(); i++){
+            if(isValid(S, indexes[i], sources[i])){
+                m[indexes[i]] = {indexes[i] + sources[i].size(), targets[i]};
+            }
+        }
+        // write new string
+        int crt = 0;
+        string res = "";
+        while(crt < S.size()){
+            if(m.count(crt)){
+                res += m[crt].second;
+                crt = m[crt].first;
+            }
+            else{
+                res += S[crt];
+                crt++;
+            }
+        }
+        return res;
+    }
+    
+    bool isValid(string &S, int start, string &source){
+        for(int i = 0; i < source.size(); i++){
+            if(S[start + i] != source[i]) return false;
+        }
+        return true;
+    }
+};
