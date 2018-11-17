@@ -1,0 +1,85 @@
+class Solution {
+public:
+    string pushDominoes(string dominoes) {
+        // idea: use three passes to calculate distance from each dominoe to L and R
+        // for dominoes showes L and R, we mark it as 1
+        // then we calculate how L and R propagate
+        // take left for example: when we propagate to left, we remember current distance to nearest L to its right, say its D
+        // then for next deminoe, if it is '.', its distance to nearest L is D+1
+        // if it is 'R', then its distance to current L is D+1, but now we reset D to be zero
+        // if it is 'L', we reset distance to be one
+        // Example:
+        // ".L.R...LR..L.."
+        // left:  "21054321432100"
+        // right: "00012345123400"
+        // when we calculate the result, there are three cases：
+        // case 1: l[i] == r[i], "."
+        // case 2: l[i] != 0 && r[i] != 0, choose the one with smaller distance
+        // case 3: one of them == 0, equal to the one that does not equal to 0
+        // results: "LL.RR.LLRRLL.."
+        int n = dominoes.size();
+        vector<int> l(n, 0), r(n, 0);
+        // fill in right
+        int steps = 0;
+        for(int i = 0; i < n; i++){
+            if(dominoes[i] == 'R'){
+                steps = 1;
+                r[i] = steps;
+            }
+            else if(dominoes[i] == 'L'){
+                if(steps != 0){
+                    r[i] = steps+1;
+                    steps = 0;
+                }
+            }
+            else{
+                if(steps != 0){
+                    steps++;
+                    r[i] = steps;
+                }
+            }
+        }
+        
+        // fill in left
+        steps = 0;
+        for(int i = n-1; i >= 0; i--){
+            if(dominoes[i] == 'L'){
+                steps = 1;
+                l[i] = steps;
+            }
+            else if(dominoes[i] == 'R'){
+                if(steps != 0){
+                    l[i] = steps+1;
+                    steps = 0;
+                }
+            }
+            else{
+                if(steps != 0){
+                    steps++;
+                    l[i] = steps;
+                }
+            }
+        }
+        string res = "";
+        for(int i = 0; i < n; i++){
+            if(l[i] == r[i]){
+                res += ".";
+            }
+            else if(l[i] == 0 || r[i] == 0){
+                if(l[i] != 0){
+                    res += "L";
+                }
+                else{
+                    res += "R";
+                }
+            }
+            else if(l[i] > r[i]){
+                res += "R";
+            }
+            else{
+                res += "L";
+            }
+        }
+        return res;
+    }
+};
