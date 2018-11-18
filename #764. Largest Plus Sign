@@ -1,0 +1,78 @@
+class Solution {
+public:
+    int orderOfLargestPlusSign(int N, vector<vector<int>>& mines) {
+        // idea: use a matrix to record the largest continuous length in the matrix to left, right, up and down
+        // let matrix indicate the original matrix
+        // let m indicate the marking matrix
+        // to be more specifically: in the first round, m[i][j] indicates how far(continuous 1s) we can go from matrix[i][j] to left given matrix[i][j] == 1
+        // then in second round, we check the same thing in right direction, and m[i][j] stores the smallest number
+        // keep going for up and down
+        // at the very end, the largest number in m is the result
+        vector<vector<int>> m(N, vector<int>(N, 0));
+        for(int i = 0; i < mines.size(); i++) m[mines[i][0]][mines[i][1]] = -1;
+        // for elements in each row, check how far it can go left
+        int crt;
+        for(int i = 0; i < N; i++){
+            crt = 0;
+            for(int j = N-1; j >= 0; j--){
+                if(m[i][j] == -1){
+                    m[i][j] == 0;
+                    crt = 0;
+                }
+                else{
+                    crt++;
+                    m[i][j] = crt;
+                }
+            }
+        }
+        // for elements in each row, check how far it can go right
+        for(int i = 0; i < N; i++){
+            crt = 0;
+            for(int j = 0; j < N; j++){
+                if(m[i][j] == -1){
+                    m[i][j] == 0;
+                    crt = 0;
+                }
+                else{
+                    crt++;
+                    // note that the result is determined by the shorter edge
+                    m[i][j] = min(m[i][j], crt);
+                }
+            }
+        }
+        // for elements in each column, check how far it can go up
+        for(int j = 0; j < N; j++){
+            crt = 0;
+            for(int i = N-1; i >= 0; i--){
+                if(m[i][j] == -1){
+                    m[i][j] == 0;
+                    crt = 0;
+                }
+                else{
+                    crt++;
+                    m[i][j] = min(m[i][j], crt);
+                }
+            }
+        }
+        // for elements in each column, check how far it can go down
+        for(int j = 0; j < N; j++){
+            crt = 0;
+            for(int i = 0; i < N; i++){
+                if(m[i][j] == -1){
+                    m[i][j] == 0;
+                    crt = 0;
+                }
+                else{
+                    crt++;
+                    m[i][j] = min(m[i][j], crt);
+                }
+            }
+        }
+        // the result is the maximum element in m
+        int res = 0;
+        for(int i = 0; i < N; i++){
+            for(int j = 0; j < N; j++) res = max(res, m[i][j]);
+        }
+        return res;
+    }
+};
