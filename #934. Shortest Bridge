@@ -1,0 +1,151 @@
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& A) {
+        // two ends BFS
+        // 1. find boundaries of two islands, name them b1 and b2
+        // 2. perform two ends BFS to find shortest path
+        // 0: water
+        // 1: unvisited island
+        // 2: visited island
+        // 3/4 boundary of island 1 and 2
+        // in BFS 3 and 4 can only be converted from 0
+        
+        queue<vector<int>> b1, b2;
+        int m = A.size(), n = A[0].size();
+        // find b1
+        bool exit = false;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(A[i][j] == 1){
+                    b1 = findBoundary(A, {i,j}, 3);
+                    exit = true;
+                    break;
+                }
+            }
+            if(exit) break;
+        }
+        // find b2
+        exit = false;
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(A[i][j] == 1){
+                    b2 = findBoundary(A, {i,j}, 4);
+                    exit = true;
+                    break;
+                }
+            }
+            if(exit) break;
+        }
+        
+        return BFS(A, b1, b2);
+    }
+    
+    queue<vector<int>> findBoundary(vector<vector<int>> &A, vector<int> start, int boundary){
+        queue<vector<int>> res;
+        queue<vector<int>> q;
+        q.push(start);
+        A[start[0]][start[1]] = 2;
+        while(!q.empty()){
+            vector<int> crt = q.front();
+            int x = crt[0], y = crt[1];
+            q.pop();
+            if(isBoundary(A, crt)){
+                res.push(crt);
+                A[x][y] = boundary;
+            }
+            // check four directions
+            
+            if(x-1 >= 0 && A[x-1][y] == 1){
+                q.push({x-1, y});
+                A[x-1][y] = 2;
+            }
+            if(y-1 >= 0 && A[x][y-1] == 1){
+                q.push({x, y-1});
+                A[x][y-1] = 2;
+            }
+            if(x+1 < A.size() && A[x+1][y] == 1){
+                q.push({x+1, y});
+                A[x+1][y] = 2;
+            }
+            if(y+1 < A[0].size() && A[x][y+1] == 1){
+                q.push({x, y+1});
+                A[x][y+1] = 2;
+            }
+        }
+        return res;
+    }
+    
+    // determine whether crt point is a boundry point
+    bool isBoundary(vector<vector<int>> &A, vector<int> &crt){
+        // a point is a boundary point if and only if at least one of its neighbor is 0
+        int x = crt[0], y = crt[1];
+        if((x-1 >= 0 && A[x-1][y] == 0) || (y-1 >= 0 && A[x][y-1] == 0) || (x+1 < A.size() && A[x+1][y] == 0) || (y+1 < A[0].size() && A[x][y+1] == 0)) return true;
+        return false;
+    }
+    
+    // two ends BFS
+    int BFS(vector<vector<int>> &A, queue<vector<int>> &b1, queue<vector<int>>& b2){
+        // b1 and b2 are boundaries of island 1 and 2
+        queue<vector<int>> *p1, *p2;
+        // let p1 points to smaller one
+        if(b1.size() < b2.size()){
+            p1 = &b1;
+            p2 = &b2;
+        }
+        else{
+            p2 = &b1;
+            p1 = &b2;
+        }
+        // when the points expand from p1 is in p2, we know two bridges meet each other
+        int level = 0;
+        while(true){
+            level++;
+            int crtColor = A[p1->front()[0]][p1->front()[1]], desColor = A[p2->front()[0]][p2->front()[1]];
+            // change 0 to crtColor
+            // if meet element which equal to desColor, return level
+            int num = p1->size();
+            for(int i = 0; i < num; i++){
+                vector<int> crt = p1->front();
+                p1->pop();
+                int x = crt[0], y = crt[1];
+                if(x-1 >= 0){
+                    if(A[x-1][y] == 0){
+                        p1->push({x-1, y});
+                        A[x-1][y] = crtColor;
+                    }
+                    else if(A[x-1][y] == desColor){
+                        return level-1;
+                    }
+                }
+                if(y-1 >= 0){
+                    if(A[x][y-1] == 0){
+                        p1->push({x, y-1});
+                        A[x][y-1] = crtColor;
+                    }
+                    else if(A[x][y-1] == desColor){
+                        return level-1;
+                    }
+                }
+                if(x+1 < A.size()){
+                    if(A[x+1][y] == 0){
+                        p1->push({x+1, y});
+                        A[x+1][y] = crtColor;
+                    }
+                    else if(A[x+1][y] == desColor){
+                        return level-1;
+                    }
+                }
+                if(y+1 < A[0].size()){
+                    if(A[x][y+1] == 0){
+                        p1->push({x, y+1});
+                        A[x][y+1] = crtColor;
+                    }
+                    else if(A[x][y+1] == desColor){
+                        return level-1;
+                    }
+                }
+            }
+            if(p1->size() > p2->size()) swap(p1, p2);
+        }
+    }
+};
