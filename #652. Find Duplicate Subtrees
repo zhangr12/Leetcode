@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> res;
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        string temp = preorder(root);
+        return res;
+    }
+    // note: inorder traversal cannot guarantee uniqueness, preorder and postorder can, here we use preorder
+    string preorder(TreeNode* node){
+        // if node is NULL, we return "N"
+        if(!node) return "N";
+        // preorder: node + left + right
+        string crt = to_string(node->val);
+        string l = preorder(node->left);
+        string r = preorder(node->right);
+        crt += l + r;
+        // check whether current node's combination exists before
+        if(m.count(crt)){
+            // if it exist and we haven't put it into res before
+            if(m[crt].second == false){
+                // put node into res and change bollean value to true
+                // in this way we will not put the same combination into result later
+                res.push_back(m[crt].first);
+                m[crt].second = true;
+            }
+        }
+        // if not we add it to m
+        else{
+            m[crt] = {node, false};
+        }
+        return crt;
+    }
+    
+private:
+    unordered_map<string, pair<TreeNode*, bool>> m;
+};
