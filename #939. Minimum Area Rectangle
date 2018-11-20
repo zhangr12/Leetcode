@@ -1,0 +1,31 @@
+class Solution {
+public:
+    // idea: smart brutal force
+    int minAreaRect(vector<vector<int>>& points) {
+        map<int, set<int>> m;
+        // put all y value with the same x together
+        for(auto p:points) m[p[0]].insert(p[1]);
+        
+        int res = INT_MAX;
+        // go through all x combination
+        for(auto it1 = m.begin(); it1 != m.end(); it1++){
+            // if current x has less than 2 y values, skip
+            // since we need at least two y values to form a rectangular
+            if(it1->second.size() < 2) continue;
+            // point to next iterator
+            auto it2 = next(it1);
+            for(; it2 != m.end(); it2++){
+                if(it2->second.size() < 2) continue;
+                vector<int> v;
+                int width = abs(it1->first - it2->first);
+                // use STL to calculate inersection between two sets' of ys
+                set_intersection(begin(it1->second), end(it1->second), begin(it2->second), end(it2->second), inserter(v, v.begin()));
+                // since we are using set here, which means the y value has been sorted
+                // we only need to check difference between adjacent y values
+                for(int i = 1; i < v.size(); i++) res = min(res, width*(v[i]-v[i-1]));
+            }
+        }
+        
+        return res == INT_MAX ? 0 : res;
+    }
+};
