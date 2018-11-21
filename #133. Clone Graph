@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // idea: BFS with memory
+    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
+        if(!node) return NULL;
+        // create head
+        UndirectedGraphNode *root = new UndirectedGraphNode(node->label);
+        // first node is old node, second is new node
+        unordered_map<UndirectedGraphNode*, UndirectedGraphNode*> m;
+        BFS(node, root, m);
+        return root;
+    }
+    // BFS with visited memory
+    // we need remember visited node since there might exists circle
+    void BFS(UndirectedGraphNode *oldNode, UndirectedGraphNode *newNode, unordered_map<UndirectedGraphNode*, UndirectedGraphNode*> &m){
+        // if we visited this node before, return
+        if(m.count(oldNode)) return;
+        // mark the node as visited, remember the map from old node to new node
+        m[oldNode] = newNode;
+        // check old node's neighbors
+        for(auto node:oldNode->neighbors){
+            // if we have not visited the neighbor node before
+            if(!m.count(node)){
+                // create new neighbor node
+                UndirectedGraphNode* temp = new UndirectedGraphNode(node->label);
+                // push new neighbor node into new node's neighbor vector
+                newNode->neighbors.push_back(temp);
+                // visit/copy neighbor node/new neighbor node
+                BFS(node, temp, m);
+            }
+            else{
+                // if we have visited neighbor node before, we push its corresponding new neighbor node into new node's neighbor vector
+                newNode->neighbors.push_back(m[node]);
+            }
+        }
+        return;
+    }
+    
+};
