@@ -1,3 +1,4 @@
+// good explaination: https://leetcode.com/problems/minimum-height-trees/discuss/76055/Share-some-thoughts
 class Solution {
 public:
     vector<int> findMinHeightTrees(int n, vector<pair<int, int>>& edges) {
