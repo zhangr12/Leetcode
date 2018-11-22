@@ -30,6 +30,8 @@ public:
                     // to avoid re-visit current node, we remove current node from its neighbor's neighbor node list
                     graph[neighbor].erase(crtNode);
                     // we only push neighbor with one edge into v2, this is because we do not want to be disturbed by the short leaf path
+                    // or in other words, we want all the leaf pointers move to the root(s) at the same speed
+                    // the pointers move faster will reach the nodes which has more than one edges, these are the pointers we want to abandon
                     if(graph[neighbor].size() == 1) p2->push_back(neighbor);
                 }
             }
