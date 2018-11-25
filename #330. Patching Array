@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int minPatches(vector<int>& nums, int n) {
+        // we assume we can use nums to patch all the numbers from 0 to miss-1
+        // here we use long int because the input n can be INT_MAX
+        long int miss = 1, i = 0, res = 0;
+        while(miss <= n){
+            // the idea is every time, we extend miss with different length
+            // depends on whether we can find valid element in nums or not
+            if(i < nums.size() && nums[i] <= miss){
+                // notice that everytime we use a number in nums, we increament the index i by 1
+                // by doing this we can guarantee to not repeatly using one element when we patching a number
+                miss += nums[i++];
+            }
+            else{
+                // if there is no valid element in nums
+                // since we can build 0~miss-1, the best strategy(the longest way we can extend miss) is add the number miss itself
+                // by doing this we can build number from 0 to 2*miss-1
+                // now we extend miss to 2*miss
+                miss += miss;
+                res++;
+            }
+        }
+        return res;
+    }
+};
