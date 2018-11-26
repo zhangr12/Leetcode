@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int monotoneIncreasingDigits(int N) {
+        string s = to_string(N);
+        
+        int marker = s.size();
+        
+        for(int i = s.size() - 1; i >= 1; i--){
+            if(s[i] < s[i-1]){
+                marker = i;
+                s[i-1] = s[i-1] - 1;
+            }
+        }
+        
+        for(int i = marker; i < s.size(); i++) s[i] = '9';
+        return stoi(s);
+    }
+};
