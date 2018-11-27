@@ -1,0 +1,49 @@
+// https://www.geeksforgeeks.org/bipartite-graph/
+// idea: A bipartite graph is possible if the graph coloring(color the graph with colors such that two adjacent nodes have different color) is possible using two colors such that vertices in a set are colored with the same color. 
+
+// solve bipartite problem with BFS
+// 1. Assign RED color to the source vertex (putting into set U).
+// 2. Color all the neighbors with BLUE color (putting into set V).
+// 3. Color all neighbor’s neighbor with RED color (putting into set U).
+// 4. This way, assign color to all vertices such that it satisfies all the constraints of m way coloring problem where m = 2.
+// 5. While assigning colors, if we find a neighbor which is colored with same color as current vertex, then the graph cannot be colored with 2 vertices (or graph is not Bipartite)
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+		int n = graph.size();
+		
+		vector<int> color(n, 0);
+		
+		for(int i = 0; i < n; i++){
+			if(color[i] != 0) continue;
+			if(!BFS(graph, color, i, 1)) return false;
+		}
+		return true;
+    }
+	
+	// 0: uncolored
+	// 1: red
+	// 2: black
+	// whenever we meet some node we 
+	bool BFS(vector<vector<int>>& graph, vector<int> &color, int crtNode, int crtColor){
+		if(color[crtNode] != 0){
+			if(color[crtNode] == crtColor) return true;
+			return false;
+		}
+		
+		color[crtNode] = crtColor;
+		
+		int c;
+		if(crtColor == 1){
+			c = 2;
+		}
+		else{
+			c = 1;
+		}
+		
+		for(int node:graph[crtNode]){
+			if(!BFS(graph, color, node, c)) return false;
+		}
+		return true;
+	}
+};
