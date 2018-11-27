@@ -15,7 +15,9 @@ public:
 		vector<int> color(n, 0);
 		
 		for(int i = 0; i < n; i++){
+            // if we visited current node/group, contionue
 			if(color[i] != 0) continue;
+            // explore current node's group
 			if(!BFS(graph, color, i, 1)) return false;
 		}
 		return true;
@@ -26,13 +28,15 @@ public:
 	// 2: black
 	// whenever we meet some node we 
 	bool BFS(vector<vector<int>>& graph, vector<int> &color, int crtNode, int crtColor){
-		if(color[crtNode] != 0){
+        if(color[crtNode] != 0){
+            // if current node's color is the same with its neighbor, return false
 			if(color[crtNode] == crtColor) return true;
 			return false;
 		}
 		
 		color[crtNode] = crtColor;
 		
+        // the neighbor's color should be different with crtColor
 		int c;
 		if(crtColor == 1){
 			c = 2;
