@@ -26,7 +26,7 @@ public:
 			if(temp.size() == 0 || nums[i] >= temp.back()){
 				s.insert(nums[i]);
 				temp.push_back(nums[i]);
-				BFS(nums, res, temp, i+1);
+				helper(nums, res, temp, i+1);
 				temp.pop_back();
 			}
 		}
