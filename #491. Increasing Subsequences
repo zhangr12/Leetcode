@@ -1,5 +1,44 @@
 class Solution {
 public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        vector<vector<int>> res;
+		vector<int> temp;
+		helper(nums, res, temp, 0);
+		return res;
+    }
+	
+    
+    // traditional back tracking
+    // use unordered_set to remember used elements, so we do not create duplicate combinations
+    // how the unordered_set works
+    // consider we have 1 2 3 1 1
+    // then the back tracking can give us all the combinations with 1 at the position 0
+    // that is 12 123 13 11 111
+    // after that we do not want to put 1 at position 0 anymore(since we already have all the possible combinations of 1 at positon 0)
+    // so we put 1 into unordered_set to
+    // note that the unordered_set is bounded with position and previous combination
+	void helper(vector<int> &nums, vector<vector<int>> &res, vector<int> &temp, int pos){
+		if(temp.size() > 1) res.push_back(temp);
+		// for fixed previous combintaion temp, and fixed insert position, temp.size(), we do not want to reuse same number
+		unordered_set<int> s;
+		for(int i = pos; i < nums.size(); i++){
+			if(s.count(nums[i])) continue;
+			if(temp.size() == 0 || nums[i] >= temp.back()){
+				s.insert(nums[i]);
+				temp.push_back(nums[i]);
+				BFS(nums, res, temp, i+1);
+				temp.pop_back();
+			}
+		}
+		return;
+	}
+};
+
+
+
+///////////////////////////////////////
+class Solution {
+public:
     // this is not a good solution. This solution does not handle the duplicates by itself
     // alternatively, it use set to remove the duplicates
     vector<vector<int>> findSubsequences(vector<int>& nums) {
