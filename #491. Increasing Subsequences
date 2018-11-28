@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // this is not a good solution. This solution does not handle the duplicates by itself
+    // alternatively, it use set to remove the duplicates
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        set<vector<int>> res;
+        vector<int> temp;
+        
+        helper(nums, res, temp, 0);
+        
+        return vector<vector<int>>(res.begin(), res.end());
+    }
+    
+    // back tracking
+    void helper(vector<int> &nums, set<vector<int>> &res, vector<int> &temp, int pos){
+        if(pos == nums.size()) return;
+        
+        int i = pos;
+        
+        while(i < nums.size()){
+            if(temp.size() == 0 || nums[i] >= temp.back()){
+                // check if there is duplicates
+                int nxt = i+1;
+                while(nxt < nums.size() && nums[nxt] == nums[i]) nxt++;
+                // we have same elements from i to nxt-1
+                for(int j = i; j < nxt; j++){
+                    temp.push_back(nums[i]);
+                    if(temp.size() > 1) res.insert(temp);
+                    helper(nums, res, temp, nxt);
+                }
+                for(int j = i; j < nxt; j++) temp.pop_back();
+                i = nxt;
+            }
+            else{
+                i++;
+            }
+        }
+        return;
+    }
+};
