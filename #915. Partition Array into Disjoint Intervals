@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int partitionDisjoint(vector<int>& A) {
+        int n = A.size();
+		// use s to store the smallest number's index of A from right
+        stack<int> s;
+		s.push(n-1);
+		// note that we only need to reach 1, since left and right cannot be null
+		for(int i = n-2; i >= 1; i--){
+			if(A[i] < A[s.top()]) s.push(i);
+		}
+		// use maxL to record to maximum number from left
+		// use rStart to track where the right starts
+		int maxL = A[0], rStart = 1;
+		while(rStart < n){
+			// s.top() is the index of the smallest number of A[rStart~n-1]
+			// if maxL <= smallest number from right, rStart is the answer
+			if(maxL <= A[s.top()]) return rStart;
+			// update maxL
+			maxL = max(maxL, A[rStart]);
+			// check if we need to update s
+			if(s.top() == rStart) s.pop();
+			// move rStart to right by 1
+			rStart++;
+		}
+		return -1;
+    }
+};
