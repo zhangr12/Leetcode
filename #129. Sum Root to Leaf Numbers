@@ -10,6 +10,32 @@
 class Solution {
 public:
     int sumNumbers(TreeNode* root) {
+        if(!root) return 0;
+        
+        int res = 0;
+        
+        BFS(root, 0, res);
+        return res;
+    }
+    
+    void BFS(TreeNode* node, int crtSum, int &res){
+        crtSum = crtSum*10 + node->val;
+        
+        if(!node->left && !node->right){
+            res += crtSum;
+            return;
+        }
+        if(node->left) BFS(node->left, crtSum, res);
+        if(node->right) BFS(node->right, crtSum, res);
+        return;
+    }
+};
+
+
+///////////////////////////////////
+class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
         // BFS
         if(!root) return 0;
         
