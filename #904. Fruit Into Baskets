@@ -1,0 +1,29 @@
+class Solution {
+public:
+    // idea: this problem is equal to we have a vector which contains different integers
+    // find the maximum length of the subarrays which only contains two different kinds of integers
+    // solution: 
+    // we can use a map to record the type and number of different fruits, use two pointers to record the left and right position for current valid interval
+    // once the size of map is greater than 2, we move add 1 to left until the size of m becomes 2
+    // if the size of map is less than or equal to 2, we update the final result and move right to 1
+    int totalFruit(vector<int>& tree) {
+        unordered_map<int, int> m;
+        int l = 0, r = 0, res = 0;
+        while(r < tree.size()){
+            // we can expand right when m.size() < 2 or (m.size() == 2 && m.count(tree[r]))
+            if(m.size() < 2 || (m.size() == 2 && m.count(tree[r]))){
+                m[tree[r]]++;
+                res = max(res, r - l + 1);
+                r++;
+            }
+            // now m.size() == 2 && m.count(tree[r]) == 0
+            // inorder to move to right, we need first make m.size() == 1
+            else{
+                m[tree[l]]--;
+                if(m[tree[l]] == 0) m.erase(tree[l]);
+                l++;
+            }
+        }
+        return res;
+    }
+};
