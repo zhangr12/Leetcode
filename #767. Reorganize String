@@ -1,0 +1,47 @@
+class Solution {
+public:
+    // Put the least common letters at the odd indexes and put the most common letters at the even indexes
+    // for most common chars, we start from left
+    // for least common chars, we start from right
+    // this can guarantee that if they meet at middle frequent char, they already miss each other(since one is from left to right, one is from right to left)
+    string reorganizeString(string S) {
+        if(S.size() == 1) return S;
+        int n = S.size();
+        vector<pair<char, int>> v(26, {'a', 0});
+        
+        for(char s:S) v[s-'a'] = {s, v[s-'a'].second+1};
+        
+        sort(v.begin(), v.end(), compare);
+        
+        if(v[0].second > (n+1)/2) return "";
+        
+        // i fill all the even points from the beginning, starts from the most frequent char
+        // j fill all the odd points from the end, start from the least frequent char
+        int i = 0, j = (n-1)%2 ? n-1 : n-2, chari = 0, charj = 25;
+        // point j to next existing char
+        while(v[charj].second == 0) charj--;
+        while(true){
+            // if i is invalid, we know that we must already filled in all the places, so return answer
+            if(i >= n) return S;
+            // check is current char still can be used
+            if(v[chari].second == 0) chari++;
+            // change S[i]
+            S[i] = v[chari].first;
+            // point i to next even index
+            i += 2;
+            // decrease the usable number
+            v[chari].second--;
+            
+            // similar with i, the only different is this time we fill in from right
+            if(j < 0) return S;
+            if(v[charj].second == 0) charj--;
+            S[j] = v[charj].first;
+            j -= 2;
+            v[charj].second--;
+        }
+    }
+    
+    static bool compare(pair<char, int> &p1, pair<char, int> &p2){
+        return p1.second > p2.second;
+    }
+};
