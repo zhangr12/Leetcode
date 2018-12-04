@@ -40,3 +40,33 @@ public:
     }
     
 };
+
+
+
+
+class Solution {
+public:
+    // always use the smallest bigger number in A(i.e. upper_bound)
+    // remember to erase the element in A after use it
+    // time complexity: O(NlogN + NlogN)
+    // not as efficiency as previous method
+    vector<int> advantageCount(vector<int>& A, vector<int>& B) {
+        sort(A.begin(), A.end());
+        
+        vector<int> res(A.size(), 0);
+        
+        for(int i = 0; i < B.size(); i++){
+            auto it = upper_bound(A.begin(), A.end(), B[i]);
+            if(it == A.end()){
+                res[i] = A[0];
+                A.erase(A.begin());
+            }
+            else{
+                res[i] = *it;
+                A.erase(it);
+            }
+        }
+        return res;
+    }
+};
+
