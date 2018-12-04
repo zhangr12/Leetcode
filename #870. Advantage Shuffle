@@ -1,5 +1,39 @@
 class Solution {
 public:
+    vector<int> advantageCount(vector<int>& A, vector<int>& B) {
+        sort(A.begin(), A.end(), compare);
+		
+		int n = A.size();
+		vector<int> idx(n);
+		iota(idx.begin(), idx.end(), 0);
+		// sort the idx based on B
+		sort(idx.begin(), idx.end(), [&B](size_t i1, size_t i2){return B[i1] > B[i2];});
+		
+		vector<int> res(n);
+		
+		int bigger = 0, smaller = n-1;
+		for(int i = 0; i < n; i++){
+			if(A[bigger] > B[idx[i]]){
+				res[idx[i]] = A[bigger];
+				bigger++;
+			}
+			else{
+				res[idx[i]] = A[smaller];
+				smaller--;
+			}
+		}
+		return res;
+    }
+	
+	static bool compare(int &n1, int &n2){
+		return n1 > n2;
+	}
+};
+
+
+/////////////////////////////////////
+class Solution {
+public:
     // idea: sort A and B(remember B's element's index after sorting) in decreasing order
     // make sure A's bigger element can always wins by using following strategy:
     // compare A's bigger element with B's bigger element, if A[i] > B[j], put A[i] in B[j]'s corresponding index(before sorting)
