@@ -1,0 +1,42 @@
+class Solution {
+public:
+    // idea: sort A and B(remember B's element's index after sorting) in decreasing order
+    // make sure A's bigger element can always wins by using following strategy:
+    // compare A's bigger element with B's bigger element, if A[i] > B[j], put A[i] in B[j]'s corresponding index(before sorting)
+    // if A[i] <= B[j], simply put a small element in B[j]'s place(do not waste big number in A)
+    vector<int> advantageCount(vector<int>& A, vector<int>& B) {
+        sort(A.begin(), A.end(), compare1);
+        
+        vector<pair<int, int>> BB(B.size());
+        
+        for(int i = 0; i < B.size(); i++) BB[i] = {B[i], i};
+        
+        sort(BB.begin(), BB.end(), compare);
+        
+        vector<int> res(A.size(), 0);
+        
+        int big = 0, small = A.size()-1;
+        
+        for(auto p:BB){
+            if(p.first < A[big]){
+                res[p.second] = A[big];
+                big++;
+            }
+            else{
+                res[p.second] = A[small];
+                small--;
+            }
+        }
+        return res;
+    }
+    
+    static bool compare1(int &n1, int &n2){
+        return n1 > n2;
+    }
+    
+    
+    static bool compare(pair<int, int> &p1, pair<int, int> &p2){
+        return p1.first > p2.first;
+    }
+    
+};
