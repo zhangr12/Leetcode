@@ -1,3 +1,56 @@
+// use binary search in the countPair function, much faster than non-binary search version
+class Solution {
+public:
+	int helper(vector<int> &nums, int start, int m){
+		// this line is important
+        // if nums[n-1] - nums[start] <= m, the return needs to be n-start, instead of n - start - 1
+        if(nums.back() - nums[start] <= m) return nums.size() - start - 1;
+        // since we always assume l will points to the next number that not satisfy
+        // nums[l] - nums[start] <= m
+        int l = start, r = nums.size()-1;
+		while(l < r){
+			int mid = l + (r-l)/2;
+			if(nums[mid] - nums[start] <= m){
+				l = mid + 1;
+			}
+			else{
+				r = mid;
+			}
+		}
+		return l - start - 1;
+	}
+	
+	
+	int countPair(vector<int> &nums, int mid){
+		int res = 0;
+		for(int i = 0; i < nums.size()-1; i++){
+			res += helper(nums, i, mid);
+		}
+		return res;
+	}
+	
+    int smallestDistancePair(vector<int>& nums, int k) {
+        int n = nums.size();
+		sort(nums.begin(), nums.end());
+		int l = 0;
+		int r = nums[n-1] - nums[0];
+		while(l < r){
+			int mid = l + (r-l)/2;
+			int count = countPair(nums, mid);
+			if(count < k){
+				l = mid + 1;
+			}
+			else{
+				r = mid;
+			}
+		}
+		return l;
+    }
+};
+
+
+/////////////////////////////////
+// single binary search method
 class Solution {
 public:
 	int countPair(vector<int> &nums, int mid){
