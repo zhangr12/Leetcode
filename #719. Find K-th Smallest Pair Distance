@@ -1,0 +1,31 @@
+class Solution {
+public:
+	int countPair(vector<int> &nums, int mid){
+		int res = 0;
+		for(int i = 0; i < nums.size()-1; i++){
+			int j = i+1;
+			while(j < nums.size() && nums[j] - nums[i] <= mid) j++;
+			res += j-i-1;
+		}
+		return res;
+	}
+	
+    int smallestDistancePair(vector<int>& nums, int k) {
+        int n = nums.size();
+		sort(nums.begin(), nums.end());
+		int l = INT_MAX;
+		for(int i = 1; i < n; i++) l = min(l, nums[i] - nums[i-1]);
+		int r = nums[n-1] - nums[0];
+		while(l < r){
+			int mid = l + (r-l)/2;
+			int count = countPair(nums, mid);
+			if(count < k){
+				l = mid + 1;
+			}
+			else{
+				r = mid;
+			}
+		}
+		return l;
+    }
+};
