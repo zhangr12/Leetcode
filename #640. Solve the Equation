@@ -1,0 +1,59 @@
+class Solution {
+public:
+    string solveEquation(string equation) {
+        // idea is simple: track coefficient of x and constant numbers seperately
+        // at the end, if both the coefficient of x and constant number are zero, then no solution
+        // if coefficient of x is zero and number is not zero, then no solution
+        // otherwise, return the solution
+        // the hard point is how to locate these coefficient fast
+        
+        // find '='
+        int start = 0, end = 0;
+        while(equation[end] != '=') end++;
+        vector<int> l = extractNumbers(equation, start, end);
+        vector<int> r = extractNumbers(equation, end+1, equation.size());
+        int xCoef = l[0] - r[0], num = r[1] - l[1];
+        if(xCoef == 0 && num == 0){
+            return "Infinite solutions";
+        }
+        else if(xCoef == 0){
+            return "No solution";
+        }
+        else{
+            return "x=" + to_string(num/xCoef);
+        }
+    }
+    
+    // equation information is stored in [start, end)
+    // no need to worry about space
+    // use + and - to splite string into some substring
+    // if the last char is 'x', then we add it to xCoef(be careful about the x, -x, +x)
+    // otherwise, we add it the number
+    vector<int> extractNumbers(string &s, int start, int end){
+        int xCoef = 0, number = 0, i = start;
+        while(i < end){
+            // find next +/-
+            int j = i+1;
+            while(j < end && s[j] != '+' && s[j] != '-') j++;
+            string temp = s.substr(i, j-i);
+            int n = temp.size();
+            if(temp[n-1] == 'x'){
+                string temp1 = temp.substr(0, n-1);
+                if(temp1 == "+" || temp1 == ""){
+                    xCoef += 1;
+                }
+                else if(temp1 == "-"){
+                    xCoef += -1;
+                }
+                else{
+                    xCoef += stoi(temp1);
+                }
+            }
+            else{
+                number += stoi(temp);
+            }
+            i = j;
+        }
+        return {xCoef, number};
+    }
+};
