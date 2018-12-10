@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        // idea: similar with remove zeros or duplicates
+		// use two pointers, one for the current position(increment 1 at each time)
+		// one for tracking the index of the first invalid element in nums
+		// since we allow repeat twice, we need to use "count" to remember how many time the same element appears
+		if(nums.size() == 0) return 0;
+		int crt = 1, count = 1, prevNum = nums[0];
+		for(int i = 1; i < nums.size(); i++){
+			if(prevNum == nums[i]){
+				count++;
+			}
+			else{
+				prevNum = nums[i];
+				count = 1;
+			}
+			if(count > 2) continue;
+			swap(nums[crt], nums[i]);
+			crt++;
+		}
+		return crt;
+    }
+};
