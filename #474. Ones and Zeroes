@@ -1,0 +1,32 @@
+// dp method with size m+1-by-n+1
+// dp[i][j] means the number of strings we can form with i zeros and j ones
+// like all the other combination problems, traverse the matrix from bottom right to top left to avoid reuse of strings
+// if we are allowed to reuse the strings, then we count from top left to bottom right
+// for each string s
+// assume it contains zeros 0s, and ones 1s
+// then the transition formular is:
+// dp[i][j] = max(dp[i][j], dp[i-zeros][j-ones]+1), for i from m to zeros and j from n to ones
+// dp[m][n] is the answer
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+		
+		for(string s:strs){
+			int ones = 0, zeros = 0;
+			for(char c:s){
+				if(c == '0'){
+					zeros++;
+				}
+				else{
+					ones++;
+				}
+			}
+			
+			for(int i = m; i >= zeros; i--){
+				for(int j = n; j >= ones; j--) dp[i][j] = max(dp[i][j], dp[i-zeros][j-ones]+1);
+			}
+		}
+		return dp[m][n];
+    }
+};
