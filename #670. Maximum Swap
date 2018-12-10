@@ -1,0 +1,26 @@
+// traverse the num in string from right to left
+// assume we are at position i(i th digit in num)
+// then the best strategy so far is to switch i th digit with the largest digit on its right
+// repeat this until we reach index 0
+
+// let n = to_string(num)
+// assume current index is i
+// use crtMax to store the index of current maximum element for index in range [i+1, n.size()-1]
+// use sw to store the pair that needs to be switched
+// start from right, for element i, if it is less than previous maximum digit, we should switch i and crtMax, so write {i, crtMax} in sw
+// now update crtMax: if crt element n[i] is greater than n[crtMax], let crtMax = crt
+class Solution {
+public:
+    int maximumSwap(int num) {
+        string n = to_string(num);
+		vector<int> sw(2, 0);
+		int crtMax = n.size()-1, crt = n.size()-1;
+		while(crt >= 0){
+			if(n[crt] < n[crtMax]) sw = {crt, crtMax};
+			if(n[crt] > n[crtMax]) crtMax = crt;
+			crt--;
+		}
+		swap(n[sw[0]], n[sw[1]]);
+		return stoi(n);
+    }
+};
