@@ -7,6 +7,57 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+ // recursive solution, better than traditional queue based BFS
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<vector<int>> res;
+        if(!root) return res;
+        vector<int> temp;
+        temp.push_back(root->val);
+        helper(root, res, temp, root->val, sum);
+        
+        return res;
+    }
+    
+    // here, crtV is the nodes' value up to current node(include), crtSum also included current node
+    void helper(TreeNode* node, vector<vector<int>> &res, vector<int> &crtV, int crtSum, int sum){
+        if(!node->left && !node->right){
+            if(crtSum == sum) res.push_back(crtV);
+            return;
+        }
+        
+        if(node->left){
+            crtV.push_back(node->left->val);
+            helper(node->left, res, crtV, crtSum + node->left->val, sum);
+            crtV.pop_back();
+        }
+        if(node->right){
+            crtV.push_back(node->right->val);
+            helper(node->right, res, crtV, crtSum + node->right->val, sum);
+            crtV.pop_back();
+        }
+        return;
+    }
+    
+};
+
+
+
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ // traditional BFS solution
+ // this solution is inefficient
 class Solution {
 public:
     vector<vector<int>> pathSum(TreeNode* root, int sum) {
