@@ -1,0 +1,31 @@
+class Solution {
+public:
+	// greedy method
+	// use left[num] to store the number of non-used numbers
+	// use end[num] to store number of valid sequence ended with num
+	// for each non-used number, we first check whether we can added it to the end of an existing valid sequence
+	// if not, we check whether it can be a start of a valid sequence
+	// if not, return false
+    bool isPossible(vector<int>& nums) {
+        unordered_map<int, int> left, end;
+		for(int num:nums) left[num]++;
+		for(int num:nums){
+			if(left[num]==0) continue;
+			if(end[num-1]){
+				end[num-1]--;
+				end[num]++;
+				left[num]--;
+			}
+			else if(left[num+1] && left[num+2]){
+				left[num]--;
+				left[num+1]--;
+				left[num+2]--;
+				end[num+2]++;
+			}
+			else{
+				return false;
+			}
+		}
+		return true;
+    }
+};
