@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int lengthLongestPath(string input) {
+        stringstream ss(input);
+		
+		vector<int> levelInfo(10, 0);
+		
+		int res = 0;
+		
+		while(ss){
+			string w = nxtWord(ss);
+			auto p = fileInfo(w);
+			
+			int level = p.first.first, charNum = p.first.second;
+			bool isFile = p.second;
+			
+			if(level >= levelInfo.size()){
+				levelInfo.push_back(charNum);
+			}
+			else{
+				levelInfo[level] = charNum;
+			}
+			if(isFile){
+				int temp = accumulate(levelInfo.begin(), levelInfo.begin() + level + 1, 0);
+				res = max(res, temp+level);
+			}
+		}
+		return res;
+    }
+	
+	pair<pair<int, int>, bool> fileInfo(string &f){
+		int idx = 0, numChars = 0, level = 0;
+		bool isFile = false;
+		while(idx < f.size() && f[idx] == '\t'){
+			level++;
+			idx++;
+		}
+		while(idx < f.size()){
+			if(f[idx] == '.') isFile = true;
+			idx++;
+			numChars++;
+		}
+	    return {{level, numChars}, isFile};
+	}
+	
+	string nxtWord(stringstream &ss){
+		string w;
+		getline(ss, w, '\n');
+		return w;
+	}
+	
+};
