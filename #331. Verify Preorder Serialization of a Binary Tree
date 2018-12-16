@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        // all non-null node provides 2 outdegree and 1 indegree (2 children and 1 parent), except root
+        // all null node provides 0 outdegree and 1 indegree (0 child and 1 parent).
+        // Suppose we try to build this tree. 
+        // During building, we record the out degree and in degree. 
+        // When the next node comes, we then increase in by 1, because the node provides an in degree. 
+        // If the node is not null, we increase out by 2, because it provides two out degrees. 
+        // If a serialization is correct, in should never be greater than out and out-in will be zero when finished.
+        if(preorder.size() == 0) return true;
+        // assume there is a pseudo head which give out an extra one
+        int crtIdx = -1, in = 0, out = 1;
+        bool crt;
+        while(crtIdx < (int)preorder.size()){
+            crt = notNull(preorder, crtIdx);
+            in++;
+            if(out - in < 0) return false;
+            if(crt) out += 2;
+        }
+        return out - in == 0;
+    }
+    
+    bool notNull(string &s, int &crtIdx){
+        bool res = s[++crtIdx] != '#';
+        while(crtIdx < s.size() && s[crtIdx] != ',') crtIdx++;
+        return res;
+    }
+};
+
+
+///////////////////////////////////////////
+// relation between node and edge
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        // consider the relation between node and edge
+        // if we add one virtual edge to root, then the number of total nodes should be equal to the number of total edges
+        // also when we constructing the tree, the number of node should never be greater than the number of edge
+        // now, when node comes(null or not null), it consumes one edge
+        // if the node is not null, it adds two edges
+        // note that during the whole process, the edge should always be greater than zero
+        // but we only need to check edge after each node comes, since if edge-- is greater than 0, then edge+2 must be greater than 0
+        if(preorder.size() == 0) return true;
+        
+        int crtIdx = -1, edge = 1, n = preorder.size();
+        while(crtIdx < n){
+            bool crt = notNull(preorder, crtIdx);
+            edge--;
+            if(edge < 0) return false;
+            if(crt) edge += 2;
+        }
+        return edge == 0;
+    }
+    
+    bool notNull(string &s, int &crtIdx){
+        bool res = s[++crtIdx] != '#';
+        while(crtIdx < s.size() && s[crtIdx] != ',') crtIdx++;
+        return res;
+    }
+};
