@@ -1,0 +1,60 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val = NULL;
+    Node* prev = NULL;
+    Node* next = NULL;
+    Node* child = NULL;
+
+    Node() {}
+
+    Node(int _val, Node* _prev, Node* _next, Node* _child) {
+        val = _val;
+        prev = _prev;
+        next = _next;
+        child = _child;
+    }
+};
+*/
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        // idea: use stack to store the node right after the one has child
+        stack<Node*> s;
+        
+        Node *crt = head;
+        
+        while(crt){
+            if(crt->next == NULL){
+                if(crt->child){
+                    crt->next = crt->child;
+                    crt->child->prev = crt;
+                    crt->child = NULL;
+                    crt = crt->next;
+                }
+                else{
+                    if(s.empty()) break;
+                    Node *node = s.top();
+                    s.pop();
+                    crt->next = node;
+                    node->prev = crt;
+                    crt = crt->next;
+                }
+            }
+            else{
+                if(crt->child == NULL){
+                    crt = crt->next;
+                }
+                else{
+                    s.push(crt->next);
+                    crt->next = crt->child;
+                    crt->child->prev = crt;
+                    crt->child = NULL;
+                    crt = crt->next;
+                }
+            }
+        }
+        return head;
+    }
+};
