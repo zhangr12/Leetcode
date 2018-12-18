@@ -28,6 +28,7 @@ public:
         // first string's parent is second string
         unordered_map<string, string> parent;
         // first string is parent, set<string> contains all the kids belongs to this parent
+        // here we cannot use unordered_set because the problem required us to make the order of the email being sorted
         unordered_map<string, set<string>> unions;
         
         // now each emails have their parents(which is the first email address in the email list)
