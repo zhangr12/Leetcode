@@ -8,8 +8,8 @@ public:
         }
         
         for(int i = 0; i < S.size(); i++){
-			S[i] = 'a' + (S[i]-'a'+shifts[i])%26;
-		}
-		return S;
+            S[i] = 'a' + (S[i]-'a'+shifts[i])%26;
+        }
+        return S;
     }
 };
