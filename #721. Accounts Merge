@@ -1,0 +1,67 @@
+class Solution {
+public:
+    static bool compare(const vector<string> &v1, const vector<string> &v2){
+        return v1[0] > v2[0];
+    }
+    
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        vector<vector<string>> res;
+        
+        if(accounts.size() == 0) return res;
+        
+        sort(accounts.begin(), accounts.end(), compare);
+        
+        int l = 0, r = 1;
+        while(r < accounts.size()){
+            string crtName = accounts[l][0];
+            while(r < accounts.size() && accounts[r][0] == crtName) r++;
+            
+            unionFind(accounts, res, l, r);
+            
+            l = r;
+        }
+        return res;
+    }
+    
+    void unionFind(vector<vector<string>> &A, vector<vector<string>> &res, int l, int r){
+        string owner = A[l][0];
+        // first string's parent is second string
+        unordered_map<string, string> parent;
+        // first string is parent, set<string> contains all the kids belongs to this parent
+        unordered_map<string, set<string>> unions;
+        
+        auto find = [&](string s) -> string{
+            while(s != parent[s]) s = parent[s];
+            return s;
+        };
+        
+        // now each emails have their parents(which is the first email address in the email list)
+        for(int i = l; i < r; i++){
+            for(int j = 1; j < A[i].size(); j++){
+                parent[A[i][j]] = A[i][1];
+            }
+        }
+        
+        for(int i = l; i < r; i++){
+            // find parent's parent
+            string p = find(A[i][1]);
+            for(int j = 2; j < A[i].size(); j++){
+                // let all the kids' parent equal to their parent's parent
+                parent[find(A[i][j])] = p;
+            }
+        }
+        
+        for(int i = l; i < r; i++){
+            for(int j = 1; j < A[i].size(); j++){
+                // put kids who have the same parent together
+                unions[find(A[i][j])].insert(A[i][j]);
+            }
+        }
+        
+        for(auto u:unions){
+            vector<string> temp(u.second.begin(), u.second.end());
+            temp.insert(temp.begin(), owner);
+            res.push_back(temp);
+        }
+    }
+};
