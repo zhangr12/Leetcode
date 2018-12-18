@@ -30,11 +30,6 @@ public:
         // first string is parent, set<string> contains all the kids belongs to this parent
         unordered_map<string, set<string>> unions;
         
-        auto find = [&](string s) -> string{
-            while(s != parent[s]) s = parent[s];
-            return s;
-        };
-        
         // now each emails have their parents(which is the first email address in the email list)
         for(int i = l; i < r; i++){
             for(int j = 1; j < A[i].size(); j++){
@@ -44,17 +39,17 @@ public:
         
         for(int i = l; i < r; i++){
             // find parent's parent
-            string p = find(A[i][1]);
+            string p = find(A[i][1], parent);
             for(int j = 2; j < A[i].size(); j++){
                 // let all the kids' parent equal to their parent's parent
-                parent[find(A[i][j])] = p;
+                parent[find(A[i][j], parent)] = p;
             }
         }
         
         for(int i = l; i < r; i++){
             for(int j = 1; j < A[i].size(); j++){
                 // put kids who have the same parent together
-                unions[find(A[i][j])].insert(A[i][j]);
+                unions[find(A[i][j], parent)].insert(A[i][j]);
             }
         }
         
@@ -63,5 +58,10 @@ public:
             temp.insert(temp.begin(), owner);
             res.push_back(temp);
         }
+    }
+    
+    string find(string s, unordered_map<string, string> &m){//在findRoot的同时做路径压缩
+        if(m[s] != s) m[s] = find(m[s], m);
+        return m[s];
     }
 };
