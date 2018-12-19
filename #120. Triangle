@@ -1,20 +1,39 @@
+// bottom up (does not change input)
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& T) {
+        vector<int> prevRow = T.back();
+	int n = T.size();
+	for(int i = n-2; i >= 0; i--){
+		for(int j = 0; j < T[i].size(); j++){
+			prevRow[j] = min(prevRow[j], prevRow[j+1]) + T[i][j];
+		}
+	}
+	return prevRow[0];
+    }
+};
+
+
+
+////////////////////////////
+// top down (change input)
 class Solution {
 public:
     // idea: the distance for node j at row i is: T[i][j] + min(T[i-1][j-1], T[i-1][j])
 	// take care of head and tail separately, since they do not have any choice but to use the tail and head from above row
     int minimumTotal(vector<vector<int>>& T) {
         for(int i = 1; i < T.size(); i++){
-			// head
-			T[i][0] += T[i-1][0];
-			// tail
-            T[i][i] += T[i-1][i-1];
-			// middle
-			for(int j = 1; j < T[i].size()-1; j++){
-				T[i][j] += min(T[i-1][j-1], T[i-1][j]);
-			}
+		// head
+		T[i][0] += T[i-1][0];
+		// tail
+		T[i][i] += T[i-1][i-1];
+		// middle
+		for(int j = 1; j < T[i].size()-1; j++){
+			T[i][j] += min(T[i-1][j-1], T[i-1][j]);
 		}
-		int res = INT_MAX;
-		for(int i = 0; i < T.back().size(); i++) res = min(res, T.back()[i]);
-		return res;
+	}
+	int res = INT_MAX;
+	for(int i = 0; i < T.back().size(); i++) res = min(res, T.back()[i]);
+	return res;
     }
 };
