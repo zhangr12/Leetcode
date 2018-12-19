@@ -1,0 +1,65 @@
+class MyCircularQueue {
+public:
+    /** Initialize your data structure here. Set the size of the queue to be k. */
+    MyCircularQueue(int k) {
+        v = new int[k];
+		maxCap = k;
+    }
+    
+    /** Insert an element into the circular queue. Return true if the operation is successful. */
+    bool enQueue(int value) {
+        if(crtCap < maxCap){
+			tail = (tail+1)%maxCap;
+			v[tail] = value;
+			crtCap++;
+			return true;
+		}
+		return false;
+    }
+    
+    /** Delete an element from the circular queue. Return true if the operation is successful. */
+    bool deQueue() {
+        if(crtCap > 0){
+			crtCap--;
+			head = (head+1)%maxCap;
+			return true;
+		}
+		return false;
+    }
+    
+    /** Get the front item from the queue. */
+    int Front() {
+        if(crtCap == 0) return -1;
+        return v[head];
+    }
+    
+    /** Get the last item from the queue. */
+    int Rear() {
+        if(crtCap == 0) return -1;
+        return v[tail];
+    }
+    
+    /** Checks whether the circular queue is empty or not. */
+    bool isEmpty() {
+        return crtCap == 0;
+    }
+    
+    /** Checks whether the circular queue is full or not. */
+    bool isFull() {
+        return crtCap == maxCap;
+    }
+private:
+	int head{0}, tail{-1}, maxCap, crtCap{0};
+	int *v;
+};
+
+/**
+ * Your MyCircularQueue object will be instantiated and called as such:
+ * MyCircularQueue* obj = new MyCircularQueue(k);
+ * bool param_1 = obj->enQueue(value);
+ * bool param_2 = obj->deQueue();
+ * int param_3 = obj->Front();
+ * int param_4 = obj->Rear();
+ * bool param_5 = obj->isEmpty();
+ * bool param_6 = obj->isFull();
+ */
