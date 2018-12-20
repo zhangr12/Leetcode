@@ -1,0 +1,53 @@
+class Solution {
+public:
+    // idea: moving window, check status of the window after each loop
+    bool checkInclusion(string s1, string s2) {
+        vector<int> v(26, 0);
+		
+		for(char s:s1) v[s-'a']++;
+		
+		int l = 0, r = -1, status;
+		while(l < s2.size()-s1.size()+1){
+			status = varify(v);
+			if(status == 1) return true;
+			// cannot move right pointer
+			if(r == s2.size()-1){
+				// if still only contains positive element, since now we cannot reduce positive number in v
+				// return false
+				if(status == 0){
+					return false;
+				}
+				// if contains negative element, we can 
+				else{
+					v[s2[l]-'a']++;
+					l++;
+				}
+			}
+			else{
+				if(status == 0){
+					r++;
+					v[s2[r]-'a']--;
+				}
+				else{
+					v[s2[l]-'a']++;
+					l++;
+				}
+			}
+		}
+		return false;
+    }
+	
+	// -1: contains negative element
+	// 0:  contains positive element
+	// 1:  perfect
+	int varify(vector<int> &v){
+		bool containsPositive = false;
+		for(int i = 0; i < 26; i++){
+			if(v[i] < 0) return -1;
+			if(v[i] > 0) containsPositive = true;;
+		}
+		if(containsPositive) return 0;
+		return 1;
+	}
+	
+};
