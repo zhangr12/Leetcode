@@ -35,3 +35,34 @@ public:
         return res;
     }
 };
+
+
+////////////////////////////////
+// use vector to mimic stack
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& A) {
+        vector<int> res;
+		for(int star:A){
+			if(res.size() == 0){
+				res.push_back(star);
+			}
+			else{
+				// no collision
+				if((res.back() > 0 && star > 0) || (res.back() < 0 && star < 0) || (res.back() < 0 && star > 0)){
+					res.push_back(star);
+				}
+				else{
+					while(res.size() > 0 && res.back() > 0 && -star > res.back()) res.pop_back();
+					if(res.size() == 0 || res.back() < 0){
+						res.push_back(star);
+					}
+					else if(res.back() == -star){
+						res.pop_back();
+					}
+				}
+			}
+		}
+		return res;
+    }
+};
