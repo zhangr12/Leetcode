@@ -1,0 +1,28 @@
+class Solution {
+public:
+    // idea: 
+    // assume matrix m[i][j] stores the minimum amount of money that we need in order to win if the number is between [i, j]
+    // for number interval [i, j], for a fixed k belongs to [i, j], the amount of money we need to win is at least
+    // k + max(dp[i][k-1], dp[k+1][j])
+    // we need to traverse k from i to j to find the minimum amount that we need in order to win
+    // that is: min(k+max(dp[i][k-1], dp[k+1][j])) for all k belongs to [i, j]
+    int getMoneyAmount(int n) {
+        vector<vector<int>> m(n, vector<int>(n, 0));
+        return dp(1, n, m);
+    }
+    
+    int dp(int l, int r, vector<vector<int>> &m){
+        if(r <= l) return 0;
+        
+        if(m[l-1][r-1] != 0) return m[l-1][r-1];
+        
+        int res = INT_MAX, temp = 0;
+        
+        for(int i = l; i <= r; i++){
+            temp = i + max(dp(l, i-1, m), dp(i+1, r, m));
+            if(temp < res) res = temp;
+        }
+        m[l-1][r-1] = res;
+        return res;
+    }
+};
