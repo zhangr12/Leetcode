@@ -1,0 +1,64 @@
+class Solution {
+public:
+    string predictPartyVictory(string senate) {
+        // idea:
+        // use push, front and pop function in queue to mimic the round-based voting
+        // if two queues are in same loop, then the one with smaller front element can be pushed back to queue, the larger one must be popped out
+        // if two queues are not in the same loop
+        // then the one with smaller loop number keep deleting the other queue until they are in the same loop again
+        // use -1 to determine whether we finish a loop or not
+        // whenever meet -1 in the front of queue, add corresponding loop number by 1
+        queue<int> qR, qD;
+        int loopR = 0, loopD = 0;
+        for(int i = 0; i < senate.size(); i++){
+            if(senate[i] == 'R'){
+                qR.push(i);
+            }
+            else{
+                qD.push(i);
+            }
+        }
+        qR.push(-1);
+        qD.push(-1);
+        while(qR.size() > 1 && qD.size() > 1){
+            if(qR.front() == -1){
+                qR.pop();
+                qR.push(-1);
+                loopR++;
+            }
+            if(qD.front() == -1){
+                qD.pop();
+                qD.push(-1);
+                loopD++;
+            }
+            if(loopR == loopD){
+                if(qR.front() < qD.front()){
+                    qD.pop();
+                    int temp = qR.front();
+                    qR.pop();
+                    qR.push(temp);
+                }
+                else{
+                    qR.pop();
+                    int temp = qD.front();
+                    qD.pop();
+                    qD.push(temp);
+                }
+            }
+            else if(loopR > loopD){
+                qR.pop();
+                int temp = qD.front();
+                qD.push(temp);
+                qD.pop();
+            }
+            else{
+                qD.pop();
+                int temp = qR.front();
+                qR.push(temp);
+                qR.pop();
+            }
+        }
+        if(qR.size() == 1) return "Dire";
+        return "Radiant";
+    }
+};
