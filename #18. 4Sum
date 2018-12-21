@@ -1,0 +1,54 @@
+class Solution {
+public:
+    // idea:
+    // reduce to 2Sum + 3Sum + 4Sum problem
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+		vector<vector<int>> res;
+		vector<int> temp;
+		twoSum(nums, res, temp, 4, 0, target);
+		return res;
+    }
+	
+	void twoSum(vector<int> &nums, vector<vector<int>> &res, vector<int> &temp, int K, int pos, int target){
+		if(K == 2){
+			int l = pos, r = nums.size()-1;
+			while(l < r){
+				if(l > pos && nums[l] == nums[l-1]){
+					l++;
+					continue;
+				}
+				if(r < nums.size() - 1 && nums[r] == nums[r+1]){
+					r--;
+					continue;
+				}
+				int tempSum = nums[l] + nums[r];
+				if(tempSum == target){
+					temp.push_back(nums[l]);
+					temp.push_back(nums[r]);
+					res.push_back(temp);
+					temp.pop_back();
+					temp.pop_back();
+					l++;
+					r--;
+				}
+				else if(tempSum > target){
+					r--;
+				}
+				else{
+					l++;
+				}
+			}
+			return;
+		}
+		else{
+			for(int i = pos; i < nums.size(); i++){
+				if(i > pos && nums[i-1] == nums[i]) continue;
+				temp.push_back(nums[i]);
+				twoSum(nums, res, temp, K-1, i+1, target-nums[i]);
+				temp.pop_back();
+			}
+			return;
+		}
+	}
+};
