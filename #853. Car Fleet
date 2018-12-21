@@ -1,0 +1,35 @@
+class Solution {
+public:
+	// idae:
+	// since a car can never pass a can ahead of it, it is nature to first sort the position and speed vector
+	// so that position is decreasing and speed is also sorted accordingly
+	// now we can calculate the arrival time for all the vehicles if there is no traffic on the road, call it time
+	// the arrival time of a fleet is dominated by the car in the first place, which is one of the slowest(since equal is also fine) in the whole fleet
+	// so we start from right side, we use crtTime to remember the arrival time for current fleet
+	// if the arrival time of the car on the left is smaller than or equal to crtTime, we know it is in the fleet
+	// otherwise, if the arrival time is greater than crtTime, we know that it is the leading car of the next fleet
+	// in this case, we increase fleet number by 1 and set crtTime equal to current car's arrival time
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        if(position.size() == 0) return 0;
+		vector<int> idx(position.size());
+        vector<double> time(position.size(), 0);
+		
+		for(int i = 0; i < position.size(); i++) time[i] = (target - position[i]) / (double)speed[i];
+		
+		iota(idx.begin(), idx.end(), 0);
+		
+        // sort speed based on position
+		sort(idx.begin(), idx.end(), [&](int i, int j){ return position[i] < position[j]; });
+		
+		int res = 1;
+		double crtTime = time[idx.back()];
+		
+		for(int i = idx.size() - 2; i >= 0; i--){
+			if(time[idx[i]] > crtTime){
+				res++;
+				crtTime = time[idx[i]];
+			}
+		}
+		return res;
+    }
+};
