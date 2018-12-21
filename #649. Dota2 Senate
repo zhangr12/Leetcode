@@ -18,9 +18,12 @@ public:
                 qD.push(i);
             }
         }
+        // use -1 to detect whether we finish current round or not
         qR.push(-1);
         qD.push(-1);
+        // stop when one of the queue only contains -1
         while(qR.size() > 1 && qD.size() > 1){
+            // determine whether the voting enter into next round
             if(qR.front() == -1){
                 qR.pop();
                 qR.push(-1);
@@ -31,6 +34,7 @@ public:
                 qD.push(-1);
                 loopD++;
             }
+            // if two queues are in the same round
             if(loopR == loopD){
                 if(qR.front() < qD.front()){
                     qD.pop();
@@ -45,6 +49,7 @@ public:
                     qD.push(temp);
                 }
             }
+            // if not, let the queue with smaller loop number vote
             else if(loopR > loopD){
                 qR.pop();
                 int temp = qD.front();
