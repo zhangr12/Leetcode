@@ -1,5 +1,22 @@
 class Solution {
 public:
+    // observation:
+    // a local inversion must be a global inversion
+    // a global inversion may not be a local inversion
+    // so it is only true when every global inversion is a local inversion
+    // this means the offset can not be greater than 1
+    bool isIdealPermutation(vector<int>& A) {
+        for(int i = 0; i < A.size(); i++){
+            if(abs(A[i] - i) > 1) return false;
+        }
+        return true;
+    }
+};
+
+/////////////////////////////////////
+class Solution {
+public:
+    // direct method: time O(NlogN), space O(N)
     bool isIdealPermutation(vector<int>& A) {
         vector<int> prev{A[0]};
         
