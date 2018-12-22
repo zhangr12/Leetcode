@@ -1,0 +1,21 @@
+class Solution {
+public:
+    bool isIdealPermutation(vector<int>& A) {
+        vector<int> prev{A[0]};
+        
+        int local = 0, global = 0;
+        
+        for(int i = 1; i < A.size(); i++){
+            // local inverse
+            if(A[i-1] > A[i]) local++;
+            
+            auto it = upper_bound(prev.begin(), prev.end(), A[i]);
+            // it should point at the end of prev
+            // if its not point at the end of prev, the distance is prev.end() - it
+            global += prev.end() -it;
+            
+            prev.insert(it, A[i]);
+        }
+        return local == global;
+    }
+};
