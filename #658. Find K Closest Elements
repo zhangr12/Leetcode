@@ -1,3 +1,62 @@
+////////////////////////////////////
+// binary search
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        // idea:
+        // assume arr[i]~arr[i+k-1] is the result, try to find i using binary search
+        // minimize maximum distance from x to arr[i]~arr[i+k-1]
+        
+        int l = 0, r = arr.size()-k;
+        while(l < r){
+            int mid = l + (r-l)/2;
+            // here we check the which one has smaller distance to x: arr[mid] or arr[mid+k]
+            // if arr[mid+k] has smaller distance to x, it means we can make the sequence better if we include arr[mid+k] in the sequence
+            // so we move left to mid+1
+            // else, it means we should never include any elements on the right side of arr[mid+k](include mid+k) in the result
+            // so we move right to mid
+            //
+            // if abs(arr[mid]-x) > abs(arr[mid+k]-x), it means two possible cases:
+            // 1. all the elements from arr[mid+1] to arr[mid+k] is better than arr[mid]
+            // 2. part of the elements from arr[mid+1] to arr[mid+k] is better than arr[mid]
+            // in both situations, we should move l to mid+1
+            // similar when abs(arr[mid]-x) <= abs(arr[mid+k]-x)
+            if(abs(arr[mid]-x) > abs(arr[mid+k]-x)){
+                l = mid + 1;
+            }
+            else{
+                r = mid;
+            }
+        }
+        return vector<int>(arr.begin() + l, arr.begin() + l + k);
+    }
+};
+
+
+
+////////////////////////////////////
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        auto it = lower_bound(arr.begin(), arr.end(), x);
+        int pos = it - arr.begin();
+        int l = pos-k, r = pos + k - 1;
+        while(l < 0) l++;
+        while(r >= arr.size()) r--;
+        
+        while(r - l + 1 > k){
+            if(abs(arr[l]-x) > abs(arr[r]-x)){
+                l++;
+            }
+            else{
+                r--;
+            }
+        }
+        return vector<int>(arr.begin() + l, arr.begin() + r + 1);
+    }
+};
+
+/////////////////////////////////////
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
