@@ -1,0 +1,70 @@
+class Solution {
+public:
+    vector<pair<int, int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        // idea: 
+        // reverse thinking: check from the boundary, check which cell can be touched by "reverse flow" for both A and P
+        // here reverse flow means:
+        // Water can only flow from a cell to another one with height equal or greater.
+        
+        // BFS for each boundary node
+        // everytime, start form a boundary node do BFS
+        // during BFS, record whether current node has been visited by P or A
+        // in P loop, if current node has been visited by P before, stop
+        // similar in A loop
+        vector<pair<int, int>> res;
+        if(matrix.size() == 0) return res;
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<string>> history(m, vector<string>(n, ""));
+        
+        for(int i = 0; i < n; i++){
+            //cout << 0 << "!!!!!!" << i << endl;
+            helper(matrix, history, 0, i, "P");
+            //cout << m-1 << "!!!!!!" << i << endl;
+            helper(matrix, history, m-1, i, "A");
+        }
+        
+        for(int i = 0; i < m; i++){
+            helper(matrix, history, i, 0, "P");
+            helper(matrix, history, i, n-1, "A");
+        }
+        
+        // traverse matrix write result in res
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(history[i][j] == "PA" || history[i][j] == "AP") res.push_back({i, j});
+            }
+        }
+        return res;
+    }
+    
+    void helper(vector<vector<int>>& m, vector<vector<string>> &h, int startX, int startY, string mark){
+        if(h[startX][startY].find(mark) != string::npos) return;
+        
+        queue<pair<int, int>> q;
+        q.push({startX, startY});
+        h[startX][startY] += mark;
+        
+        while(!q.empty()){
+            auto temp = q.front();
+            q.pop();
+            int x = temp.first, y = temp.second;
+            // check four directions
+            if(x-1 >= 0 && m[x-1][y] >= m[x][y] && h[x-1][y].find(mark) == string::npos){
+                h[x-1][y] += mark;
+                q.push({x-1, y});
+            }
+            if(y-1 >= 0 && m[x][y-1] >= m[x][y] && h[x][y-1].find(mark) == string::npos){
+                h[x][y-1] += mark;
+                q.push({x, y-1});
+            }
+            if(x+1 < m.size() && m[x+1][y] >= m[x][y] && h[x+1][y].find(mark) == string::npos){
+                h[x+1][y] += mark;
+                q.push({x+1, y});
+            }
+            if(y+1 < m[0].size() && m[x][y+1] >= m[x][y] && h[x][y+1].find(mark) == string::npos){
+                h[x][y+1] += mark;
+                q.push({x, y+1});
+            }
+        }
+    }
+};
