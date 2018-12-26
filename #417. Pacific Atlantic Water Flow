@@ -2,7 +2,8 @@ class Solution {
 public:
     vector<pair<int, int>> pacificAtlantic(vector<vector<int>>& matrix) {
         // idea: 
-        // reverse thinking: check from the boundary, check which cell can be touched by "reverse flow" for both A and P
+        // reverse thinking: the problem is equivalent to if water reverse flow from ocean to cell, then which cell can have water from both P and A?
+        // check from the boundary, check which cell can be touched by "reverse flow" for both A and P
         // here reverse flow means:
         // Water can only flow from a cell to another one with height equal or greater.
         
