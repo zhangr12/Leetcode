@@ -1,0 +1,38 @@
+class Solution {
+public:
+    double minAreaFreeRect(vector<vector<int>>& points) {
+        // 1. Two diagonals of a rectangle bisect each other, and are of equal length.
+        // 2. The map's key is String including diagonal length and coordinate of the diagonal center; map's value is the index of two points forming the diagonal.
+        unordered_map<string, vector<pair<vector<int>, vector<int>>>> m;
+        for(int i = 0; i < points.size(); i++){
+            for(int j = i+1; j < points.size(); j++){
+                double dis = (points[i][0] - points[j][0])*(points[i][0] - points[j][0]) + (points[i][1] - points[j][1])*(points[i][1] - points[j][1]);
+                if(dis == 0) continue;
+                double midX = 0.5*points[i][0] + 0.5*points[j][0], midY = 0.5*points[i][1] + 0.5*points[j][1];
+                m[to_string(dis) + "#" + to_string(midX) + "#" + to_string(midY)].push_back({points[i], points[j]});
+            }
+        }
+        // be careful about overflow
+        long int res = LONG_MAX;
+        for(auto item:m){
+            if(item.second.size() == 1) continue;
+            auto ps = item.second;
+            for(int i = 0; i < ps.size(); i++){
+                for(int j = i+1; j < ps.size(); j++){
+                    double temp = Area(ps[i], ps[j]);
+                    if(temp < res) res = temp;
+                }
+            }
+        }
+        return res == LONG_MAX ? 0 : sqrt(res);
+    }
+    
+    long int Area(pair<vector<int>, vector<int>> &point1, pair<vector<int>, vector<int>> &point2){
+        auto p1 = point1.first, p2 = point2.first, p3 = point2.second;
+        return distance(p1, p2)*distance(p1, p3);
+    }
+    
+    long int distance(vector<int> &p1, vector<int> &p2){
+        return (p1[0]-p2[0])*(p1[0]-p2[0]) + (p1[1]-p2[1])*(p1[1]-p2[1]);
+    }
+};
