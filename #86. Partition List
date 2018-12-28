@@ -1,0 +1,36 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea:
+    // two pseudoHeads, one for node with value less than x, one for nodes with value greater than or equal to x
+    // expand two pseudoHead according to current node's value
+    // at the very end, put these two list nodes together
+    ListNode* partition(ListNode* head, int x) {
+        if(!head) return nullptr;
+        ListNode *less = new ListNode(0), *greater = new ListNode(0);
+        ListNode *pseudoHeadL = less, *pseudoHeadG = greater;
+        while(head){
+            if(head->val < x){
+                less->next = head;
+                head = head->next;
+                less = less->next;
+                less->next = nullptr;
+            }
+            else{
+                greater->next = head;
+                head = head->next;
+                greater = greater->next;
+                greater->next = nullptr;
+            }
+        }
+        less->next = pseudoHeadG->next;
+        return pseudoHeadL->next;
+    }
+};
