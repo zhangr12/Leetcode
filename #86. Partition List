@@ -17,12 +17,14 @@ public:
         ListNode *less = new ListNode(0), *greater = new ListNode(0);
         ListNode *pseudoHeadL = less, *pseudoHeadG = greater;
         while(head){
+            // expand less
             if(head->val < x){
                 less->next = head;
                 head = head->next;
                 less = less->next;
                 less->next = nullptr;
             }
+            // expand greater
             else{
                 greater->next = head;
                 head = head->next;
