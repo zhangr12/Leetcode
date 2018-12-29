@@ -1,0 +1,23 @@
+class Solution {
+public:
+    // return a^b % base
+    int powMod(int a, int b){
+        a %= base;
+        int res = 1;
+        for(int i = 0; i < b; i++){
+            res = (res * a) % base;
+        }
+        return res;
+    }
+    
+    int superPow(int a, vector<int>& b) {
+        if(b.size() == 0) return 1;
+        
+        int lastDigit  = b.back();
+        b.pop_back();
+        return (powMod(superPow(a, b), 10)*powMod(a, lastDigit)) % base;
+        
+    }
+private:
+    const int base = 1337;
+};
