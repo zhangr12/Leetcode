@@ -1,5 +1,9 @@
 class Solution {
 public:
+    // ugly numbers can only comes from smaller ugly number multiply by 2, 3 or 5
+    // dp method: next ugly number must comes from previous ugly number multiply by 2, 3 or 5
+    // need to remember the ugly number that should multiply 2, 3 and 5
+    // also need to move index forward when there are more than 2 possibilities
     int nthUglyNumber(int n) {
         if(n == 1) return 1;
         vector<int> ugly(n, 0);
