@@ -1,0 +1,36 @@
+class Solution {
+public:
+    bool makesquare(vector<int>& nums) {
+        int tempSum = accumulate(nums.begin(), nums.end(), 0);
+        
+        if(tempSum%4) return false;
+        
+        int target = tempSum/4;
+        vector<int> visited(nums.size(), 0);
+        
+        return helper(nums, visited, 0, target, 4, 0);
+    }
+    
+    // the last parameter: start position is impossible!!!!
+    // by remember the position, we can guarantee the search only once for each possible group combination(though this possible combination might be failed at the end)
+    // if we do not remember the start position for current group, everytime we add a number to the group, we need to traverse the whole nums
+    // which will make the searching O(4^N)(???)
+    bool helper(vector<int> &nums, vector<int>& visited, int crtSum, int target, int groups, int start){
+        if(groups == 1) return true;
+        
+        for(int i = start; i < nums.size(); i++){
+            if(visited[i] != 0) continue;
+            if(nums[i] > target - crtSum) continue;
+            visited[i] = 1;
+            if(nums[i] + crtSum == target){
+                if(helper(nums, visited, 0, target, groups-1, 0)) return true;
+            }
+            else{
+                if(helper(nums, visited, crtSum+nums[i], target, groups, i+1)) return true;
+            }
+            visited[i] = 0;
+        }
+        return false;
+    }
+    
+};
