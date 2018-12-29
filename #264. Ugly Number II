@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        if(n == 1) return 1;
+        vector<int> ugly(n, 0);
+        ugly[0] = 1;
+        int two = 0, three = 0, five = 0;
+        for(int i = 1; i < n; i++){
+            int temp = min(2*ugly[two], min(3*ugly[three], 5*ugly[five]));
+            ugly[i] = temp;
+            if(2*ugly[two] == temp) two++;
+            if(3*ugly[three] == temp) three++;
+            if(5*ugly[five] == temp) five++;
+        }
+        return ugly[n-1];
+    }
+};
