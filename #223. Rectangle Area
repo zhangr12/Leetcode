@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int Area = (C-A)*(D-B) + (G-E)*(H-F);
+        // if there is common area, the left of the common area must comes from maximum of A and E
+        // similar to right, bottom and top
+        int left = max(A, E);
+        int right = min(C, G);
+        int bottom = max(B, F);
+        int top = min(D, H);
+        // check whether common area exist
+        if(left >= right || bottom >= top){
+            return Area;
+        }
+        else{
+            return Area - (right-left)*(top-bottom);
+        }
+    }
+};
