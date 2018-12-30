@@ -6,6 +6,42 @@ public:
         y = y_center;
     }
     
+    vector<double> randPoint() {
+        // {r*cos(theta), r*sin(theta)}
+        // how to randomly generate r and theta
+        // use the concept of the inverse CDF
+        double R = r*sqrt((double)rand()/RAND_MAX), theta = fRand(0, 2*PI);
+        return {x + R*cos(theta), y + R*sin(theta)};
+    }
+    
+    
+    double fRand(double fMin, double fMax){
+        double f = (double)rand()/RAND_MAX;
+        return fMin + f *(fMax-fMin);
+    }
+    
+    
+private:
+    const double PI = 3.1415926;
+    double r, x, y;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(radius, x_center, y_center);
+ * vector<double> param_1 = obj.randPoint();
+ */
+
+
+///////////////////////////////////
+class Solution {
+public:
+    Solution(double radius, double x_center, double y_center) {
+        r = radius;
+        x = x_center;
+        y = y_center;
+    }
+    
     // generate random points in rectangular, then check whether it falls in the circle
     vector<double> randPoint() {
         double resX, resY;
