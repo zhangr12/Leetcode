@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxWidthRamp(vector<int>& A) {
+        stack<int> s;
+        // create a decreasing stack to store all the candidates
+        // the candidate points are those points which is smaller than the smallest point from previous subarray
+        // if it is greater than previous smallest point, then it cannot be the potential candidate
+        for(int i = 0; i < A.size(); i++){
+            if(s.empty() || A[s.top()] > A[i]) s.push(i);
+        }
+        // check ramp distane for each candidate
+        int res = 0;
+        for(int i = A.size()-1; i >= 0; i--){
+            // for each candidate point in s, its ideal pair ramp point(if exist) must be the right most element that is greater than or equal to the candidate point
+            while(!s.empty() && A[s.top()] <= A[i]){
+                res = max(res, i-s.top());
+                s.pop();
+            }
+        }
+        return res;
+    }
+};
