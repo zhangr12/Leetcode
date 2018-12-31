@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int knightDialer(int N) {
+        // dp
+        // use prevEnd to store the number of previous ending on key 0~9
+        // initialization: prevEnd = 1 for 1 move
+        // transition formular: crtEnd[i] += prevEnd[moves[i][j]]
+        // here moves[i][j] means j can jump to i
+        const int modular = pow(10, 9) + 7;
+        // note that 5 cannot from anyother previous number
+        vector<vector<int>> moves{{4, 6}, {6, 8}, {7, 9}, {4, 8}, {3, 9, 0}, {}, {1, 7, 0}, {2, 6}, {1, 3}, {2, 4}};
+        vector<int> prevMove(10, 1);
+        for(int i = 0; i < N-1; i++){
+            vector<int> crtMove(10, 0);
+            for(int j = 0; j < 10; j++){
+                for(int k = 0; k < moves[j].size(); k++) crtMove[j] = (crtMove[j] + prevMove[moves[j][k]])%modular;
+            }
+            prevMove = crtMove;
+        }
+        int res = 0;
+        for(int i = 0; i < 10; i++) res = (res + prevMove[i])%modular;
+        return res;
+    }
+};
