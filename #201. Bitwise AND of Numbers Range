@@ -1,0 +1,19 @@
+class Solution {
+public:
+    // idea:
+    // find the first bit from left in m and n that they are not agree with each other
+    // then pad all the rest bit with zero
+    
+    // consider like below:
+    // if m and n are not the same, for example m = 0bxyz0acd, n=0bxyz1rst, (0b means base 2)
+    // then the last four bits (0acd in m, irst in n) should all set to zero, since they all will have at least one zero in the range from m to n
+    int rangeBitwiseAnd(int m, int n) {
+        int i = 0;
+        while(m != n){
+            m >>= 1;
+            n >>= 1;
+            i++;
+        }
+        return n << i;
+    }
+};
