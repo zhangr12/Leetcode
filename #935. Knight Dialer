@@ -1,3 +1,49 @@
+// O(logN) matrix multiplication method
+class Solution {
+public:
+    // idea: 
+    // the power of matrix reveals the number of walks in an non-directed graph
+    // https://math.stackexchange.com/questions/1890620/finding-path-lengths-by-the-power-of-adjacency-matrix-of-an-undirected-graph
+    const int modular = pow(10, 9) + 7;
+    int knightDialer(int N) {
+        if(N == 1) return 10;
+        vector<vector<long int>> t{{0, 0, 0, 0, 1, 0, 1, 0, 0, 0},{0, 0, 0, 0, 0, 0, 1, 0, 1, 0},{0, 0, 0, 0, 0, 0, 0, 1, 0, 1},{0, 0, 0, 0, 1, 0, 0, 0, 1, 0},{1, 0, 0, 1, 0, 0, 0, 0, 0, 1},{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},{1, 1, 0, 0, 0, 0, 0, 1, 0, 0},{0, 0, 1, 0, 0, 0, 1, 0, 0, 0},{0, 1, 0, 1, 0, 0, 0, 0, 0, 0},{0, 0, 1, 0, 1, 0, 0, 0, 0, 0}};
+        vector<vector<long int>> res(10, vector<long int>(10, 0));
+        for(int i = 0; i < 10; i++) res[i][i] = 1;
+        N -= 1;
+        while(N){
+            if(N%2) res = matMut(res, t);
+            t = matMut(t, t);
+            N /= 2;
+        }
+        return matSum(res);
+    }
+    
+    // matrix multiplication: matrix m1 is l-by-m, m2 is m-by-n
+    // return matrix has size l-by-n
+    vector<vector<long int>> matMut(vector<vector<long int>> &m1, vector<vector<long int>> &m2){
+        int l = m1.size(), m = m1[0].size(), n = m2[0].size();
+        vector<vector<long int>> res(l, vector<long int>(n, 0));
+        for(int i = 0; i < l; i++){
+            for(int j = 0; j < n; j++){
+                for(int k = 0; k < m; k++) res[i][j] = (res[i][j] + m1[i][k]*m2[k][j])%modular;
+            }
+        }
+        return res;
+    }
+    
+    int matSum(vector<vector<long int>> &m){
+        int res = 0;
+        for(int i = 0; i < m.size(); i++){
+            for(int j = 0; j < m[0].size(); j++) res = (res + m[i][j])%modular;
+        }
+        return res;
+    }
+};
+
+
+///////////////////////////////////////
+// O(N) dp method
 class Solution {
 public:
     int knightDialer(int N) {
