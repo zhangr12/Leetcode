@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int flipgame(vector<int>& fronts, vector<int>& backs) {
+        // if front[i] == back[i], then this number must not be the answer, store this number in a set "same"
+        // if front[i] != back[i], then we can always flip this card to make the number at the front different
+        // this means two things: 
+        // 1. this number can be the candidate of the answer
+        // 2. this number will not block other numbers to become the candidate
+        unordered_set<int> s;
+        for(int i = 0; i < fronts.size(); i++){
+            if(fronts[i] == backs[i]) s.insert(fronts[i]);
+        }
+        int res = INT_MAX;
+        for(int i = 0; i < fronts.size(); i++){
+            if(!s.count(fronts[i])) res = min(res, fronts[i]);
+            if(!s.count(backs[i])) res = min(res, backs[i]);
+        }
+        return res == INT_MAX ? 0 : res;
+    }
+};
