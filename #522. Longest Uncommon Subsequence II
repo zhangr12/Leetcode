@@ -1,0 +1,58 @@
+class Solution {
+public:
+    int findLUSlength(vector<string>& strs) {
+        // sort strs based on length
+		sort(strs.begin(), strs.end(), [](string &s1, string &s2){ return s1.size() > s2.size();});
+		
+		unordered_set<string> dups = findDup(strs);
+		
+		return LUS(strs, dups);
+    }
+	
+	unordered_set<string> findDup(vector<string> &strs){
+		unordered_set<string> res, temp;
+		for(auto str:strs){
+			if(temp.count(str)){
+				res.insert(str);
+			}
+			else{
+				temp.insert(str);
+			}
+		}
+		return res;
+	}
+	
+	bool check(string &s1, string &s2){
+		// s1 is the longer one, s2 is the shorter one
+		int p1 = 0, p2 = 0;
+		while(p1 < s1.size() && p2 < s2.size()){
+			if(s1[p1] == s2[p2]){
+				p1++;
+				p2++;
+			}
+			else{
+				p1++;
+			}
+		}
+		if(p2 == s2.size()) return true;
+		return false;
+	}
+	
+	
+	int LUS(vector<string> &strs, unordered_set<string> &dups){
+		for(int i = 0; i < strs.size(); i++){
+			if(dups.count(strs[i])) continue;
+			// check whether it is substring for all previous longer strings
+			bool isSubSeq = false;
+			for(int j = 0; j < i; j++){
+				if(strs[i].size() == strs[j].size()) return strs[i].size();
+				if(check(strs[j], strs[i])){
+					isSubSeq = true;
+					break;
+				}
+			}
+			if(!isSubSeq) return strs[i].size();
+		}
+		return -1;
+	}
+};
