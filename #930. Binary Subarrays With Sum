@@ -1,0 +1,89 @@
+// O(N) time, O(N) space
+class Solution {
+public:
+    // idea: 
+    // similar with 560. Subarray Sum Equals K
+    // we want to know sum of subarray from A[i]~A[j], call it sum[i,j]
+    // it is equal to sum[0,j] - sum[0,i-1]
+    // we calculate the accumulated sum so far and remember how many times the accumulated sum shows up
+    // for fixed j, the number of subarrays with sum equal to S and ended with j is equal to the number of sum[0, i-1] which equals to sum[0~j] - S
+    // we need to set m[0] = 1 because it is possible that sum[0~j] equal to S
+    int numSubarraysWithSum(vector<int>& A, int S) {
+        int res = 0, crtSum = 0;
+        unordered_map<int, int> m;
+        m[0] = 1;
+        for(int num:A){
+            crtSum += num;
+            res += m[crtSum - S];
+            m[crtSum]++;
+        }
+        return res;
+    }
+};
+
+
+
+////////////////////////////////
+// straight forward solution, O(N) time, O(1) space
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& A, int S) {
+        if(S == 0){
+            int l = 0, r, res = 0;
+            while(l < A.size()){
+                // point l to next 0
+                while(l < A.size() && A[l] != 0) l++;
+                r = l;
+                // point r to next 1
+                while(r < A.size() && A[r] == 0) r++;
+                //cout << l << " " << r << endl;
+                int num = r - l;
+                res += (num+1)*num/2;
+                l = r + 1;
+            }
+            return res;
+        }
+        else{
+            int l = 0, res = 0;
+            while(l < A.size() && A[l] == 0) l++;
+            if(l == A.size()) return res;
+            int r = l, crtSum = 1;
+            while(crtSum < S){
+                if(r == A.size()) return res;
+                r++;
+                if(r < A.size() && A[r] == 1) crtSum++;
+            }
+            
+            while(true){
+                //cout << l << " " << r << endl;
+                // now crtSum == S
+                // find zeros on left of l
+                int templ = l-1, leftZeros = 0;
+                while(templ >= 0 && A[templ] == 0){
+                    templ--;
+                    leftZeros++;
+                }
+                
+                // find zeros on right of r
+                int tempr = r+1, rightZeros = 0;
+                while(tempr < A.size() && A[tempr] == 0){
+                    tempr++;
+                    rightZeros++;
+                }
+                //cout << leftZeros << " " << rightZeros << endl;
+                res += (leftZeros+1)*(rightZeros+1);
+                
+                l++;
+                while(l < A.size() && A[l] == 0) l++;
+                if(l == A.size()) return res;
+                crtSum--;
+                while(crtSum < S){
+                    if(r == A.size()) return res;
+                    r++;
+                    if(r < A.size() && A[r] == 1) crtSum++;
+                }
+            }
+            return res;
+        }
+    }
+};
