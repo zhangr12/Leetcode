@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<string> spellchecker(vector<string>& wordlist, vector<string>& queries) {
+        unordered_map<string, int> m1, m2;
+		unordered_set<string> s;
+		for(int i = 0; i < wordlist.size(); i++){
+			string temp = toLower(wordlist[i]);
+			if(!m1.count(temp)) m1[temp] = i;
+			temp = vowelTransform(wordlist[i]);
+			if(!m2.count(temp)) m2[temp] = i;
+			s.insert(wordlist[i]);
+		}
+		
+		vector<string> res;
+		for(auto word:queries){
+			string temp1 = toLower(word), temp2 = vowelTransform(word);
+			if(s.count(word)){
+				res.push_back(word);
+			}
+			else if(m1.count(temp1)){
+				res.push_back(wordlist[m1[temp1]]);
+			}
+			else if(m2.count(temp2)){
+				res.push_back(wordlist[m2[temp2]]);
+			}
+			else{
+				res.push_back("");
+			}
+		}
+		return res;
+    }
+	
+	string vowelTransform(string s){
+		for(int i = 0; i < s.size(); i++){
+            s[i] = tolower(s[i]);
+			if(s[i] == 'a' || s[i] == 'e' || s[i] == 'i' || s[i] == 'o' || s[i] == 'u'){
+				s[i] = '*';
+			}
+		}
+		return s;
+	}
+	
+	string toLower(string s){
+		for(int i = 0; i < s.size(); i++){
+			s[i] = tolower(s[i]);
+		}
+		return s;
+	}
+};
