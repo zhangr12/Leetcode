@@ -1,0 +1,25 @@
+class Solution {
+public:
+    // recursive solution with memory
+    double soupServings(int N) {
+        if(N > 5000) return 1;
+		
+		return helper(N, N);
+    }
+	
+	double helper(int A, int B){
+        // this part is based on the problem description
+		if(A == 0 && B != 0) return 1;
+		if(A == 0 && B == 0) return 0.5;
+		if(A != 0 && B == 0) return 0;
+		// if we visited A, B before, there is no need to re-calculate the result
+		if(m[A][B]) return m[A][B];
+		// since each operation has equal probability, we simply add all their probabilitis together and divide by 0.25
+		m[A][B] = 0.25*(helper(A-min(A, 100), B) + helper(A-min(A, 75), B - min(B, 25)) + helper(A-min(A, 50), B-min(B,50)) + helper(A-min(A,25), B-min(B, 75)));
+		
+		return m[A][B];
+	}
+	
+private:
+	unordered_map<int, unordered_map<int, double>> m;
+};
