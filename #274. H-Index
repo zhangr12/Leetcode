@@ -1,3 +1,29 @@
+// bucket sort idea: time O(N), space O(N)
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int n = citations.size();
+		vector<int> buckets(n+1, 0);
+		
+		for(int cite:citations){
+			if(cite > n){
+				buckets[n]++;
+			}
+			else{
+				buckets[cite]++;
+			}
+		}
+		int accumulate = 0;
+		for(int i = n; i >=0; i--){
+			accumulate += buckets[i];
+			if(accumulate < i) continue;
+			return i;
+		}
+    }
+};
+
+//////////////////////////////
+// sort first: time O(NlogN), space O(N)
 class Solution {
 public:
     int hIndex(vector<int>& citations) {
