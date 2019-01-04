@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        if(citations.size() == 0) return 0;
+        sort(citations.begin(), citations.end());
+		int i = citations.size()-1, numPapers = 1;
+		for(; i >= 0; i--, numPapers++){
+			if(citations[i] < numPapers) break;
+		}
+		return citations[i] == numPapers ? numPapers : numPapers - 1;
+    }
+};
