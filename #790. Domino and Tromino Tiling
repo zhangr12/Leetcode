@@ -1,3 +1,53 @@
+// dp with O(N) time, O(1) space
+// find the formular: dp[k] = 2*dp[k-1] + dp[k-3]
+class Solution {
+public:
+    int numTilings(int N) {
+        // note that in the description, N cannot be 0
+        if(N <= 2) return N;
+        int modular = pow(10, 9) + 7;
+        int dp, dp1 = 2, dp2 = 1, dp3 = 1;
+        for(int k = 3; k <= N; k++){
+            dp = ((2*dp1)%modular + dp3)%modular;
+            // update history information
+            dp3 = dp2;
+            dp2 = dp1;
+            dp1 = dp;
+        }
+        return dp;
+    }
+};
+
+
+/////////////////////////////////////
+// dp with O(N) time, O(1) space
+// note that we only need dp[k-1], dp[k-2], dp[k-3], T3[k-2] and T4[k-2]
+class Solution {
+public:
+    int numTilings(int N) {
+        // note that in the description, N cannot be 0
+        if(N <= 2) return N;
+        int modular = pow(10, 9) + 7;
+        int dpk, dpk1 = 2, dpk2 = 1, dpk3 = 1, T3k2 = 0, T4k2 = 0, T3k1, T4k1;
+        for(int k = 3; k <= N; k++){
+            T3k1 = (dpk3 + T4k2)%modular;
+            T4k1 = (dpk3 + T3k2)%modular;
+            dpk = ((dpk1 + dpk2)%modular + (T3k1 + T4k1)%modular)%modular;
+            
+            // update history information
+            T3k2 = T3k1;
+            T4k2 = T4k1;
+            dpk3 = dpk2;
+            dpk2 = dpk1;
+            dpk1 = dpk;
+        }
+        return dpk;
+    }
+};
+
+
+
+/////////////////////////////////////
 // dp with O(N) time, O(N) space
 class Solution {
 public:
