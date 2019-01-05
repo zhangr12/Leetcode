@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // always keep a window [i,j] such that the product of the numbers in the window is less than k
+    // if current window's product is greater than or equal to k, we move i to left
+    // after we updated j, for the window [i,j], the number of all the subarraies ended with j is j-i+1
+    // after each step, update the result of product of the window
+    int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+        if(nums.size() == 0) return 0;
+        int res = 0, l = 0, r = 0, temp = nums[0];
+        while(r < nums.size()){
+            if(temp < k){
+                res += r-l+1;
+                r++;
+                if(r < nums.size()) temp *= nums[r];
+            }
+            else{
+                temp /= nums[l];
+                l++;
+                if(r < l) r = l;
+            }
+        }
+        return res;
+    }
+};
