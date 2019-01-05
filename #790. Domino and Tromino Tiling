@@ -1,0 +1,19 @@
+// dp with O(N) time, O(N) space
+class Solution {
+public:
+    int numTilings(int N) {
+        // note that in the description, N cannot be 0
+        if(N <= 2) return N;
+        int modular = pow(10, 9) + 7;
+        vector<int> dp(N+1, 0), T3(N+1, 0), T4(N+1, 0);
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
+        for(int k = 3; k <= N; k++){
+            T3[k-1] = (T4[k-2] + dp[k-3])%modular;
+            T4[k-1] = (T3[k-2] + dp[k-3])%modular;
+            dp[k] = ((dp[k-1] + dp[k-2])%modular + (T3[k-1] + T4[k-1])%modular)%modular;
+        }
+        return dp[N];
+    }
+};
