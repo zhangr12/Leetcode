@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int n = citations.size();
+        // binary search:
+        // there are two kinds of binary search problems
+        // 1. exist exact answer
+        // 2. find lower bound
+        // the second one is more general then the second one and also is more important and needs to remember!!!
+        int l = 0, r = citations.size() - 1;
+        while(l <= r){
+            int mid = l + (r-l)/2;
+            //if(citations[mid] == n-mid) return n-mid;
+            if(citations[mid] < n-mid){
+                l = mid + 1;
+            }
+            else{
+                r = mid - 1;
+            }
+        }
+        return n - l;
+    }
+};
+
+
+////////////////////////////
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        if(citations.size() == 0) return 0;
+        int i = citations.size() - 1, papers = 0;
+        for(; i >= 0; i--){
+            papers++;
+            if(papers >= citations[i]) break;
+        }
+        // i == -1 means we reach the end(start) of citations, and all the citations are greater than papers, so the h index should be papers
+        if(i == -1 || papers <= citations[i]) return papers;
+        return papers - 1;
+    }
+};
