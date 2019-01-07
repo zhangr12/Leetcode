@@ -1,0 +1,67 @@
+class Solution {
+public:
+    // use binary search to find the consequtive sequence
+    // we can do this because the sequence is sorted and contains no duplicate numbers
+    // will be faster if the sequence contains long consequtive sequence
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> res;
+		if(nums.size() == 0) return res;
+		int l = 0;
+		while(l < nums.size()){
+			int length = binarySearch(nums, l);
+			
+			if(length == 1){
+				res.push_back(to_string(nums[l]));
+			}
+			else{
+				res.push_back(to_string(nums[l]) + "->" + to_string(nums[l] + length - 1));
+			}
+			l = l + length;
+		}
+		return res;
+    }
+	
+	int binarySearch(vector<int> &nums, int crtIdx){
+		int l = crtIdx, r = nums.size() - 1;
+		while(l <= r){
+			int mid = l + (r-l)/2;
+            //cout << l << " " << mid << endl;
+            //cout << nums[mid] << " " << nums[crtIdx] + mid - l << endl;
+			if(nums[mid] == nums[crtIdx] + mid - crtIdx){
+				l = mid + 1;
+			}
+			else{
+				r = mid - 1;
+			}
+		}
+        //cout << crtIdx << "////////////" << l << endl;
+		return l - crtIdx;
+	}
+};
+
+
+/////////////////////////////////////
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> res;
+		if(nums.size() == 0) return res;
+		int l = 0;
+		while(l < nums.size()){
+			int r = l+1;
+      // might can replace this part with binary search
+			while(r < nums.size() && nums[r] == nums[r-1] + 1) r++;
+			
+			int length = r - l;
+			
+			if(length == 1){
+				res.push_back(to_string(nums[l]));
+			}
+			else{
+				res.push_back(to_string(nums[l]) + "->" + to_string(nums[l] + length - 1));
+			}
+			l = r;
+		}
+		return res;
+    }
+};
