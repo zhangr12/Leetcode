@@ -1,0 +1,31 @@
+class Solution {
+public:
+    Solution(vector<vector<int>> rects) {
+        numRects = rects.size();
+		accumulatePoints.resize(numRects, 0);
+		accumulatePoints[0] = (rects[0][2] - rects[0][0] + 1)*(rects[0][3] - rects[0][1] + 1);
+		m[0] = rects[0];
+		for(int i = 1; i < numRects; i++){
+			accumulatePoints[i] = accumulatePoints[i-1] + (rects[i][2] - rects[i][0] + 1)*(rects[i][3] - rects[i][1] + 1);
+			m[i] = rects[i];
+		}
+    }
+    
+    vector<int> pick() {
+        int crtRect = lower_bound(accumulatePoints.begin(), accumulatePoints.end(), rand()%(accumulatePoints.back()+1)) - accumulatePoints.begin();
+		vector<int> rect = m[crtRect];
+		return {rect[0] + rand()%(rect[2] - rect[0] + 1), rect[1] + rand()%(rect[3] - rect[1] + 1)};
+    }
+private:
+	unordered_map<int, vector<int>> m;
+	int numRects{0};
+    // note that we should count the number of points covered by rectangular(NOT area!!!)
+    // also need to keep in mind that the points on boundary is also count as part of the rectengular
+	vector<int> accumulatePoints;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(rects);
+ * vector<int> param_1 = obj.pick();
+ */
