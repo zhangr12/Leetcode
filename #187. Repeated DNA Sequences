@@ -1,0 +1,77 @@
+class Solution {
+public:
+    // same idea with use unordered_map<string, int>
+    // difference is that here we use unordered_map<int, int>
+    // the advantage is that when we sliding the window and create the key, we only need to read each char once
+    // When using a hash table, there is a runtime hit for hashing the string. In this case, converting the string to a table index. That will presumably mean looking at each character of the string. Since each character is part of 10 different substrings (other than the end characters), that means 10n character reads. Still linear, but we can do better on the constant.
+    // this problem can be solved by using bits to record to string
+    // here we only have 4 possible chars, so 2 bits for each is enough
+    // this means we need 2*10=20 bits for the key
+    // each time comes in a new char, we only need to: 1. move the previous key to left for 2 bits(i.e. <<2)
+    // 2. set the left most two bits to be zero (here we need a mask)
+    // 3. write in the new two bits to right
+    vector<string> findRepeatedDnaSequences(string s) {
+        if(s.size() < 10) return {};
+        unordered_map<int, int> record;
+        vector<string> res;
+        
+        // build mask with all one for first 20 bits and zero otherwise
+        int mask = (1 << 20) - 1;
+        int crt = 0;
+        // build key for first 10 chars
+        for(int i = 0; i < 10; i++){
+            crt = (crt << 2) | char2Val(s[i]);
+        }
+        record[crt]++;
+        
+        for(int i = 10; i < s.size(); i++){
+            // build key for current substring
+            crt = ((crt<<2) & mask) | char2Val(s[i]);
+            
+            if(record.count(crt)){
+                if(record[crt] == 1){
+                    res.push_back(s.substr(i-10+1, 10));
+                    record[crt]++;
+                }
+            }
+            else{
+                record[crt] = 1;
+            }
+        }
+        return res;
+    }
+    
+    int char2Val(char s){
+        if(s == 'A') return 0;
+        if(s == 'C') return 1;
+        if(s == 'G') return 2;
+        if(s == 'T') return 3;
+    }
+    
+};
+
+
+//////////////////////////////////
+// simple code, same idea, not so efficient
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        if(s.size() < 10) return {};
+        unordered_map<string, int> record;
+        vector<string> res;
+        
+        for(int i = 0; i < s.size() - 10 + 1; i++){
+            string temp = s.substr(i, 10);
+            if(record.count(temp)){
+                if(record[temp] == 1){
+                    res.push_back(temp);
+                    record[temp]++;
+                }
+            }
+            else{
+                record[temp] = 1;
+            }
+        }
+        return res;
+    }
+};
