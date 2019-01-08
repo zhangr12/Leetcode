@@ -1,0 +1,60 @@
+class Solution {
+public:
+    vector<int> splitIntoFibonacci(string S) {
+        if(S.size() < 3) return {};
+        string maxInt = to_string(INT_MAX);
+		vector<int> res;
+		for(int i = 1; i <= S.size()-2; i++){
+            string crtInt = S.substr(0, i);
+            if(i > 10 || !isValidInt(maxInt, crtInt)) break;
+			// generate first number
+			int firstNum = stoi(crtInt);
+			
+            if(S[i] == '0'){
+				if(check(S, firstNum, 0, i + 1, res)) return res;
+			}
+			else{
+				// generate second number
+				for(int j = 1; j < S.size() - i - 1; j++){
+                    crtInt = S.substr(i, j);
+					if(j > 10 || !isValidInt(maxInt, crtInt)) break;
+					if(check(S, firstNum, stoi(crtInt), i + j, res)) return res;
+					res = {};
+				}
+			}
+		}
+		return {};
+    }
+	
+	bool check(string &s, int prevprev, int prev, int pos, vector<int> &res){
+		if(pos == s.size()) return false;
+		res.push_back(prevprev);
+		res.push_back(prev);
+		while(pos < s.size()){
+			string crt = to_string(prevprev + prev);
+			
+			for(int i = 0; i < crt.size(); i++){
+				if(pos + i >= s.size()) return false;
+				if(s[pos+i] != crt[i]) return false;
+			}
+			
+			pos += crt.size();
+			
+			int temp = prevprev + prev;
+			res.push_back(temp);
+			prevprev = prev;
+			prev = temp;
+		}
+		return true;
+	}
+    
+    bool isValidInt(string &maxInt, string &crtInt){
+		if(crtInt.size() < maxInt.size()) return true;
+		
+		for(int i = 0; i < maxInt.size(); i++){
+			if (crtInt[i] < maxInt[i]) return true;
+			if(crtInt[i] > maxInt[i]) return false;
+		}
+		return true;
+	}
+};
