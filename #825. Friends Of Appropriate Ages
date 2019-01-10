@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int numFriendRequests(vector<int>& ages) {
+		int people[121]={}, accuSum[121]={};
+		
+		for(int i = 0; i < ages.size(); i++) people[ages[i]]++;
+		
+		for(int j = 1; j < 121; j++) accuSum[j] = accuSum[j-1] + people[j];
+		// solve for 0.5*A + 7 < A to find out that A should be at least 15 in order to make friend
+		// the interval of friends is (0.5*A+7, A]
+		int res = 0;
+		for(int i = 15; i < 121; i++){
+			int count = accuSum[i] - accuSum[i/2+7];
+			// cannot make friend with oneself
+			res += count*people[i] - people[i];
+		}
+		return res;
+    }
+};
