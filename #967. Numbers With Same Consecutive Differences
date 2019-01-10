@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> numsSameConsecDiff(int N, int K) {
+        if(N == 0) return {};
+		if(N == 1) return {0,1,2,3,4,5,6,7,8,9};
+		
+		// generate valid following digits for 1~9 for current K
+		unordered_map<int, vector<int>> m;
+		generateDigits(m, K);
+		
+		vector<int> res;
+		// push first number into res
+		for(int i = 1; i <= 9; i++){
+			if(i+K <= 9 || i-K >= 0) res.push_back(i);
+		}
+		
+		helper(N-1, K, res, m);
+        return res;
+    }
+	
+	void helper(int N, int K, vector<int> &res, unordered_map<int, vector<int>> &m){
+		if(N == 0) return;
+		vector<int> temp;
+		for(int i = 0; i < res.size(); i++){
+			int lastDigit = res[i]%10;
+			for(int j = 0; j < m[lastDigit].size(); j++){
+				temp.push_back(res[i]*10 + m[lastDigit][j]);
+			}
+		}
+        res = temp;
+		helper(N-1, K, res, m);
+	}
+	
+	void generateDigits(unordered_map<int, vector<int>> &m, int K){
+		for(int i = 0; i <= 9; i++){
+			for(int j = 0; j <= 9; j++){
+				if(abs(i-j) == K) m[i].push_back(j);
+			}
+		}
+	}
+};
