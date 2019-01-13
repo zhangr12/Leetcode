@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // dp method
+    // there are two cases, swap and not swap
+    // for A and B, assume A[0~i-1] and B[0~i-1] has been sorted appropriately and 
+    // then whether we want to swap A[i] and B[i] is depends on the relation between A[i-1], A[i], B[i-1] and B[i]
+    // let prevSwap means the minimum swaps we need to take if we want to swap A[i-1] and B[i-1]
+    // let prevNoSwap means the minimum swaps we need to take if we do not want to swap A[i-1] and B[i-1]
+    // let swap means the minimum swaps we need to take if we want to swap A[i] and B[i]
+    // let noSwap means the minimum swaps we need to take if we do not want to swap A[i] and B[i]
+    // then for A[i] and B[i]:
+    // if A[i-1] < A[i] and B[i-1] < B[i]
+    // for swap, we know that if we want  to swap A[i] and B[i] then we have to also swap A[i-1] and B[i-1]
+    // this gives us swap = min(swap, prevSwap + 1)
+    // for noSwap, we know that we need to do nothing, do noSwap = prevNoSwap
+    // similar logic for A[i-1] < B[i] and B[i-1] < A[i]
+    // note that one of these two cases have to be true in order to make the problem solvable
+    int minSwap(vector<int>& A, vector<int>& B) {
+        int prevSwap = 1, prevNoSwap = 0, swap, noSwap, n = A.size();
+        for(int i = 1; i < A.size(); i++){
+            // here we should try to avoid use INT_MAX, because it may cause overflow
+            // n is enough
+            swap = n, noSwap = n;
+            if(A[i-1] < A[i] && B[i-1] < B[i]){
+                noSwap = prevNoSwap;
+                swap = min(swap, prevSwap + 1);
+            }
+            if(A[i-1] < B[i] && B[i-1] < A[i]){
+                noSwap = min(noSwap, prevSwap);
+                swap = min(swap, prevNoSwap + 1);
+            }
+            prevSwap = swap;
+            prevNoSwap = noSwap;
+        }
+        return min(swap, noSwap);
+    }
+};
