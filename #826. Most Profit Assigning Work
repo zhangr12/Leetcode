@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        // we only need to find out what is the best way to assign job to each individual worker, this is because one job can be complete multiple times
+        // find out for each corresponding difficulty level, what is the more profitable job
+        map<int, int> m;
+        for(int i = 0; i < difficulty.size(); i++){
+            m[difficulty[i]] = max(m[difficulty[i]], profit[i]);
+        }
+        
+        // if low difficulty can give high profit, then no reason to do high difficulty job
+        int maxProfit = 0;
+        for(auto it = m.begin(); it != m.end(); it++){
+            if(maxProfit > it->second){
+                it->second = maxProfit;
+            }
+            else{
+                maxProfit = it->second;
+            }
+        }
+        
+        int res = 0;
+        
+        for(int i = 0; i< worker.size(); i++){
+            // find upper_bound
+            auto it = m.upper_bound(worker[i]);
+            if(it == m.begin()) continue;
+            it--;
+            res += it->second;
+        }
+        return res;
+    }
+};
