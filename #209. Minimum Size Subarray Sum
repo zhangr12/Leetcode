@@ -1,3 +1,4 @@
+// two pointers and sliding window
 class Solution {
 public:
     int minSubArrayLen(int s, vector<int>& nums) {
@@ -12,6 +13,41 @@ public:
                 if(res > r-l) res = r-l;
                 crtSum -= nums[l];
                 l++;
+            }
+        }
+        return res == INT_MAX ? 0 : res;
+    }
+};
+
+
+
+////////////////////////////////////////
+// O(NlogN) algorithm using upper_bound and accumulate sum
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int n = nums.size(), res = INT_MAX;
+        vector<int> sums;
+        
+        for(int i = 0; i < n; i++){
+            if(i == 0){
+                sums.push_back(nums[i]);
+            }
+            else{
+                sums.push_back(sums[i-1] + nums[i]);
+            }
+            if(sums.back() >= s){
+                // here can also be lower_bound, however, if we use lower_bound, we need to saperate equal and greater cases
+                // assume the position we get back from lower_bound is pos, for equal case, the length is i - pos
+                // for greater case, the length is i-pos+1
+                
+                // if we use upper_bound, we do not have this issue
+                // since for all the subsequence to the left of pos, they satisfy sum(subarray) <= sums.back() - s
+                // which means if we take [pos, i] as subarray, it will be the smallest one greater than or equal to s, which is exactly what we want
+                auto it = upper_bound(sums.begin(), sums.end(), sums.back() - s);
+                if(it == sums.end()) continue;
+                if(res > i-(it-sums.begin()) + 1) res = i-(it-sums.begin()) + 1;
             }
         }
         return res == INT_MAX ? 0 : res;
