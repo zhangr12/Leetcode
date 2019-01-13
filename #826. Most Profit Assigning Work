@@ -10,12 +10,17 @@ public:
         
         // if low difficulty can give high profit, then no reason to do high difficulty job
         int maxProfit = 0;
-        for(auto it = m.begin(); it != m.end(); it++){
+        for(auto it = m.begin(); it != m.end(); ){
             if(maxProfit > it->second){
-                it->second = maxProfit;
+                // erase during iterating
+                // note that in the for loop we do not have the incremental term
+                // below is the C++11 version
+                // after erase, it moves the iterator to next position
+                it = m.erase(it);
             }
             else{
                 maxProfit = it->second;
+                it++;
             }
         }
         
