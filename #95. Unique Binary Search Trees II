@@ -9,6 +9,14 @@
  */
 class Solution {
 public:
+    TreeNode* deepCopy(TreeNode* root){
+		if(root == nullptr) return nullptr;
+		TreeNode* node = new TreeNode(root->val);
+		node->left = deepCopy(root->left);
+		node->right = deepCopy(root->right);
+ 		return node;
+	}
+    
     // recursively generate trees in range [start, end]
     vector<TreeNode*> generator(int start, int end){
         vector<TreeNode*> res;
@@ -27,8 +35,9 @@ public:
                 for(int j = 0; j < l.size(); j++){
                     for(int k = 0; k < r.size(); k++){
                         TreeNode* root = new TreeNode(i);
-                        root->left = l[j];
-                        root->right = r[k];
+                        // need to deep copy here, otherwise, different tree share same node in memory
+                        root->left = deepCopy(l[j]);
+                        root->right = deepCopy(r[k]);
                         res.push_back(root);
                     }
                 }
@@ -36,8 +45,6 @@ public:
         }
         return res;
     }
-    
-    
     
     vector<TreeNode*> generateTrees(int n) {
         if(n == 0) return {};
