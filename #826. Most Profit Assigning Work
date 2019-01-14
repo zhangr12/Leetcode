@@ -8,6 +8,34 @@ public:
             m[difficulty[i]] = max(m[difficulty[i]], profit[i]);
         }
         
+        int res = 0;
+        int maxProfit = 0;
+        auto it = m.begin();
+        sort(worker.begin(), worker.end());
+        for(int i = 0; i< worker.size(); i++){
+            while(it != m.end() && it->first <= worker[i]){
+                if(maxProfit < it->second) maxProfit = it->second;
+                it++;
+            }
+            res += maxProfit;
+        }
+        return res;
+    }
+};
+
+
+
+///////////////////////////////////
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        // we only need to find out what is the best way to assign job to each individual worker, this is because one job can be complete multiple times
+        // find out for each corresponding difficulty level, what is the more profitable job
+        map<int, int> m;
+        for(int i = 0; i < difficulty.size(); i++){
+            m[difficulty[i]] = max(m[difficulty[i]], profit[i]);
+        }
+        
         // if low difficulty can give high profit, then no reason to do high difficulty job
         int maxProfit = 0;
         for(auto it = m.begin(); it != m.end(); ){
@@ -32,6 +60,30 @@ public:
             if(it == m.begin()) continue;
             it--;
             res += it->second;
+        }
+        return res;
+    }
+};
+
+
+
+///////////////////////////////////////////////
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        sort(worker.begin(), worker.end());
+        vector<pair<int, int>> jobs(difficulty.size());
+        for(int i = 0; i < difficulty.size(); i++) jobs[i] = {difficulty[i], profit[i]};
+        sort(jobs.begin(), jobs.end(), [](pair<int, int> &p1, pair<int, int> &p2){ return p1.first < p2.first;});
+        // maxProfit: maximum profit one can get by doing job with difficulty level less than or equal to current worker's ability
+        int maxProfit = 0, crtPos = 0, res = 0;
+        // no need to search from beginning, since we sort both jobs and worker
+        for(int i = 0; i < worker.size(); i++){
+            while(crtPos < jobs.size() && jobs[crtPos].first <= worker[i]){
+                if(jobs[crtPos].second > maxProfit) maxProfit = jobs[crtPos].second;
+                crtPos++;
+            }
+            res += maxProfit;
         }
         return res;
     }
