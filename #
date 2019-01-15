@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& A, int K) {
+        // same idea with using prefix+map method, but here we use vector
+        // since there might be negative number after the modular, the range of crtSum%K is [-K+1, K-1]
+        // later we will use the modular as index, in order to make the index >= 0, we shift the whole interval to right for K units
+        // the rangen now is [1, 2K-1]
+        // for each subarray, we calculate its sum mod K, call it temp, 
+        // and find the corresponding summation in history value v which satisfy v = temp or v = -(K-temp) (temp is positive) or v = K+temp (temp is negative)
+        vector<int> m(2*K, 0);
+        int crtSum = 0, res = 0;
+        m[K] = 1;
+        for(int num:A){
+            crtSum += num;
+            int temp = crtSum%K;
+            if(temp == 0){
+                res += m[K];
+            }
+            else if(temp > 0){
+                res += m[-(K-temp) + K] + m[temp + K];
+            }
+            else{
+                res += m[K+temp + K] + m[temp + K];
+            }
+            m[temp + K]++;
+        }
+        return res;
+    }
+};
+
+
+///////////////////////////////////////
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& A, int K) {
+        unordered_map<int, int> m;
+        int crtSum = 0, res = 0;
+        m[0] = 1;
+        for(int num:A){
+            crtSum += num;
+            int temp = crtSum%K;
+            if(temp == 0){
+                res += m[0];
+            }
+            else if(temp > 0){
+                res += m[-(K-temp)] + m[temp];
+            }
+            else{
+                res += m[K+temp] + m[temp];
+            }
+            m[temp]++;
+        }
+        return res;
+    }
+};
