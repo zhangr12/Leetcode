@@ -1,0 +1,30 @@
+class Solution {
+public:
+	// idea: 
+	// if we know the max number of unique substrings in p starts with 
+	// 'a', 'b', ..., 'z', then the summary of them is the answer
+    int findSubstringInWraproundString(string p) {
+        vector<int> v(26, 0);
+        
+        int crt = 0, n = p.size();
+		while(crt < n){
+			int nxt = crt + 1;
+			// make sure the next char is the one we want
+			while(nxt < n && p[nxt] == 'a' + (p[nxt-1]-'a'+1)%26) nxt++;
+			
+			// now the substring is [crt, nxt)
+			
+			int length = nxt - crt, updateLength = min(26, nxt - crt);
+            //cout << length << endl;
+			for(int i = 0; i < updateLength; i++){
+				v[p[crt + i]-'a'] = max(v[p[crt + i]-'a'], length - i);
+			}
+			crt = nxt;
+		}
+		int res = 0;
+		for(int i = 0; i < 26; i++){
+			res += v[i];
+		}
+		return res;
+    }
+};
