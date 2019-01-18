@@ -1,0 +1,73 @@
+// dp with space N
+class Solution {
+public:
+    // idea: dp with size same as the grid
+    // dp[i][j] means how many paths can reach cell [i][j]
+    // if there is a obstacle on the cell, we make dp[i][j] = -1
+    // transition formular:
+    // if(dp[i-1][j] != -1) dp[i][j] += dp[i-1][j]
+    // if(dp[i][j-1] != -1) dp[i][j] += dp[i][j-1]
+    // note that we only need to remember previous row's information, this means that actually we do not need a matrix    
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        if(obstacleGrid.size() == 0) return 0;
+        
+        int m = obstacleGrid.size(), n = obstacleGrid[0].size();
+        
+        vector<int> prev(n, 0), crt(n, 0), *pPrev, *pCrt;
+        crt[0] = 1;
+        pPrev = &prev;
+        pCrt = &crt;
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                // reserve the value at [0, 0]
+                if(i > 0) (*pCrt)[j] = 0;
+                if(obstacleGrid[i][j] != 0){
+                    (*pCrt)[j] = -1;
+                }
+                else{
+                    if(i-1 >= 0 && (*pPrev)[j] != -1) (*pCrt)[j] += (*pPrev)[j];
+                    if(j-1 >= 0 && (*pCrt)[j-1] != -1) (*pCrt)[j] += (*pCrt)[j-1];
+                }
+            }
+            swap(pPrev, pCrt);
+        }
+        return max(0, (*pPrev)[n-1]);
+    }
+};
+
+
+
+/////////////////////////////////////////////
+// dp with space M*N
+class Solution {
+public:
+    // idea: dp with size same as the grid
+    // dp[i][j] means how many paths can reach cell [i][j]
+    // if there is a obstacle on the cell, we make dp[i][j] = -1
+    // transition formular:
+    // if(dp[i-1][j] != -1) dp[i][j] += dp[i-1][j]
+    // if(dp[i][j-1] != -1) dp[i][j] += dp[i][j-1]
+    // note that we only need to remember previous row's information, this means that actually we do not need a matrix    
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        if(obstacleGrid.size() == 0) return 0;
+        
+        int m = obstacleGrid.size(), n = obstacleGrid[0].size();
+        
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        dp[0][0] = 1;
+        
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(obstacleGrid[i][j] != 0){
+                    dp[i][j] = -1;
+                }
+                else{
+                    if(i-1 >= 0 && dp[i-1][j] != -1) dp[i][j] += dp[i-1][j];
+                    if(j-1 >= 0 && dp[i][j-1] != -1) dp[i][j] += dp[i][j-1];
+                }
+            }
+        }
+        return max(dp[m-1][n-1], 0);
+    }
+};
