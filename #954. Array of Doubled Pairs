@@ -1,5 +1,28 @@
 class Solution {
 public:
+    bool canReorderDoubled(vector<int>& A) {
+        unordered_map<int, int> m;
+        for(int num:A) m[num]++;
+        vector<int> vals;
+        for(auto item:m) vals.push_back(item.first);
+        sort(vals.begin(), vals.end(), [&vals](int a, int b){ return abs(a) < abs(b); });
+        for(int val:vals){
+            // not enough match number
+            if(m[val] > m[val*2]){
+                return false;
+            }
+            // if m[val*2] == m[val]
+            // m[val*2] will becomes 0
+            m[val*2] -= m[val];
+        }
+        return true;
+    }
+};
+
+
+//////////////////////////////////////////
+class Solution {
+public:
     // idea:
     // since relative position of pairs in map in not important, we only need to find pair for each number in A
     // use map to sort the elements
