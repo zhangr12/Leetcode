@@ -1,0 +1,44 @@
+class Solution {
+public:
+    // idea:
+    // since relative position of pairs in map in not important, we only need to find pair for each number in A
+    // use map to sort the elements
+    // remember that map sort the key in increasing order
+    // for negative number, since we start with the one with larger absolute value, we need to find the corresponding one with smaller abs value
+    // for positive number, since we start with the smaller number, we need to find the corresponding larger one
+    // also don't forget to check whether we have even number of 0s
+    bool canReorderDoubled(vector<int>& A) {
+        map<int, int> m;
+        for(int num:A) m[num]++;
+        // in cpp, element in map has been sorted in increasing order based on the key value
+        
+        // take care of 0
+        if(m[0]%2) return false;
+        m.erase(0);
+        
+        auto it = m.begin();
+        // take care of nagetive part, if there is any
+        while(it != m.end()){
+            if(it->first > 0) break;
+            if(it->first%2) return false;
+            int target = it->first/2;
+            if(it->second > m[target]) return false;
+            // pair current element with target
+            m[target] -= it->second;
+            if(m[target] == 0) m.erase(target);
+            // in C++11, erase will return a iterator which points to the next element in map
+            it = m.erase(it);
+        }
+        
+        // take care of positive part
+        while(it != m.end()){
+            int target = 2*it->first;
+            if(m[target] < it->second) return false;
+            m[target] -= it->second;
+            if(m[target] == 0) m.erase(target);
+            // in C++11, erase will return a iterator which points to the next element in map
+            it = m.erase(it);
+        }
+        return true;
+    }
+};
