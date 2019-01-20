@@ -1,6 +1,47 @@
 class Solution {
 public:
     // idea: dp with size n by 2 (n = nums.size())
+    // initialization: dp[i][0] = 1, dp[i][1] = 1
+    // dp[i][0]: the length of LIS(longest increasing usbsequence) ended with nums[i]
+    // dp[i][1]: the number of subsequence ending with nums[i] with length dp[i][0]
+    // at the very end, return the dp[i][1] corresponding to largest dp[i][0]
+    // if multiple dp[i][0] equals to largest length, add these dp[i][1] together
+    int findNumberOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        if(n == 0) return 0;
+        // initialization
+        vector<vector<int>> dp(n, vector<int>(2, 1));
+        int LIS = 0;
+        for(int i = 0; i < n; i++){
+            // find largest dp[j][0] (the LIS which can end at nums[i])
+            for(int j = 0; j < i; j++){
+                // if nums[j] < nums[i], this means nums[j] can be the candidate
+                if(nums[j] < nums[i]){
+                    // if we can find longer subsequence ending by nums[i], update dp[i][0] and erase all previous record in dp[i][1]
+                    if(dp[j][0] + 1 > dp[i][0]){
+                        dp[i][0] = dp[j][0] + 1;
+                        dp[i][1] = 0;
+                    }
+                    // if current subsequence's length is equal to current longest subsequence, update dp[i][1] since we have more choice
+                    if(dp[j][0] + 1 == dp[i][0]) dp[i][1] += dp[j][1];
+                }
+            }
+            // update LIS
+            LIS = max(LIS, dp[i][0]);
+        }
+        int res = 0;
+        for(int i = 0; i < n; i++){
+            if(dp[i][0] == LIS) res += dp[i][1];
+        }
+        return res;
+    }
+};
+
+
+////////////////////////////////////////
+class Solution {
+public:
+    // idea: dp with size n by 2 (n = nums.size())
     // initialization: dp[i][0] = 1
     // dp[i][0]: the length of LIS(longest increasing usbsequence) ended with nums[i]
     // dp[i][1]: the number of subsequence ending with nums[i] with length dp[i][0]
@@ -30,7 +71,6 @@ public:
         for(int i = 0; i < n; i++){
             if(dp[i][0] == LIS) res += dp[i][1];
         }
-        cout << LIS << endl;
         return res;
     }
 };
