@@ -1,0 +1,36 @@
+class Comp{
+public:
+    bool operator()(vector<int> &p1, vector<int> &p2){
+        return p1[0] > p2[0];
+    }
+};
+
+class Solution {
+public:
+    // nums1 and num2's element's combination can form a matrix with size m by n
+    // where m is nums1's size, n is nums2's size
+    // assume now the smallest number is the [i,j] in this matrix (ith element in nums1, jth element in nums2)
+    // besides the pairs that are already in the queue, the possible candidates are [i, j+1] and [i+1, j]
+    // now we proof why [i+1, j] can only be a candidate when j == 0
+    // assume j > 0, then if [i+1, j-1] hasn't been choosen, then there is no need to put [i+1, j] into the queue, since [i+1,j] must be greater than [i+1, j-1]
+    // if [i+1, j-1] has already been put into the queue, then we must already put [i+1, j] into the queue, put [i+1, j] into the queue again will cause duplicate
+    // so [i+1, j] can only be put into the queue when j == 0, under this scenario, there will not be any duplicate
+    
+    
+    // note that we can also switch [i, j+1] and [i+1, j] and proof that we can always take action [i+1, j] but for [i, j+1], it only need to be done when j == 0. This is because we did not make any assumption about nums1 and nums2, so this equivalent to take transpose to nums1 and nums2
+    vector<pair<int, int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        vector<pair<int, int>> res;
+        if(nums1.size() == 0 || nums2.size() == 0) return res;
+        priority_queue<vector<int>, vector<vector<int>>, Comp> q;
+        q.push({nums1[0] + nums2[0], 0, 0});
+        while(!q.empty() && res.size() < k){
+            vector<int> temp = q.top();
+            q.pop();
+            int i = temp[1], j = temp[2];
+            res.push_back({nums1[i], nums2[j]});
+            if(j + 1 < nums2.size()) q.push({nums1[i] + nums2[j+1], i, j+1});
+            if(j == 0 && i+1 < nums1.size()) q.push({nums1[i+1] + nums2[j], i+1, j});
+        }
+        return res;
+    }
+};
