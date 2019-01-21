@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // dp
+    // just simulate how the wine falls for each level
+    double champagneTower(int poured, int query_row, int query_glass) {
+        double res[100];
+        res[0] = poured;
+        for(int i = 1; i <= query_row; i++){
+            // we start update from right most cup, note that we move down for one row, we expand one step to the right in res
+            // the right most cup only determined by the right most cup in previous row, which is (res[i-1]-1)/2.0
+            // don't forget to max with 0, since the wine in cup cannot be negative
+            res[i] = max(0.0, (res[i-1] - 1)/2.0);
+            for(int j = i-1; j > 0; j--){
+                // the middle cup is determined by res[j] and res[j-1]
+                // note that everytime we only update the cup which will not be used in the next time update
+                res[j] = max(0.0, (res[j] - 1)/2.0) + max(0.0, (res[j-1] - 1)/2.0);
+            }
+            // the first cup is only determined by the first cup in previous row
+            res[0] = max(0.0, (res[0] - 1)/2.0);
+        }
+        // result cannot be greater than 1, since the capacity of cup is 1
+        return min(res[query_glass], 1.0);
+    }
+};
