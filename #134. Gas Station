@@ -1,6 +1,37 @@
 class Solution {
 public:
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        // two rounds
+        // for current station i, if gas[i] >= cost[i], then this is staion can be a candidate
+        // go as fas as we can from this station, if we can finish a loop, return i
+        // stop when the remained gas is less than zero, this means all the intermidiate stations cannot be the candidate station
+        // this is because if we cannot finish the whole loop with some start benifit(here, either move forward or gain more gas)
+        // then we cannot finish it without the start benefit
+        // keep going until we finish two rounds or meet a station that we can finish the whole loop
+        // also remember that we need to make sure we have at least zero gas when we finish the loop
+        int crt = 0, n = gas.size();
+        while(crt < 2*n){
+            if(gas[crt%n] < cost[crt%n]){
+                crt++;
+                continue;
+            }
+            int stationTemp = 0, gasTemp = 0, start = crt;
+            while(gasTemp >= 0 && stationTemp < n){
+                gasTemp += gas[crt%n] - cost[crt%n];
+                crt++;
+                stationTemp++;
+            }
+            if(gasTemp >= 0 && stationTemp == n) return crt%n;
+        }
+        return -1;
+    }
+};
+
+
+//////////////////////////////////////////////
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
         // idea: three pass
         // first pass: generate the p vector(this pass can be eliminate if want O(1) space)
         // second pass: find the index that can give us the maximum residual gas
