@@ -1,6 +1,35 @@
 class Solution {
 public:
     int calculate(string s) {
+        stringstream ss("+" + s + "+");
+        long long res = 0, term = 0, n;
+        char sign;
+        while(ss){
+            ss >> sign;
+            if(sign == '-' || sign == '+'){
+                res += term;
+                ss >> term;
+                term *= (sign == '-' ? -1 : 1);
+            }
+            else{
+                ss >> n;
+                if(sign == '/'){
+                    term /= n;
+                }
+                else{
+                    term *= n;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+////////////////////////////////
+class Solution {
+public:
+    int calculate(string s) {
         // idea: two passes: 1st pass store the +-operator and numbers in the deque.
         // In the first pass, when we meet * or / we read the next element and the last element pushed in qNum to do operator on them and then push back to qNum
         // in the secon pass, read deque from front, and read qOp at the same time to determine whether we should plus or minus
