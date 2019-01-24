@@ -1,5 +1,42 @@
 class Solution {
 public:
+    bool canTransform(string s, string e) {
+        if(s.size() != e.size()) return false;
+		
+		int i = 0, j = 0, m = s.size();
+		while(i < m && j < m){
+			while(i < m && s[i] == 'X') i++;
+			while(j < m && e[j] == 'X') j++;
+			if(i == m || j == m){
+				if(i == m && j == m) return true;
+				return false;
+			}
+			if(s[i] != e[j]) return false;
+			if(s[i] == 'L' && i < j) return false;
+			if(s[i] == 'R' && i > j) return false;
+			i++;
+			j++;
+		}
+		if(i == m){
+			while(j < m){
+				if(e[j] != 'X') return false;
+                j++;
+			}
+		}
+		else if(j == m){
+			while(i < m){
+				if(s[i] != 'X') return false;
+                i++;
+			}
+		}
+		return true;
+    }
+};
+
+
+/////////////////////////////////////
+class Solution {
+public:
     // idea:
     // L and R's relative order have to be same
     // L's position in start has to be greater than or equal to L's potion in end
