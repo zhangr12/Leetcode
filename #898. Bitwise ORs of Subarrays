@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int subarrayBitwiseORs(vector<int>& A) {
+        unordered_set<int> res, crt, crt1;
+        for(int num:A){
+            // subarray which ends at num
+            crt1 = {num};
+            // crt stores all the subarray which ends right before num
+            // note that since we are using OR operator, this means the result from subarray [0, i-1] must be less than or equal to [0, i]
+            // so crt's size is at most 30(since we can represent all the number <= 10^9 with 30 bits)
+            for(int c:crt) crt1.insert(c|num);
+            // now crt1 store the results from subarray which ending at num, write it into res
+            for(int c:crt1) res.insert(c);
+            crt = crt1;
+        }
+        return res.size();
+    }
+};
