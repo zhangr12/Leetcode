@@ -9,14 +9,13 @@
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        ListNode* pseudoHead = new ListNode(0);
-        pseudoHead->next = head;
-        ListNode *prev = pseudoHead, *crt = pseudoHead->next, *nxt;
+        ListNode* pH = new ListNode(0);
+        pH->next = head;
+        ListNode *prev = pH, *crt = pH->next, *nxt;
         while(crt){
             nxt = crt->next;
             if(nxt == nullptr) break;
             if(nxt->val != crt->val){
-                prev->next = crt;
                 // only update prev when we know crt is a unique node
                 prev = crt;
                 crt = nxt;
@@ -33,14 +32,9 @@ public:
                 // now, either nxt == nullptr or nxt->val != crt->val
                 // we know that we can abandon all the node between crt and nxt
                 prev->next = nxt;
-                if(nxt == nullptr){
-                    break;
-                }
-                else{
-                    crt = nxt;
-                }
+                crt = nxt;
             }
         }
-        return pseudoHead->next;
+        return pH->next;
     }
 };
