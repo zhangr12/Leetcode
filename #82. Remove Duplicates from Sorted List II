@@ -31,7 +31,7 @@ public:
                     }
                 }
                 // now, either nxt == nullptr or nxt->val != crt->val
-                // note that though nxt->val != crt->val, nxt->val may still be duplicate number
+                // we know that we can abandon all the node between crt and nxt
                 prev->next = nxt;
                 if(nxt == nullptr){
                     break;
