@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // idea:
+    // we determine the number in each position one by one
+    // assume we have n numbers 1~n
+    // the number of permutation start with 1 is (n-1)!
+    // similar for 2~n
+    // if we want to write all the permutations in order, the first number must start with 1, after (n-1)! permutations, start with 2.....
+    // this means the position of the first number in 1~9 is p = (k-1)/((n-1)!)
+    // we update k as k -= p*((n-1)!)
+    // erase the number in position p from 1~n and keep going until we finish the n numbers
+    // write "123" as an example to help understand
+    string getPermutation(int n, int k) {
+        vector<int> nums(n), permut(n, 1);
+        for(int i = 1; i < n; i++) permut[i] = permut[i-1]*(i+1);
+        iota(nums.begin(), nums.end(), 1);
+        string res = "";
+        k--;
+        for(int i = 0; i < n; i++){
+            int pos = nums.size() == 1 ? 0 : k/permut[nums.size()-2];
+            res += to_string(nums[pos]);
+            k -= pos*permut[nums.size()-2];
+            nums.erase(nums.begin() + pos);
+        }
+        return res;
+    }
+};
