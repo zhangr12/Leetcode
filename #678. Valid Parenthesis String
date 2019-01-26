@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // if only contains (), when have (, count++, else count--, if count < 0, return false
+    // at the end, if count == 0, return true
+    // now we have *, we cannot use a single number, but instead, we use a range
+    // we use low to indicate the lowest possible count, use high to indicate highest possible count
+    // note that we do not want low to be less than 0
+    // this is because if low becomes -1 in current loop, we can have either ) or *
+    // if it is because of ), as long as high is >= 0, we should be fine, because this means we can use previous ( to math current )
+    // if it is because of *, this simply means we should not turn * into )
+    // if high is less than 0, this means there is not enough * to match the ), so we return false
+    // at the end, check if low == 0
+    bool checkValidString(string s) {
+        int low = 0, high = 0;
+        for(int i = 0; i < s.size(); i++){
+            if(s[i] == '('){
+                low++;
+                high++;
+            }
+            else if(s[i] == ')'){
+                low--;
+                high--;
+            }
+            else{
+                low--;
+                high++;
+            }
+            if(low < 0) low = 0;
+            if(high < 0) return false;
+        }
+        return low == 0;
+    }
+};
+
+
+
+//////////////////////////////////
+class Solution {
+public:
+    bool checkValidString(string s) {
+        if(s.size() == 0) return true;
+        return helper(s, 0, 0);
+    }
+    
+    
+    bool helper(string &s, int count, int pos){
+        if(count < 0) return false;
+        
+        for(int i = pos; i < s.size(); i++){
+            if(s[i] == '('){
+                count++;
+            }
+            else if(s[i] ==')'){
+                count--;
+                if(count < 0) return false;
+            }
+            else{
+                return helper(s, count+1, i+1) || helper(s, count-1, i+1) || helper(s, count, i+1);
+            }
+        }
+        return count == 0;
+    }
+};
