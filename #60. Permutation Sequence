@@ -1,3 +1,4 @@
+// time complexity: O(n)
 class Solution {
 public:
     // idea:
@@ -21,6 +22,22 @@ public:
             res += to_string(nums[pos]);
             k -= pos*permut[nums.size()-2];
             nums.erase(nums.begin() + pos);
+        }
+        return res;
+    }
+};
+
+
+
+////////////////////////////////
+// naive solution with time complexity O(n!)
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        string res = "";
+        for(int i = 1; i <= n; i++) res += to_string(i);
+        for(int i = 1; i < k; i++){
+            next_permutation(res.begin(), res.end());
         }
         return res;
     }
