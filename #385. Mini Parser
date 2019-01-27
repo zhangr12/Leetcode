@@ -1,0 +1,65 @@
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Constructor initializes an empty nested list.
+ *     NestedInteger();
+ *
+ *     // Constructor initializes a single integer.
+ *     NestedInteger(int value);
+ *
+ *     // Return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Set this NestedInteger to hold a single integer.
+ *     void setInteger(int value);
+ *
+ *     // Set this NestedInteger to hold a nested list and adds a nested integer to it.
+ *     void add(const NestedInteger &ni);
+ *
+ *     // Return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+class Solution {
+public:
+    // https://leetcode.com/problems/mini-parser/discuss/86074/C++-Non-Recursive-One-Pass-Solution-(using-Stack)-oror-A-Possible-Implementation-of-NestedInteger
+    NestedInteger deserialize(string ss) {
+        stack<NestedInteger> s;
+        s.push(NestedInteger());
+        
+        function<bool(char)> isNum = [](char c){ return isdigit(c) || c == '-'; };
+        
+        for(auto it = ss.begin(); it != ss.end(); ){
+            char c = *it;
+            if(isNum(c)){
+                //auto it2 = find_if_not();
+                auto it2 = find_if_not(it, ss.end(), isNum);
+                //while(it2 != ss.end() && (isdigit(*it2) || *it2 == '-')) it2++;
+                int term = stoi(string(it, it2));
+                s.top().add(NestedInteger(term));
+                // cout << term << endl;
+                it = it2;
+            }
+            else{
+                if(c == '['){
+                    s.push(NestedInteger());
+                }
+                else if(c == ']'){
+                    NestedInteger temp = s.top();
+                    s.pop();
+                    s.top().add(temp);
+                }
+                it++;
+            }
+        }
+        // cout << "here" << endl;
+        return s.top().getList().front();
+    }
+};
