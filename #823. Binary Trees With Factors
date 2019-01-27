@@ -1,0 +1,28 @@
+class Solution {
+public:
+    // idea: dp(unordered_map, not vector)
+    // the smaller number must be child of larger number
+    // we sort A first
+    // dp[i]: the number of different binary trees we can make by using A[i] as root
+    // initialization: dp[i] = 1
+    // transition formular: dp[i] = (dp[i] + dp[A[i]/A[j]]*dp[A[j]]) % modular if A[i]%A[j] == 0
+    // Note: A*B mod n = ((A mod n)*(B mod n)) mod n
+    // (A+B) mod n = ((A mod n) + (B mod n)) mod n
+    int numFactoredBinaryTrees(vector<int>& A) {
+        sort(A.begin(), A.end());
+        
+        int modular = pow(10, 9) + 7;
+        
+        unordered_map<int, long long> m;
+        
+        for(int i = 0; i < A.size(); i++){
+            m[A[i]] = 1;
+            for(int j = 0; j < i; j++){
+                if(A[i]%A[j] == 0) m[A[i]] = (m[A[i]] + m[A[i]/A[j]]*m[A[j]]) % modular;
+            }
+        }
+        int res = 0;
+        for(auto item:m) res = (res + item.second)%modular;
+        return res;
+    }
+};
