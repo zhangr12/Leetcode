@@ -1,0 +1,50 @@
+class Solution {
+public:
+    // idea:
+    // dp with size m by n, time complexity O(Nmn)
+    int findPaths(int m, int n, int N, int i, int j) {
+        vector<vector<int>> prev(m+2, vector<int>(n+2, 0)), crt(m+2, vector<int>(n+2, 0)), *pPrev, *pCrt;
+        pPrev = &prev;
+        pCrt = &crt;
+        prev[i+1][j+1] = 1;
+        int res = 0, modular = pow(10, 9) + 7;
+        for(int t = 0; t < N; t++){
+            // update boundary
+            // Note:
+            // 1. we do not need to update four corners(since no ball will fall into four corners)
+            // 2. we need to accumulate from previous move
+            for(int col = 1; col < n+1; col++){
+                // up
+                (*pCrt)[0][col] = ((*pPrev)[0][col] + (*pPrev)[1][col])%modular;
+                // down
+                (*pCrt)[m+1][col] = ((*pPrev)[m+1][col] + (*pPrev)[m][col])%modular;
+            }
+            for(int row = 1; row < m+1; row++){
+                // left
+                (*pCrt)[row][0] = ((*pPrev)[row][0] + (*pPrev)[row][1])%modular;
+                // right
+                (*pCrt)[row][n+1] = ((*pPrev)[row][n+1] + (*pPrev)[row][n])%modular;
+            }
+            for(int row = 1; row < m+1; row++){
+                for(int col = 1; col < n+1; col++){
+                    // since we only care about current step, we need to reset crt[row][col] first
+                    (*pCrt)[row][col] = 0;
+                    if(row - 1 >= 1) (*pCrt)[row][col] = ((*pCrt)[row][col] + (*pPrev)[row-1][col])%modular;
+                    if(row + 1 <= m) (*pCrt)[row][col] = ((*pCrt)[row][col] + (*pPrev)[row+1][col])%modular;
+                    if(col - 1 >= 1) (*pCrt)[row][col] = ((*pCrt)[row][col] + (*pPrev)[row][col-1])%modular;
+                    if(col + 1 <= n) (*pCrt)[row][col] = ((*pCrt)[row][col] + (*pPrev)[row][col+1])%modular;
+                }
+            }
+            swap(pPrev, pCrt);
+        }
+        for(int col = 1; col < n+1; col++){
+            res = (res + (*pPrev)[0][col])%modular;
+            res = (res + (*pPrev)[m+1][col])%modular;
+        }
+        for(int row = 1; row < m+1; row++){
+            res = (res + (*pPrev)[row][0])%modular;
+            res = (res + (*pPrev)[row][n+1])%modular;
+        }
+        return res;
+    }
+};
