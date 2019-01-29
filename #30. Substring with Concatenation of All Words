@@ -1,0 +1,26 @@
+class Solution {
+public:
+    // since we do not care the word's order in words, we can use map/unordered_map to quickly check whether a word exist or not
+    vector<int> findSubstring(string s, vector<string>& words) {
+        if(s.size() == 0 || words.size() == 0) return {};
+        unordered_map<string, int> m1;
+        for(auto word:words) m1[word]++;
+        int len = words[0].size();
+        vector<int> res;
+        for(int i = 0; i < s.size() - words.size()*len + 1; i++){
+            // use m2 to store the occurance of word when the substring start from i
+            unordered_map<string, int> m2;
+            int num = 0, pos = i;
+            while(num < words.size()){
+                string crt = s.substr(pos, len);
+                // crt doesn't belongs to m1 or we already have enough crt
+                if(!m1.count(crt) || m2[crt] == m1[crt]) break;
+                m2[crt]++;
+                pos += len;
+                num++;
+            }
+            if(num == words.size()) res.push_back(i);
+        }
+        return res;
+    }
+};
