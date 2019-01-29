@@ -43,3 +43,60 @@ public:
         return res;
     }
 };
+
+
+//////////////////////////////////////
+class Solution {
+public:
+    // same idea with Boyer-Moore Algorithm
+    // this is a generalized version, in helper function, the second parameter is equal to 3, this number is come from n/3 in the problem statement
+    vector<int> majorityElement(vector<int>& nums) {
+        return helper(nums, 3);
+    }
+    
+    vector<int> helper(vector<int> &nums, int k){
+        if(nums.size() == 0) return {};
+        vector<int> count(k-1, 0), majNums(k-1, nums[0]);
+        for(int i = 0; i < nums.size(); i++){
+            bool existInMaj = false;
+            for(int j = 0; j < k-1; j++){
+                if(nums[i] == majNums[j]){
+                    count[j]++;
+                    existInMaj = true;
+                    break;
+                }
+            }
+            bool newMaj = false;
+            if(!existInMaj){
+                for(int j = 0; j < k-1; j++){
+                    if(count[j] == 0){
+                        count[j]++;
+                        majNums[j] = nums[i];
+                        newMaj = true;
+                        break;
+                    }
+                }
+            }
+            if(!newMaj && !existInMaj){
+                for(int j = 0; j < k-1; j++){
+                    count[j]--;
+                }
+            }
+        }
+        vector<int> res;
+        for(int i = 0; i < k-1; i++) count[i] = 0;
+        for(int num:nums){
+            for(int j = 0; j < k-1; j++){
+                if(num == majNums[j]){
+                    count[j]++;
+                    break;
+                }
+            }
+        }
+        for(int i = 0; i < k-1; i++){
+            if(count[i] > nums.size()/k) res.push_back(majNums[i]);
+        }
+        return res;
+    }
+};
+
