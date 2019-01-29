@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // dp with two unordered_map: m2, m3
+    // m2[k] = i means number of two numbers sum up equal to k is i
+    // m3[k] = i means number of three numbers sum up equal to k is i
+    int threeSumMulti(vector<int>& A, int target) {
+        unordered_map<int, int> m2, m3;
+        int modular = pow(10, 9) + 7;
+        for(int i = 0; i < A.size(); i++){
+            // fill m3 before m2 to avoid duplicate use
+            // fill m3
+            for(auto it:m2){
+                if(it.first + A[i] > target) continue;
+                m3[it.first + A[i]] = (m3[it.first + A[i]] + it.second)%modular;
+            }
+            // fill m2
+            for(int j = 0; j < i; j++){
+                if(A[i] + A[j] > target) continue;
+                m2[A[i]+A[j]] = (m2[A[i]+A[j]] + 1)%modular;
+            }
+        }
+        return m3[target];
+    }
+};
