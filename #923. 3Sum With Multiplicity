@@ -1,5 +1,43 @@
 class Solution {
 public:
+    int threeSumMulti(vector<int>& A, int target) {
+        unordered_map<int, long> m;
+        for(auto num:A) m[num]++;
+        long res = 0;
+        int modular = pow(10, 9) + 7;
+        for(auto it1:m){
+            for(auto it2:m){
+                int c1 = it1.first, c2 = it2.first, c3 = target - c1 - c2;
+                if(!m.count(c3)) continue;
+                // note that each conbinations (i,j,k) must only be counted once
+                // the order does not matter
+                // only three cases
+                // c1 == c2 == c3
+                // c1 == c2 != c3
+                // c1 < c2 < c3
+                // why not c1 != c2 != c3?
+                // consider case: 1 2 4, target = 7
+                // 1 2 4 should only be counted once, if we use c1 != c2 != c3, 1 2 4 will be counted 3 times
+                if(c1 == c2 && c2 == c3){
+                    res = (res + m[c1]*(m[c1]-1)*(m[c1]-2)/6)%modular;
+                }
+                else if(c1 == c2 && c2 != c3){
+                    res = (res + m[c1]*(m[c1]-1)/2*m[c3])%modular;
+                }
+                else if(c1 < c2 && c2 < c3){
+                    res = (res + m[c1]*m[c2]*m[c3])%modular;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
+/////////////////////////////
+// slow solution
+class Solution {
+public:
     // dp with two unordered_map: m2, m3
     // m2[k] = i means number of two numbers sum up equal to k is i
     // m3[k] = i means number of three numbers sum up equal to k is i
