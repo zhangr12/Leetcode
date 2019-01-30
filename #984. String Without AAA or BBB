@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // idea: if A and B has same length, only need to write ABABAB
+    // if A and B does not has the same length, assume A is greater than B
+    // use two A and one B until the rest has the same length or one of them becomes zero
+    string strWithout3a3b(int A, int B) {
+        int diff = abs(A-B);
+        string res = "";
+        while(diff > 0 && A > 0 && B > 0){
+            if(A > B){
+                res += "aab";
+                A -= 2;
+                B -= 1;
+            }
+            else{
+                res += "bba";
+                B -= 2;
+                A -= 1;
+            }
+            diff--;
+        }
+        if(A == 0){
+            for(int i = 0; i < B; i++) res += "b";
+        }
+        else if(B == 0){
+            for(int i = 0; i < A; i++) res += "a";
+        }
+        else{
+            for(int i = 0; i < A; i++) res += "ab";
+        }
+        return res;
+    }
+};
