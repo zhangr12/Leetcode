@@ -1,0 +1,44 @@
+// dequeue version
+// much more cheap than vector when n is large
+class Solution {
+public:
+    // idea: simulate the reverse process and build the stack bottom up
+    vector<int> deckRevealedIncreasing(vector<int>& deck) {
+        if(deck.size() == 0) return {};
+        sort(deck.begin(), deck.end());
+        int n = deck.size();
+        deque<int> res;
+        res.push_back(deck.back());
+        for(int i = n-2; i >= 0; i--){
+            res.push_front(res.back());
+            res.pop_back();
+            res.push_front(deck[i]);
+        }
+        return vector<int>(res.begin(), res.end());
+    }
+};
+
+
+//////////////////////////
+// same idea, vector version
+// probably will be a problem if n is large since vector insert method is expensive
+// vector insert method: linear on the number of elements inserted (copy/move construction) plus the number of elements after position (moving)
+// also the reallocation may happen when use vector which makes it even more expensive
+class Solution {
+public:
+    // idea: build the stack bottom up
+    vector<int> deckRevealedIncreasing(vector<int>& deck) {
+        if(deck.size() == 0) return {};
+        sort(deck.begin(), deck.end());
+        int n = deck.size();
+        vector<int> res;
+        res.push_back(deck.back());
+        for(int i = n-2; i >= 0; i--){
+            int temp = res.back();
+            res.pop_back();
+            res.insert(res.begin(), temp);
+            res.insert(res.begin(), deck[i]);
+        }
+        return res;
+    }
+};
