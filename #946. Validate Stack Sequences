@@ -1,0 +1,28 @@
+class Solution {
+public:
+    // idea: use a stack s to check the valibility
+    // everytime we check whether s.top() is the element we want to pop
+    // if it is, we pop it and increase move to next element we want to pop
+    // if it is not, we keep push element from pushed list until we meet the desired element or reach the end of pushed list
+    // if we meet the desired element, we simply move both pop and push index forward
+    // if we reach the end of pushed list, this means the list is invalid
+    // at the end, return true
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int> s;
+        int i = 0, n = pushed.size();
+        for(int j = 0; j < n; j++){
+            if(!s.empty() && s.top() == popped[j]){
+                s.pop();
+            }
+            else{
+                while(i < pushed.size() && pushed[i] != popped[j]){
+                    s.push(pushed[i]);
+                    i++;
+                }
+                if(i == pushed.size()) return false;
+                i++;
+            }
+        }
+        return true;
+    }
+};
