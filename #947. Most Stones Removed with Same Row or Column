@@ -1,0 +1,85 @@
+class Solution {
+public:
+    // https://www.jianshu.com/p/30d2058db7f7
+    // better version of union find
+    // here instead of group stones, we try to group row's index and columns index
+    // by doing that, we only need to traverse stones once
+    // 我们以为是行列把石头连接在了一起。
+    // 换个角度思考，也可以是一个石头把它所在行列坐标连在了一起。
+    // 我们的输入是所有的石头，每个石头都固定连接两个元素。
+    // 想到这里，union find的思路就已经呼之欲出了。
+    int removeStones(vector<vector<int>>& stones) {
+        unordered_map<int, int> m;
+        for(auto s:stones){
+            // here we use -s[1]-1 to distinguish row index with column index
+            unionFind(m, s[0], -s[1]-1, islands);
+        }
+        return stones.size() - islands;
+    }
+    
+    // if the stone is an island so far, connect its row index with column index
+    // otherwise, connect its row and column index to one common parent
+    void unionFind(unordered_map<int, int> &m, int row, int col, int &islands){
+        int pr = find(m, row), pc = find(m, col);
+        if(pr != pc){
+            m[pr] = pc;
+            islands--;
+        }
+    }
+    
+    int find(unordered_map<int, int> &m, int num){
+        if(!m.count(num)){
+            m[num] = num;
+            islands++;
+        }
+        if(m[num] != num) m[num] = find(m, m[num]);
+        return m[num];
+    }
+private:
+    int islands{0};
+};
+
+
+
+
+
+//////////////////////////
+// naive union find solution
+class Solution {
+public:
+    // idea: union find
+    int removeStones(vector<vector<int>>& stones) {
+        island = stones.size();
+        unordered_map<int, int> m;
+        for(auto s:stones) m[s[0]*10000 + s[1]] = s[0]*10000 + s[1];
+        
+        // union find
+        for(int i = 0; i < stones.size(); i++){
+            for(int j = i+1; j < stones.size(); j++){
+                if(stones[i][0] == stones[j][0] || stones[i][1] == stones[j][1]) unionFind(m, stones[i][0]*10000 + stones[i][1], stones[j][0]*10000 + stones[j][1]);
+            }
+        }
+        
+        // count island
+        return stones.size() - island;
+    }
+    
+    void unionFind(unordered_map<int, int> &m, int n1, int n2){
+        int p1 = parent(m, n1), p2 = parent(m, n2);
+        if(p1 != p2){
+            m[p1] = p2;
+            island--;
+        }
+    }
+    
+    int parent(unordered_map<int, int> &m, int crt){
+        if(m[crt] != crt){
+            //crt = m[crt];
+            m[crt] = parent(m, m[crt]);
+        }
+        return m[crt];
+    }
+private:
+    int island{0};
+};
+
