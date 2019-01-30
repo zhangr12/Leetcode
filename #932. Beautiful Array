@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // https://leetcode.com/problems/beautiful-array/discuss/186679/C++JavaPython-Odd-+-Even-Pattern-O(N)
+    // idea:
+    // assume an array A is a beatiful array, this means any A[k]*2 != A[i] + A[j] for i<k<j
+    // it can be showed that A is still a beautiful array under below operation
+    // delete: delete a number from A
+    // addition: A+const
+    // multiplication: A*const
+    // also we notice that if A[i] and A[j] is one odd number and one even number, then A[i]+A[j] must not equal to A[k]*2, since A[k]*2 is even
+    // so if we have one beautiful array only contains even number and one beautiful array only contains odd number
+    // we can push them together to get a longer beautiful array
+    vector<int> beautifulArray(int N) {
+        vector<int> res{1};
+        while(res.size() < N){
+            vector<int> temp;
+            for(int num:res){
+                if(num*2-1 <= N) temp.push_back(num*2-1);
+            }
+            for(int num:res){
+                if(num*2 <= N) temp.push_back(num*2);
+            }
+            res = temp;
+        }
+        return res;
+    }
+};
