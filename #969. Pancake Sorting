@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // start from the largest number, reverse twice
+    // first reverse current largest number to beginning
+    // the reverse current largest number to its correct location
+    // reduct current largest number
+    // keep going until we do it for A.size() times
+    vector<int> pancakeSort(vector<int>& A) {
+        int crtNum = A.size();
+        vector<int> res;
+        for(int i = 0; i < A.size(); i++){
+            int j = 0;
+            for(; j < A.size(); j++){
+                if(A[j] == crtNum) break;
+            }
+            reverse(A.begin(), A.begin() + j+1);
+            reverse(A.begin(), A.begin() + crtNum);
+            res.push_back(j+1);
+            res.push_back(crtNum);
+            crtNum--;
+        }
+        return res;
+    }
+};
