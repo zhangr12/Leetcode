@@ -1,0 +1,39 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int minCameraCover(TreeNode* root) {
+        int res = 0;
+        int temp = helper(root, res);
+        // if root is not monitored, we put a camera on it
+        if(temp == 0) res++;
+        return res;
+    }
+    
+    // 0: not monitored
+    // 1: monitored but has no camera
+    // 2: has camera
+    
+    // one is 0: we have to put camera on current node
+    // one is 1: we do not need to put camera on this node and this node has been monitored
+    // else, we do not need to put camera on this node but this node is not been monitored
+    int helper(TreeNode* node, int &res){
+        if(!node) return 1;
+        int l = helper(node->left, res), r = helper(node->right, res);
+        if(l == 0 || r == 0){
+            res++;
+            return 2;
+        }
+        if(l == 2 || r == 2){
+            return 1;
+        }
+        return 0;
+    }
+};
