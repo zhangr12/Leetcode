@@ -1,0 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int distributeCoins(TreeNode* root) {
+        int res = 0;
+        DFS(root, res);
+        return res;
+    }
+    // DFS returns how many extra coins to move out of node
+    // if this number is negative, it means we need to move in coins
+    int DFS(TreeNode* node, int &res){
+        if(node == nullptr) return 0;
+        // how many coins to move out from left subtree
+        int l = DFS(node->left, res);
+        // how many coins to move out from right subtree
+        int r = DFS(node->right, res);
+        // to keep the balance, we need l+r moves total
+        res += abs(l) + abs(r);
+        // number of coins that need to move out from node is:
+        // number of coins needs to move out from left and right subtree, -1 is because we need to keep one coin at node, plus how many coins we have a node
+        return l+r-1+node->val;
+    }
+};
