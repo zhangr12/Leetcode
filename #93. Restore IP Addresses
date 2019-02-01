@@ -1,0 +1,32 @@
+class Solution {
+public:
+    // what is a valid IP address:
+    // Basically for each ip there are 4 blocks : a.b.c.d
+    // Each block must satisfy: 0 <= a <= 255 and the only valid block which starts at 0 is '0' itself. (so '00', '01' are all invalid)
+    // idea:
+    // BFS
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> res;
+        helper(res, s, 0, 0, "");
+        return res;
+    }
+    
+    void helper(vector<string> &res, string &s, int pos, int blocks, string temp){
+        if(blocks == 4 && pos == s.size()){
+            res.push_back(temp);
+            return;
+        }
+        if(blocks == 4 || pos == s.size()) return;
+        if(temp.size() > 0) temp += ".";
+        if(s[pos] == '0'){
+            temp += s.substr(pos, 1);
+            helper(res, s, pos+1, blocks+1, temp);
+        }
+        else{
+            for(int i = 1; i <= 3; i++){
+                if(pos + i <= s.size() && stoi(s.substr(pos, i)) <= 255) helper(res, s, pos+i, blocks+1, temp+s.substr(pos, i));
+            }
+        }
+        return;
+    }
+};
