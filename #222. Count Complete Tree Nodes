@@ -19,9 +19,11 @@ public:
             h++;
         }
         int res = pow(2, h)-1;
+        // last level can have at most crtNum nodes
         int crtNum = res+1;
         node = root;
         while(node){
+            // if node->right == nullptr, we know that left child node must be a leaf, add 1 to result and break
             if(node->right == nullptr){
                 res++;
                 break;
@@ -29,14 +31,18 @@ public:
             // find mid
             TreeNode* mid = node->right;
             for(int i = 1; i < h; i++) mid = mid->left;
-            h--;
             if(mid){
+                // if mid exist, we know at least the first half part of the last level(with node as root) is full
                 res += crtNum/2;
+                // keep search right subtree
                 node = node->right;
             }
             else{
+                // else, we search left subtree
                 node = node->left;
             }
+            // move one level down
+            h--;
             crtNum /= 2;
         }
         return res;
