@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // use binary search to count for last level
+    int countNodes(TreeNode* root) {
+        // find height
+        int h = -1;
+        TreeNode* node = root;
+        while(node){
+            node = node->left;
+            h++;
+        }
+        int res = pow(2, h)-1;
+        int crtNum = res+1;
+        node = root;
+        while(node){
+            if(node->right == nullptr){
+                res++;
+                break;
+            }
+            // find mid
+            TreeNode* mid = node->right;
+            for(int i = 1; i < h; i++) mid = mid->left;
+            h--;
+            if(mid){
+                res += crtNum/2;
+                node = node->right;
+            }
+            else{
+                node = node->left;
+            }
+            crtNum /= 2;
+        }
+        return res;
+    }
+};
