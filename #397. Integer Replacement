@@ -1,0 +1,22 @@
+class Solution {
+public:
+    // dp with memory
+    int integerReplacement(int n) {
+        unordered_map<long, int> m;
+        m[1] = 0;
+        return helper(n, m);
+    }
+    
+    int helper(long n, unordered_map<long, int> &m){
+        if(m.count(n)) return m[n];
+        int res;
+        if(n%2 == 0){
+            res = 1 + helper(n/2, m);
+        }
+        else{
+            res = 1 + min(helper(n+1, m), helper(n-1, m));
+        }
+        m[n] = res;
+        return res;
+    }
+};
