@@ -1,0 +1,32 @@
+class Solution {
+public:
+    // idea:
+    // write down the index to figure out the pattern
+    string convert(string s, int numRows) {
+        // single row is a special case
+        if(numRows == 1) return s;
+        int maxDiff = numRows*2-2, crtDiff = numRows*2-2;
+        string res = "";
+        for(int i = 0; i < numRows; i++){
+            if(i == 0 || i == numRows - 1){
+                int idx = i;
+                while(idx < s.size()){
+                    res += s[idx];
+                    idx += maxDiff;
+                }
+                crtDiff -= 2;
+            }
+            else{
+                int idx = i;
+                while(idx < s.size()){
+                    res += s[idx];
+                    idx += crtDiff;
+                    if(idx < s.size()) res += s[idx];
+                    idx += (maxDiff-crtDiff);
+                }
+                crtDiff -= 2;
+            }
+        }
+        return res;
+    }
+};
