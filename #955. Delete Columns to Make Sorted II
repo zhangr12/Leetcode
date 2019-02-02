@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // idea:
+    // use checked to indicate whether we need to check the relation between current row and next row's char
+    // each time, for fixed column, we first check whether we need to delete current column or not(note that we only need to check rows that has not been checked)
+    // then we update checked vector
+    int minDeletionSize(vector<string>& A) {
+        int res = 0;
+        vector<bool> checked(A.size(), false);
+        for(int j = 0; j < A[0].size(); j++){
+            bool deleteCol = false;
+            for(int i = 0; i+1 < A.size(); i++){
+                if(!checked[i] && A[i][j] > A[i+1][j]){
+                    deleteCol = true;
+                    break;
+                }
+            }
+            
+            if(deleteCol){
+                res++;
+            }
+            else{
+                for(int i = 0; i+1 < A.size(); i++){
+                    if(!checked[i] && A[i][j] < A[i+1][j]) checked[i] = true;
+                }
+            }
+        }
+        return res;
+    }
+};
