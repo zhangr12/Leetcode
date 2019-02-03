@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea:
+    // level order traversal from left to right, remember the vertical index of each node
+    // also remember the minimum and maximum vertical index
+    // move the results from unordered_map to vector
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        if(!root) return {};
+        unordered_map<int, vector<int>> m;
+        // int is the vertical index of corresponding node
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+        int minIdx = 0, maxIdx = 0;
+        while(!q.empty()){
+            // only nodes at same level can have the same position
+            int len = q.size();
+            vector<pair<int, int>> temp(len);
+            for(int i = 0; i < len; i++){
+                auto item = q.front();
+                q.pop();
+                TreeNode* crt = item.first;
+                int idx = item.second;
+                if(idx > maxIdx) maxIdx = idx;
+                if(idx < minIdx) minIdx = idx;
+                temp[i] = {crt->val, idx};
+                if(crt->left) q.push({crt->left, idx-1});
+                if(crt->right) q.push({crt->right, idx+1});
+            }
+            sort(temp.begin(), temp.end(), [](pair<int, int> &p1, pair<int, int> &p2){
+                if(p1.second == p2.second) return p1.first < p2.first;
+                return p1.second < p2.second;
+            });
+            for(auto item:temp) m[item.second].push_back(item.first);
+        }
+        
+        vector<vector<int>> res;
+        for(int i = minIdx; i <= maxIdx; i++) res.push_back(m[i]);
+        return res;
+    }
+};
