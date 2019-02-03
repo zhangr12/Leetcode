@@ -13,6 +13,8 @@ public:
     // level order traversal from left to right, remember the vertical index of each node
     // also remember the minimum and maximum vertical index
     // move the results from unordered_map to vector
+    // since if two nodes have the same position, then the value of the node that is reported first is the value that is smaller
+    // after traverse each level, we sort the {node->val, index} pair to handle those have same position
     vector<vector<int>> verticalTraversal(TreeNode* root) {
         if(!root) return {};
         unordered_map<int, vector<int>> m;
@@ -21,7 +23,6 @@ public:
         q.push({root, 0});
         int minIdx = 0, maxIdx = 0;
         while(!q.empty()){
-            // only nodes at same level can have the same position
             int len = q.size();
             vector<pair<int, int>> temp(len);
             for(int i = 0; i < len; i++){
@@ -44,6 +45,60 @@ public:
         
         vector<vector<int>> res;
         for(int i = minIdx; i <= maxIdx; i++) res.push_back(m[i]);
+        return res;
+    }
+};
+
+
+
+//////////////////////////////////////
+//
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea:
+    // record to x and y and value of each node, then sort according to requirement
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        if(!root) return {};
+        vector<vector<int>> temp;
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+        int crtLevel = 0, minIdx = 0, maxIdx = 0;
+        while(!q.empty()){
+            int len = q.size();
+            for(int i = 0; i < len; i++){
+                auto item = q.front();
+                q.pop();
+                TreeNode* crt = item.first;
+                int idx = item.second;
+                if(idx > maxIdx) maxIdx = idx;
+                if(idx < minIdx) minIdx = idx;
+                temp.push_back({crtLevel, idx, crt->val});
+                if(crt->left) q.push({crt->left, idx-1});
+                if(crt->right) q.push({crt->right, idx+1});
+            }
+            crtLevel++;
+        }
+        sort(temp.begin(), temp.end(), [](vector<int> &v1, vector<int> &v2){
+            if(v1[1] < v2[1]) return true;
+            if(v1[1] > v2[1]) return false;
+            if(v1[0] < v2[0]) return true;
+            if(v1[0] > v2[0]) return false;
+            return v1[2] < v2[2];
+        });
+        
+        vector<vector<int>> res(maxIdx - minIdx + 1);
+        for(auto item:temp){
+            res[item[1]-minIdx].push_back(item[2]);
+        }
         return res;
     }
 };
