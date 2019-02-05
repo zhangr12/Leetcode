@@ -1,3 +1,18 @@
+class Solution {
+public:
+    // idea: 
+    // use the fact that i and i>>1 share the common head
+    // this means we can use the result from i >> 1 and then only need to check the right most bit of i
+    vector<int> countBits(int num) {
+        vector<int> res(num+1, 0);
+        for(int i = 1; i <= num; i++){
+            res[i] = res[i >> 1] + (i&1);
+        }
+        return res;
+    }
+};
+
+
 // cheating method, should use bit operation instead
 class Solution {
 public:
