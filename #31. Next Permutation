@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // From the Wikipedia page, in the 14th century, a man named Narayana Pandita gives the following classic and yet quite simple algorithm
+    // find largest k s.t. nums[k] < nums[k+1]
+    // find largest j s.t. nums[k] < nums[j]
+    // swap nums[k] and nums[j]
+    // reverse nums[k+1]~nums.end()
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size(), j, k;
+        for(k = n-2; k >= 0; k--){
+            if(nums[k] < nums[k+1]) break;
+        }
+        if(k >= 0){
+            for(j = n-1; j > k; j--){
+                if(nums[k] < nums[j]) break;
+            }
+            swap(nums[k], nums[j]);
+            reverse(nums.begin() + k + 1, nums.end());
+        }
+        else{
+            reverse(nums.begin(), nums.end());
+        }
+    }
+};
