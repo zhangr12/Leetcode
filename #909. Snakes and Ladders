@@ -1,0 +1,64 @@
+class Solution {
+public:
+    // idea: BFS
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
+        
+        vector<pair<int, int>> v(n*n+1);
+        int crt = n*n;
+        for(int i = 0; i < n; i++){
+            if((n-i-1)%2){
+                for(int j = 0; j < n; j++){
+                    v[crt] = {i, j};
+                    //cout << i << " " << j << " " << crt << endl;
+                    crt--;
+                }
+            }
+            else{
+                for(int j = n-1; j >= 0; j--){
+                    v[crt] = {i, j};
+                    //cout << i << " " << j << " " << crt << endl;
+                    crt--;
+                }
+            }
+        }
+        
+        vector<vector<bool>> visited(n, vector<bool>(n, false));
+        
+        queue<int> q;
+        q.push(1);
+        visited[n-1][0] = true;
+        int steps = 0;
+        while(!q.empty()){
+            int num = q.size();
+            for(int j = 0; j < num; j++){
+                crt = q.front();
+                //cout << crt << endl;
+                if(crt == n*n) return steps;
+                q.pop();
+                for(int i = 1; i <= 6; i++){
+                    if(crt + i > n*n) break;
+                    auto nxt = v[crt + i];
+                    int x = nxt.first, y = nxt.second;
+                    // check if we need to transfer
+                    if(board[x][y] > 0){
+                        int temp = board[x][y];
+                        nxt = v[temp];
+                        if(!visited[nxt.first][nxt.second]){
+                            q.push(temp);
+                            visited[nxt.first][nxt.second] = true;
+                        }
+                    }
+                    else{
+                        if(!visited[x][y]){
+                            q.push(crt+i);
+                            visited[x][y] = true;
+                        }
+                    }
+                }
+            }
+            steps++;
+        }
+        return -1;
+    }
+};
