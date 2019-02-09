@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // idea: dp with size L by N
+    // dp[i][j]: what is the number of combinations if we choose j+1 songs to build the length i+1 list. Note that we always have total N songs
+    // intialization: dp[0][0] = N, dp[i][0] = dp[i-1][0]*max(1-K, 0);
+    // transition formular: dp[i][j] = dp[i-1][j-1]*(N-j) + dp[i-1][j]*max(j+1-K, 0)
+    // explain: choose j songs to build i list has two different scenarios
+    // 1. we choose a new song as the last one. In this case, the number of songs we can choose is n-(j-1)
+    // 2. we already choose j songs to build the i-1 list, for the ith song in the list, if j <= K, this means there is no way we can choose ith song, since we want to same song's distance is at least L; if j > K, the number of different songs we can choose is j-K
+    int numMusicPlaylists(int N, int L, int K) {
+        vector<vector<long>> dp(L, vector<long>(N, 0));
+        int modular = pow(10, 9) + 7;
+        // initialiation:
+        dp[0][0] = N;
+        for(int i = 1; i < L; i++) dp[i][0] = dp[i-1][0]*max(1-K, 0);
+        
+        for(int j = 1; j < N; j++){
+            for(int i = j; i < L; i++){
+                dp[i][j] = (dp[i-1][j-1]*(N-j) + dp[i-1][j]*max(j+1-K, 0)) % modular;
+            }
+        }
+        return dp[L-1][N-1];
+    }
+};
