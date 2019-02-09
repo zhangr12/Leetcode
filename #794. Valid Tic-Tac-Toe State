@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool validTicTacToe(vector<string>& board) {
+        vector<int> nums = numberValid(board);
+        bool Xwin = winner(board, 'X'), Owin = winner(board, 'O');
+        
+        if(nums[0] < nums[1] || nums[0]-nums[1] > 1) return false;
+        if(Xwin && Owin) return false;
+        if(Xwin && nums[0] == nums[1]) return false;
+        if(Owin && nums[0] > nums[1]) return false;
+        
+        return true;
+    }
+    
+    vector<int> numberValid(vector<string> &board){
+        int numX = 0, numO = 0;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(board[i][j] == 'X') numX++;
+                if(board[i][j] == 'O') numO++;
+            }
+        }
+        return {numX, numO};
+    }
+    // check whether string s is a winner
+    bool winner(vector<string> &board, char s){
+        if(board[0][0] == s && board[0][1] == s && board[0][2] == s) return true;
+        if(board[0][0] == s && board[1][0] == s && board[2][0] == s) return true;
+        if(board[2][0] == s && board[2][1] == s && board[2][2] == s) return true;
+        if(board[2][2] == s && board[1][2] == s && board[0][2] == s) return true;
+        if(board[0][0] == s && board[1][1] == s && board[2][2] == s) return true;
+        if(board[0][2] == s && board[1][1] == s && board[2][0] == s) return true;
+        if(board[1][0] == s && board[1][1] == s && board[1][2] == s) return true;
+        if(board[0][1] == s && board[1][1] == s && board[2][1] == s) return true;
+        return false;
+    }
+};
