@@ -1,0 +1,66 @@
+class Trie{
+public:
+    bool word{false};
+    Trie* children[26];
+    Trie(){
+        for(int i = 0; i < 26; i++) children[i] = nullptr;
+    }
+    
+    ~Trie(){
+        delete [] children;
+    }
+};
+
+
+class WordDictionary {
+public:
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        root = new Trie();
+    }
+    
+    /** Adds a word into the data structure. */
+    void addWord(string word) {
+        Trie* crtNode = root;
+        for(char c:word){
+            if(crtNode->children[c-'a'] == nullptr){
+                Trie *newNode = new Trie();
+                crtNode->children[c-'a'] = newNode;
+            }
+            crtNode = crtNode->children[c-'a'];
+        }
+        crtNode->word = true;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    bool search(string word) {
+        return query(word, 0, root);
+    }
+private:
+    Trie* root;
+    bool query(string &word, int pos, Trie* node){
+        if(pos == word.size()){
+            if(node->word){
+                return true;
+            }
+            return false;
+        }
+        if(word[pos] == '.'){
+            for(int i = 0; i < 26; i++){
+                if(node->children[i] && query(word, pos+1, node->children[i])) return true;
+            }
+            return false;
+        }
+        else{
+            if(node->children[word[pos]-'a'] == nullptr) return false;
+            return query(word, pos+1, node->children[word[pos]-'a']);
+        }
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary obj = new WordDictionary();
+ * obj.addWord(word);
+ * bool param_2 = obj.search(word);
+ */
