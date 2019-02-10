@@ -1,5 +1,24 @@
 class Solution {
 public:
+    // So we check only the last bit of Y, since doubling and -1 can only alter (directly) one bit.
+
+    // if last bit of Y is 0, the last operation must be doubling, we trace back to Y/2
+    // if last bit of Y is 1, the last operation must be decrement, we trace back to Y+1
+    int brokenCalc(int X, int Y) {
+        if(Y <= X) return X-Y;
+        if(Y%2 == 0) return 1 + brokenCalc(X, Y/2);
+        return 1 + brokenCalc(X, Y+1);
+    }
+};
+
+
+///////////////////////////////
+class Solution {
+public:
+    // we try to convert Y to X with two operations: divide and plus
+    // If Y is even, Y = Y / 2
+    // If Y is odd, Y = (Y + 1) / 2
+    // We reduce Y with least possible operations, until it's smaller than X
     int brokenCalc(int X, int Y) {
         int res = 0;
         while(Y > X){
