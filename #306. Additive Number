@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // note: the whole sequence is fixed once we fix the first two numbers
+    bool isAdditiveNumber(string num) {
+        if(num.size() < 3) return false;
+        for(int i = 1; i <= num.size()-2; i++){
+            string prevprev = num.substr(0, i);
+            for(int j = 1; i+j <= num.size()-1; j++){
+                // the secong number can be zero
+                // if it is zero, then we do not need to do further search since 0xxx is invalid
+                if(num[i] == '0'){
+                    string prev = num.substr(i, 1);
+                    if(helper(num, i+1, prev, prevprev)) return true;
+                    break;
+                }
+                string prev = num.substr(i, j);
+                if(helper(num, i+j, prev, prevprev)) return true;
+            }
+        }
+        return false;
+    }
+    
+    bool helper(string &num, int pos, string prev, string prevprev){
+        if(pos == num.size()) return true;
+        
+        string nxt;
+        if(prev.size() >= prevprev.size()){
+            nxt = add(prev, prevprev);
+        }
+        else{
+            nxt = add(prevprev, prev);
+        }
+        //cout << prevprev << " " << prev << " " << nxt << endl;
+        for(int i = 0; i < nxt.size(); i++){
+            if(pos+i == num.size()) return false;
+            if(num[pos+i] != nxt[i]) return false;
+        }
+        return helper(num, pos+nxt.size(), nxt, prev);
+    }
+    
+    // assume s1.size() >= s2.size()
+    string add(string &s1, string &s2){
+        int carry = 0, i = s2.size()-1, j = s1.size()-1;
+        string res = "";
+        while(i >= 0){
+            int temp = s1[j]-'0'+s2[i]-'0'+carry;
+            carry = temp/10;
+            temp %= 10;
+            res = to_string(temp) + res;
+            i--;
+            j--;
+        }
+        while(j >= 0){
+            int temp = s1[j]-'0'+carry;
+            carry = temp/10;
+            temp %= 10;
+            res = to_string(temp) + res;
+            j--;
+        }
+        if(carry == 1) res = "1" + res;
+        return res;
+    }
+};
