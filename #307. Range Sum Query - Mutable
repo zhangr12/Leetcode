@@ -1,0 +1,102 @@
+class SegmentTreeNode{
+public:
+    int start, end, sum;
+    SegmentTreeNode *left, *right;
+    SegmentTreeNode(int start, int end){
+        this->start = start;
+        this->end = end;
+        this->sum = 0;
+        this->left = nullptr;
+        this->right = nullptr;
+    }
+};
+
+
+class NumArray {
+public:
+    // idea: segment tree
+    // use tree to segment the vector in such a way
+    // the leafs are element from nums
+    // the sum of parent level is the summation of element covered by its children
+    //
+    //      28
+    //    10  18
+    //  3   7   11
+    // 1 2 3 4 5  6
+    //
+    // each node remember the interval it covered
+    // the nodes at same level should cover the whole nums, and their intervals have no overlap
+    // now, if we want to update a value, we just need to do update for logN times
+    // if we want to find summation of certain interval, we can use recursive method to locate us to certain node or leaf
+    NumArray(vector<int> nums) {
+        root = buildTree(nums, 0, nums.size()-1);
+    }
+    
+    void update(int i, int val) {
+        update(root, i, val);
+    }
+    
+    int sumRange(int i, int j) {
+        return sumRange(root, i, j);
+    }
+    
+    SegmentTreeNode* buildTree(vector<int> &nums, int start, int end){
+        if(start > end) return nullptr;
+        
+        SegmentTreeNode* node = new SegmentTreeNode(start, end);
+        if(start == end){
+            node->sum = nums[start];
+        }
+        else{
+            int mid = start + (end-start)/2;
+            node->left = buildTree(nums, start, mid);
+            node->right = buildTree(nums, mid+1, end);
+            node->sum = node->left->sum + node->right->sum;
+        }
+        return node;
+    }
+    
+    void update(SegmentTreeNode* node, int pos, int val){
+        if(node->start == node->end){
+            node->sum = val;
+        }
+        else{
+            int mid = node->start + (node->end-node->start)/2;
+            if(mid >= pos){
+                update(node->left, pos, val);
+            }
+            else{
+                update(node->right, pos, val);
+            }
+            node->sum = node->left->sum + node->right->sum;
+        }
+    }
+    
+    int sumRange(SegmentTreeNode* node, int start, int end){
+        if(node->start == start && node->end == end){
+            return node->sum;
+        }
+        else{
+            int mid = node->start + (node->end-node->start)/2;
+            if(mid >= end){
+                return sumRange(node->left, start, end);
+            }
+            else if(start >= mid+1){
+                return sumRange(node->right, start, end);
+            }
+            else{
+                return sumRange(node->left, start, mid) + sumRange(node->right, mid+1, end);
+            }
+        }
+    }
+    
+private:
+    SegmentTreeNode* root{nullptr};
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.update(i,val);
+ * int param_2 = obj.sumRange(i,j);
+ */
