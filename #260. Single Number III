@@ -1,3 +1,35 @@
+// bit operation method
+class Solution {
+public:
+    // take XOR operation through all numbers, call the result mask
+    // the mask is two single number's XOR
+    // we note that mask must not be zero, otherwise we do not have two single numbers
+    // now, we reserve one bit in mask by doing mask&(~(mask-1))
+    // we use this mask to divide the numbers into two groups
+    // since the two single numbers must have different bit at the mask's bit position, they will be divided into two groups
+    // now in each of the group, we have one single number and some pair numbers, we can again use XOR two find this single number
+    vector<int> singleNumber(vector<int>& nums) {
+        int mask = 0;
+        for(int num:nums) mask ^= num;
+        
+        mask = mask&(~(mask-1));
+        
+        vector<int> res(2, 0);
+        for(int num:nums){
+            if(num&mask){
+                res[0] ^= num;
+            }
+            else{
+                res[1] ^= num;
+            }
+        }
+        return res;
+    }
+};
+
+
+
+// naive method
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
