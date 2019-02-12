@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // ambiguous qestion description
+    // question: find pure forward or pure backward loop
+    // idea: slow&fast pointer
+    bool circularArrayLoop(vector<int>& nums) {
+        for(int i = 0; i < nums.size(); i++){
+            if(nums[i] == 0) continue;
+            
+            int slow = i, fast = nxtIdx(nums, slow);
+            // this while loop's condition make sure we are move toward one direction: either forward or backward
+            while(nums[i]*nums[fast] > 0 && nums[i]*nums[nxtIdx(nums, fast)] > 0){
+                // if slow == fast, this means we have a loop
+                if(slow == fast){
+                    // check whether it is a one element loop
+                    if(slow == nxtIdx(nums, slow)) break;
+                    // if it is a multi-element, pure direction loop, return true
+                    return true;
+                }
+                slow = nxtIdx(nums, slow);
+                fast = nxtIdx(nums, nxtIdx(nums, fast));
+            }
+            
+            // no loop has been found, set all meet elements to zero, so that next time we meet it we know this path is not what we want
+            slow = i;
+            while(nums[i]*nums[slow] > 0){
+                int temp = nxtIdx(nums, slow);
+                nums[slow] = 0;
+                slow = temp;
+            }
+        }
+        return false;
+    }
+    
+    int nxtIdx(vector<int> &nums, int crt){
+        int n = nums.size();
+        return crt + nums[crt] > 0 ? (crt + nums[crt])%n : (n + crt + nums[crt])%n;
+    }
+};
