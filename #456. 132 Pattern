@@ -1,0 +1,22 @@
+class Solution {
+public:
+    // idea: back track to keep tracking the largest s3 that are qualified
+    // we can stop once we find a number smaller than s3
+    bool find132pattern(vector<int>& nums) {
+        int s3 = INT_MIN;
+        // all s3's candidate
+        stack<int> s;
+        for(int i = nums.size()-1; i >= 0; i--){
+            if(nums[i] < s3) return true;
+            // s3's candidate needs to be less than s2
+            while(!s.empty() && s.top() < nums[i]){
+                // if it is bigger than previous s3, update s3
+                if(s3 < s.top()) s3 = s.top();
+                s.pop();
+            }
+            // current number becomes s3's candidate in next round
+            s.push(nums[i]);
+        }
+        return false;
+    }
+};
