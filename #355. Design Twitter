@@ -1,0 +1,75 @@
+class Compare{
+public:
+    bool operator()(vector<int> &v1, vector<int> &v2){
+        return v1[1] > v2[1];
+    }
+};
+
+
+class Twitter {
+public:
+    /** Initialize your data structure here. */
+    Twitter() {
+        
+    }
+    
+    /** Compose a new tweet. */
+    void postTweet(int userId, int tweetId) {
+        postTime++;
+        posts[userId].push_back({tweetId, postTime});
+    }
+    
+    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
+    vector<int> getNewsFeed(int userId) {
+        priority_queue<vector<int>, vector<vector<int>>, Compare> q;
+        int end = max((int)posts[userId].size()-10, 0), start = posts[userId].size()-1;
+        for(int i = start; i >= end; i--){
+            q.push(posts[userId][i]);
+        }
+        for(auto id:users[userId]){
+            if(id == userId) continue;
+            int end = max((int)posts[id].size()-10, 0), start = posts[id].size()-1;
+            for(int i = start; i >= end; i--){
+                if(q.size() < 10){
+                    q.push(posts[id][i]);
+                }
+                else{
+                    q.push(posts[id][i]);
+                    q.pop();
+                }
+            }
+        }
+        vector<int> res;
+        while(!q.empty()){
+            res.push_back(q.top()[0]);
+            q.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+    
+    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
+    void follow(int followerId, int followeeId) {
+        users[followerId].insert(followeeId);
+    }
+    
+    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
+    void unfollow(int followerId, int followeeId) {
+        users[followerId].erase(followeeId);
+    }
+private:
+    // key is user's ID, vector<int> stores the user current user followed. Note that a user always follow himself
+    unordered_map<int, set<int>> users;
+    // key is user's ID, vector<int> stores the user's post, index 0 corresponding to the latest one
+    unordered_map<int, vector<vector<int>>> posts;
+    int postTime = 0;
+};
+
+/**
+ * Your Twitter object will be instantiated and called as such:
+ * Twitter obj = new Twitter();
+ * obj.postTweet(userId,tweetId);
+ * vector<int> param_2 = obj.getNewsFeed(userId);
+ * obj.follow(followerId,followeeId);
+ * obj.unfollow(followerId,followeeId);
+ */
