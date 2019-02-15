@@ -1,0 +1,35 @@
+class Solution {
+public:
+    // idea:
+    //whenever meet a digit which is less than the previous digit, discard the previous one
+    string removeKdigits(string num, int k) {
+        if(k == num.size()) return "0";
+        
+        stack<char> s;
+        for(int i = 0; i < num.size(); i++){
+            while(k > 0 && !s.empty() && s.top() > num[i]){
+                s.pop();
+                k--;
+            }
+            s.push(num[i]);
+        }
+        
+        while(k > 0){
+            s.pop();
+            k--;
+        }
+        
+        // construct string
+        string res = "";
+        while(!s.empty()){
+            res = s.top() + res;
+            s.pop();
+        }
+        
+        // remove leading zero
+        int i = 0;
+        while(res[i] == '0') i++;
+        
+        return i == res.size() ? "0" : res.substr(i, res.size()-i);
+    }
+};
