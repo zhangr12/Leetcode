@@ -1,0 +1,20 @@
+class Solution {
+public:
+    // idea:
+    // convert element of nums into string
+    // sort them so that s[i]+s[j] > s[j]+s[i] for all i < j
+    // now we get the desired order, construct the result. Be careful about the all zero case
+    string largestNumber(vector<int>& nums) {
+        if(nums.size() == 0) return "0";
+        
+        vector<string> temp(nums.size());
+        
+        for(int i = 0; i < nums.size(); i++) temp[i] = to_string(nums[i]);
+        
+        sort(temp.begin(), temp.end(), [](string &s1, string &s2){ return s1+s2 > s2+s1; });
+        
+        string res = "";
+        for(string num:temp) res = res + num;
+        return res[0] == '0' ? "0" : res;
+    }
+};
