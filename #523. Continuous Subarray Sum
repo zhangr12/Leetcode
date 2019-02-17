@@ -1,0 +1,38 @@
+class Solution {
+public:
+    // idea: check modular
+    // use vector with size k to store subarray sum modular k
+    // that is sum(nums[0~i])%k, if we find a modular has seen before, then return true
+    // otherwise, return false
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        // if contains two consequtive zeros, then always return true, since we can always choose n = 0
+        for(int i = 0; i < nums.size()-1; i++){
+            if(nums[i] == 0 && nums[i+1] == 0) return true;
+        }
+        // if k == 0 and we do not have two consequtive zeros, then return false
+        if(k == 0) return false;
+        // since n can be any integer, if k is negative, we can turn it into positive
+        if(k < 0) k = -k;
+        // key: modular
+        // value: index
+        unordered_map<int, int> m;
+        int sum = 0;
+        for(int i = 0; i < nums.size(); i++){
+            sum += nums[i];
+            int temp = sum%k;
+            // if temp is multiple of k and i > 0 (we need this condition since we want subarray of size at least two), return true
+            if(temp == 0 && i > 0) return true;
+            // if we met this modulr before
+            if(m.count(temp)){
+                // if we met it early than last round (this condition guarantee the size of subarray is at least two)
+                if(i > 0 && m[temp] != i-1) return true;
+            }
+            else{
+                // record the modular and the index we meet it
+                // note that for each residual, we just need to remember the index when first time we meet it
+                m[temp] = i;
+            }
+        }
+        return false;
+    }
+};
