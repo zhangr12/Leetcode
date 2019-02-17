@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea: level order traversal
+    bool isCompleteTree(TreeNode* root) {
+        if(!root) return true;
+        
+        queue<TreeNode*> q;
+        q.push(root);
+        int crtNum = 1;
+        while(!q.empty()){
+            int prevLevelSize = q.size();
+            bool end = false;
+            for(int i = 0; i < prevLevelSize; i++){
+                TreeNode* crt = q.front();
+                q.pop();
+                if(crt->left == nullptr && crt->right != nullptr) return false;
+                // if previous node have no child but current node have child, return false
+                if((crt->left || crt->right) && end) return false;
+                if(crt->left) q.push(crt->left);
+                if(crt->right) q.push(crt->right);
+                // if current node have no child, set end flag to be true
+                if(crt->left == nullptr || crt->right == nullptr) end = true;
+            }
+            if(!q.empty() && prevLevelSize != crtNum) return false;
+            crtNum *= 2;
+        }
+        return true;
+    }
+};
