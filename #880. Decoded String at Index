@@ -22,13 +22,12 @@ public:
                 K %= N;
             }
             else{
-                // if current is alphabet
-                // we know that the last char of the string must not from duplicate
-                // we know we find the desired letter when K%N == 0
-                // in this case either K == N, which means the length is exactly what we want
-                // or K == 0, which must come from K%=N, this also means current length is exactly what we want
-                // in both of the cases, we know that the last char is what we want, which is S[i]
-                if(K%N == 0) break;
+                // current string must be something like:
+                // (duplicate)(duplicate)...(duplicate)(duplicate)unique
+                // now we need to check whether the char we want to find is in the unique part
+                // this is possible only when K == current length
+                // which means that either we have K=0 from K%=N(previous is a digit) or we have K=N from N--(previous is not a digit)
+                if(K == 0 || K == N) break;
                 N--;
             }
             i--;
