@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int smallestRangeII(vector<int>& A, int K) {
+        sort(A.begin(), A.end());
+        int n = A.size(), res = INT_MAX;
+        // we must have for smaller numbers we plus K and for the bigger numbers we minus K
+        // assume for [0~i-1] number we plus K, for [i~n-1] number we minus K
+        for(int i = 1; i < A.size(); i++){
+            int l1 = A[0]+K, r1 = A[i-1]+K, l2 = A[i]-K, r2 = A[n-1]-K;
+            int temp = max(r1, r2) - min(l1, l2);
+            if(temp < res) res = temp;
+        }
+        return min(res, A[n-1]-A[0]);
+    }
+};
