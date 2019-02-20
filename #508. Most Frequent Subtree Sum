@@ -9,6 +9,41 @@
  */
 class Solution {
 public:
+    unordered_map<int, int> m1;
+    unordered_map<TreeNode*, int> m2;
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        treeSum(root);
+        int maxFreq = 0;
+        for(auto item:m1) if(item.second > maxFreq) maxFreq = item.second;
+        vector<int> res;
+        for(auto item:m1) if(item.second == maxFreq) res.push_back(item.first);
+        return res;
+    }
+    
+    int treeSum(TreeNode* node){
+        if(!node) return 0;
+        if(m2.count(node)) return m2[node];
+        
+        int res = node->val + treeSum(node->left) + treeSum(node->right);
+        m2[node] = res;
+        m1[res]++;
+        return res;
+    }
+};
+
+
+///////////////////////////////
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
     unordered_map<int, int> m;
     int max_num = INT_MIN;
     vector<int> findFrequentTreeSum(TreeNode* root) {
