@@ -1,0 +1,42 @@
+class Solution {
+public:
+    // straight forward solution
+    string validIPAddress(string IP) {
+        if(IP.size() == 0) return "Neither";
+        if(IP.find(':') != string::npos && isIPv6(IP)) return "IPv6";
+        if(IP.find('.') != string::npos && isIPv4(IP)) return "IPv4";
+        return "Neither";
+    }
+    
+    bool isIPv4(string IP){
+        stringstream ss(IP);
+        string temp;
+        int total = 0;
+        while(getline(ss, temp, '.')){
+            total++;
+            if(temp.size() == 0 || temp.size() > 3) return false;
+            if(total == 4 && !ss.eof()) return false;
+            if(temp.size() > 1 && temp[0] == '0') return false;
+            for(int i = 0; i < temp.size(); i++){
+                if(!isdigit(temp[i])) return false;
+            }
+            if(stoi(temp) > 255) return false;
+        }
+        return total == 4 ? true : false;
+    }
+    
+    bool isIPv6(string IP){
+        stringstream ss(IP);
+        string temp;
+        int total = 0;
+        while(getline(ss, temp, ':')){
+            total++;
+            if(temp.size() > 4 || temp.size() == 0) return false;
+            if(total == 8 && !ss.eof()) return false;
+            for(int i = 0; i < temp.size(); i++){
+                if(!((temp[i] >= '0' && temp[i] <= '9') || (temp[i] >= 'a' && temp[i] <= 'f') || (temp[i] >= 'A' && temp[i] <= 'F'))) return false;
+            }
+        }
+        return total == 8 ? true : false;
+    }
+};
