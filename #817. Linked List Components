@@ -10,6 +10,35 @@ class Solution {
 public:
     int numComponents(ListNode* head, vector<int>& G) {
         unordered_set<int> s(G.begin(), G.end());
+        
+        int res = 0;
+        while(head){
+            if(!s.count(head->val)){
+                head = head->next;
+            }
+            else{
+                res++;
+                while(head && s.count(head->val)) head = head->next;
+            }
+        }
+        return res;
+    }
+};
+
+
+//////////////////////////////
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int numComponents(ListNode* head, vector<int>& G) {
+        unordered_set<int> s(G.begin(), G.end());
         // we use res to count the total number of connected components
         int res = 0;
         // we use temp to indicate whether we are in a connected components or not
