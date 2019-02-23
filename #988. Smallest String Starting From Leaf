@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // DFS
+    string smallestFromLeaf(TreeNode* root) {
+        if(!root) return "";
+        string res = "";
+        stack<pair<string, TreeNode*>> s;
+        string temp = "";
+        temp += 'a'+root->val;
+        s.push({temp, root});
+        while(!s.empty()){
+            auto item = s.top();
+            s.pop();
+            string temp = item.first;
+            TreeNode* crt = item.second;
+            if(!crt->left && !crt->right){
+                if(res == ""){
+                    res = temp;
+                }
+                else{
+                    if(res > temp) res = temp;
+                }
+            }
+            else{
+                if(crt->left){
+                    temp.insert(0, 1, 'a'+crt->left->val);
+                    s.push({temp, crt->left});
+                    temp.erase(0, 1);
+                }
+                if(crt->right){
+                    temp.insert(0, 1, 'a'+crt->right->val);
+                    s.push({temp, crt->right});
+                }
+            }
+        }
+        return res;
+    }
+};
