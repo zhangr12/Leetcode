@@ -1,0 +1,22 @@
+class Solution {
+public:
+    // navie solution
+    // First, we process all tuples A[i] and A[j], and store the result of A[i] & A[j] in the hash map tuples. 
+    // We also count there how many times each result was produced.
+    // Then, we go through the array again, and check each element against all tuples. 
+    // If it produces zero, we add the tuple counter to the result.
+    int countTriplets(vector<int>& A) {
+        unordered_map<int, int> m;
+        for(int a1:A){
+            for(int a2:A) m[a1 & a2]++;
+        }
+        
+        int res = 0;
+        for(int a:A){
+            for(auto item:m){
+                if((item.first&a) == 0) res += item.second;
+            }
+        }
+        return res;
+    }
+};
