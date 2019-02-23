@@ -1,5 +1,39 @@
 class Solution {
 public:
+    // union find
+    int findCircleNum(vector<vector<int>>& M) {
+        int n = M.size();
+        
+        vector<int> parent(n, 0);
+        iota(parent.begin(), parent.end(), 0);
+        int res = n;
+        for(int i = 0; i < n; i++){
+            for(int j = i+1; j < n; j++){
+                if(M[i][j] == 1) unionFind(parent, i, j, res);
+            }
+        }
+        return res;
+    }
+    
+    void unionFind(vector<int> &parent, int f1, int f2, int &res){
+        int p1 = findParent(parent, f1), p2 = findParent(parent, f2);
+        if(p1 != p2){
+            parent[p1] = p2;
+            res--;
+        }
+    }
+    
+    int findParent(vector<int> &parent, int p){
+        // path compression
+        if(parent[p] != p) parent[p] = findParent(parent, parent[p]);
+        return parent[p];
+    }
+};
+
+
+// bad coding, to much redundant part
+class Solution {
+public:
     int findCircleNum(vector<vector<int>>& M) {
         // use s to remember which row has been discovered
         // 1 means on list, 2 means visited
