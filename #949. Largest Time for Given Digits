@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string largestTimeFromDigits(vector<int>& A) {
+        // find first number, it can only be 0, 1 and 2
+        // when we find a valid time, compare current time with previuos found time, keep the larget one
+        string res = "";
+        int max_time = -1;
+        for(int i = 0; i < 4; i++){
+            if(A[i] > 2) continue;
+            for(int j = 0; j < 4; j++){
+                if(j == i || A[i]*10+A[j] > 23) continue;
+                int hour = A[i]*10+A[j];
+                for(int m = 0; m < 4; m++){
+                    if(m == i || m == j || A[m] > 5) continue;
+                    for(int n = 0; n < 4; n++){
+                        if(n == i || n == j || n == m) continue;
+                        int minute = A[m]*10+A[n];
+                        if(hour*60+minute > max_time){
+                            max_time = hour*60+minute;
+                            if(hour < 10){
+                                res = to_string(0) + to_string(hour) + ":";
+                            }
+                            else{
+                                res = to_string(hour) + ":";
+                            }
+                            if(minute < 10){
+                                res += to_string(0) + to_string(minute);
+                            }
+                            else{
+                                res += to_string(minute);
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+        return res;
+    }
+};
