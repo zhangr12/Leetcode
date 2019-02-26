@@ -1,0 +1,35 @@
+class TimeMap {
+public:
+    /** Initialize your data structure here. */
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        m[key].push_back({timestamp, value});
+    }
+    
+    string get(string key, int timestamp) {
+        auto pos = lower_bound(m[key].begin(), m[key].end(), make_pair(timestamp, ""), compare);
+        if(pos == m[key].end()) return m[key].back().second;
+        if(pos == m[key].begin()){
+            if((*pos).first > timestamp) return "";
+            return (*pos).second;
+        }
+        if((*pos).first == timestamp) return (*pos).second;
+        --pos;
+        return (*pos).second;
+    }
+private:
+    unordered_map<string, vector<pair<int, string>>> m;
+    static bool compare(const pair<int, string> &p1, const pair<int, string> &p2){
+        return p1.first < p2.first;
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
