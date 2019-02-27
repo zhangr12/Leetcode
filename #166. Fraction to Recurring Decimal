@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string fractionToDecimal(int n, int d) {
+        if(n == 0) return "0";
+        
+        string res = "";
+        
+        long int numerator = n, denominator = d;
+        
+        if(numerator < 0 ^ denominator < 0) res += "-";
+        
+        numerator = abs(numerator), denominator = abs(denominator);
+        
+        // integer part
+        res += to_string(numerator/denominator);
+        
+        long int r = numerator%denominator;
+        if(r == 0) return res;
+        res += ".";
+        // first int is residual, second int is position
+        unordered_map<int, int> m;
+        m[r] = res.size();
+        while(true){
+            r*= 10;
+            
+            res += to_string(r/denominator);
+            
+            r %= denominator;
+            
+            if(r == 0) break;
+            
+            if(m.count(r)){
+                res.insert(m[r], 1, '(');
+                res += ")";
+                break;
+            }
+            else{
+                m[r] = res.size();
+            }
+        }
+        return res;
+    }
+};
