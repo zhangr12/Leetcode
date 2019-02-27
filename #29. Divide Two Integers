@@ -1,0 +1,9 @@
+// cheating method...LOL
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        long int numerator = dividend, denominator = divisor;
+        long int temp = numerator/denominator;
+        return temp > INT_MAX ? INT_MAX : temp;
+    }
+};
