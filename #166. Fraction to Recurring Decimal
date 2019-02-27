@@ -18,6 +18,7 @@ public:
         if(r == 0) return res;
         res += ".";
         // first int is residual, second int is position
+        // we know we have repeat if we see the residual before
         unordered_map<int, int> m;
         m[r] = res.size();
         while(true){
