@@ -1,3 +1,4 @@
+// unordered_set
 class Solution {
 public:
     string replaceWords(vector<string>& dict, string sentence) {
@@ -24,4 +25,60 @@ public:
         }
         return res.substr(0, res.size() - 1);
     }
+};
+
+
+
+// Trie
+class Trie{
+public:
+    unordered_map<char, Trie*> children;
+    bool isEnd;
+    Trie(){
+        isEnd = false;
+    }
+};
+
+class Solution {
+public:
+    string replaceWords(vector<string>& dict, string sentence) {
+        Trie* root = buildTrie(dict);
+        
+        stringstream ss(sentence);
+        string temp, res = "";
+        while(ss >> temp){
+            int idx = 0;
+            Trie* crt = root;
+            while(true){
+                if(idx == temp.size() - 1 || !crt->children.count(temp[idx])){
+                    res += temp;
+                    break;
+                }
+                crt = crt->children[temp[idx]];
+                if(crt->isEnd){
+                    res += temp.substr(0, idx + 1);
+                    break;
+                }
+                idx++;
+            }
+            res += " ";
+        }
+        return res.substr(0, res.size()-1);
+    }
+    
+    Trie* buildTrie(vector<string> &dict){
+        Trie* root = new Trie();
+        for(string word:dict){
+            Trie* crt = root;
+            for(int i = 0; i < word.size(); i++){
+                if(!crt->children.count(word[i])) crt->children[word[i]] = new Trie();
+                crt = crt->children[word[i]];
+                // we already have a shorter prefix, no need to proceed
+                if(crt->isEnd) break;
+            }
+            crt->isEnd = true;
+        }
+        return root;
+    }
+    
 };
