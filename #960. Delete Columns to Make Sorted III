@@ -1,17 +1,23 @@
 class Solution {
 public:
+    // the idea is like longest increasing subsequence
     // dp[i]: the longest subsequence we can get if end with ith column
     int minDeletionSize(vector<string>& A) {
         int m = A.size(), n = A[0].size(), maxLength = 1;
+        // initialization: all columns can be the end column by itself
         vector<int> dp(n, 1);
+        // check for each column
         for(int col = 1; col < n; col++){
+            // check relationship between current column and all previous column
             for(int k = 0; k < col; k++){
                 int row = 0;
+                // check if current column can be the last column
                 for(; row < m; row++){
                     if(A[row][col] < A[row][k]) break;
                 }
-                // if all columns can be the last column
+                // if it can be the last column
                 if(row == m){
+                    // update dp info and update maxLength info
                     dp[col] = max(dp[col], dp[k]+1);
                     maxLength = max(maxLength, dp[col]);
                 }
