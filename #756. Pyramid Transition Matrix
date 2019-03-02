@@ -41,3 +41,41 @@ public:
         return helper(m, crt, "", 0);
     }
 };
+
+
+////////////////////////////////
+class Solution {
+public:
+    // DFS
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        if(bottom.size() == 0) return true;
+        
+        unordered_map<string, vector<char>> m;
+        for(auto a:allowed) m[a.substr(0, 2)].push_back(a[2]);
+        
+        // first string is current bottom
+        // second tring is currnet top
+        stack<pair<string, string>> s;
+        s.push({bottom, ""});
+        while(!s.empty()){
+            auto temp = s.top();
+            s.pop();
+            if(temp.first.size() == 1) return true;
+            string bottom = temp.first, top = temp.second;
+            int pos = top.size();
+            if(!m.count(bottom.substr(pos, 2))) continue;
+            for(auto c:m[bottom.substr(pos, 2)]){
+                top += c;
+                if(top.size() == bottom.size()-1){
+                    s.push({top, ""});
+                }
+                else{
+                    s.push({bottom, top});
+                }
+                top.erase(top.begin()+pos);
+            }
+        }
+        return false;
+    }
+};
+
