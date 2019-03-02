@@ -1,0 +1,41 @@
+class Compare{
+public:
+    bool operator()(const vector<int> &v1, const vector<int> &v2){
+        if(v1[0] < v2[0]) return true;
+        if(v1[0] > v2[0]) return false;
+        if(v1[1] < v2[1]) return true;
+        return false;
+    }
+};
+
+class FreqStack {
+public:
+    FreqStack() {
+        idx = 0;
+    }
+    
+    void push(int x) {
+        q.push({m[x]+1, idx, x});
+        m[x]++;
+        idx++;
+    }
+    
+    int pop() {
+        auto temp = q.top();
+        q.pop();
+        m[temp[2]]--;
+        return temp[2];
+    }
+private:
+    // vector<int> stores: count, idx, number
+    priority_queue<vector<int>, vector<vector<int>>, Compare> q;
+    unordered_map<int, int> m;
+    int idx{0};
+};
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack obj = new FreqStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ */
