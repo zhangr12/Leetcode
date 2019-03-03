@@ -1,0 +1,23 @@
+class Solution {
+public:
+    // idea:
+    // even flip equals not flip
+    // odd flip equals one flip
+    int minKBitFlips(vector<int>& A, int K) {
+        queue<int> q;
+        int res = 0;
+        for(int i = 0; i < A.size(); i++){
+            // we need to flip A[i] and previous flip does not change A[i]
+            // either A[i] is zero and it has been flips even times
+            // or A[i] is 1 and it has been fliped odd times
+            if((A[i] == 0 && q.size()%2 == 0) || (A[i] == 1 && q.size()%2 == 1)){
+                // if there is no enough space to flip, we fail
+                if(i+K-1 >= A.size()) return -1;
+                q.push(i+K-1);
+                res++;
+            }
+            if(!q.empty() && q.front() <= i) q.pop();
+        }
+        return res;
+    }
+};
