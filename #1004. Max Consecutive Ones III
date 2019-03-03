@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // idea: two pointers
+    // move first pointer as far as possible based on K
+    // once we reach limit, move second pointer until we can change one more number from 1 to zero, then move first pointer again
+    // time complexity: O(N)
+    int longestOnes(vector<int>& A, int K) {
+        if(A.size() == 0) return 0;
+        int i = 0, j = 0, changes = 0, res = 0;
+        while(i < A.size()){
+            if(A[i] == 1){
+                res = max(res, i-j+1);
+                i++;
+            }
+            else{
+                if(changes < K){
+                    res = max(res, i-j+1);
+                    i++;
+                    changes++;
+                }
+                else{
+                    while(A[j] == 1) j++;
+                    j++;
+                    changes--;
+                }
+            }
+        }
+        return res;
+    }
+};
