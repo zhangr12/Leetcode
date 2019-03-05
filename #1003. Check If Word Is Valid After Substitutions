@@ -1,0 +1,23 @@
+class Solution {
+public:
+    // idea:
+    // whenever we met a 'c', the top two chars in the stack must be 'b' and 'a', otherwise return false
+    // at the very end, check if the stack is empty
+    bool isValid(string S) {
+        stack<char> record;
+        for(char s:S){
+            if(s == 'c'){
+                if(record.size() < 2) return false;
+                char temp1 = record.top();
+                record.pop();
+                char temp2 = record.top();
+                record.pop();
+                if(!(temp1 == 'b' && temp2 == 'a')) return false;
+            }
+            else{
+                record.push(s);
+            }
+        }
+        return record.empty();
+    }
+};
