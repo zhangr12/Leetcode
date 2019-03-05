@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool reorderedPowerOf2(int N) {
+        if(N == 1) return true;
+        string s = to_string(N);
+        int n = s.size();
+        vector<int> nums(10, 0);
+        for(int i = 0; i < n; i++) nums[s[i]-'0']++;
+        int i = 2;
+        string tempi = "2";
+        while(tempi.size() < n){
+            i*=2;
+            tempi = to_string(i);
+        }
+        while(tempi.size() == n){
+            if(sameNums(tempi, nums)) return true;
+            i *= 2;
+            tempi = to_string(i);
+        }
+        return false;
+    }
+    
+    bool sameNums(string tempi, vector<int> &nums){
+        vector<int> crt(10, 0);
+        for(int i = 0; i < tempi.size(); i++) crt[tempi[i]-'0']++;
+        for(int i = 0; i < 10; i++){
+            if(crt[i] != nums[i]) return false;
+        }
+        return true;
+    }
+    
+};
