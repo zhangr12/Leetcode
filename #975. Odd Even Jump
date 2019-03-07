@@ -1,0 +1,28 @@
+class Solution {
+public:
+    // the path need to go higher and lower alternatively
+    // idea: dp + map
+    int oddEvenJumps(vector<int>& A) {
+        int n = A.size(), res = 1;
+        vector<bool> higher(n, false), lower(n, false);
+        map<int, int> m;
+        higher[n-1] = true;
+        lower[n-1] = true;
+        m[A[n-1]] = n-1;
+        for(int i = n-2; i >= 0; i--){
+            // if want to go higher, find lower_bound
+            // if want to fo lower, find upper_bound and then move back for one step(if upper_bound does not return m.begin())
+            auto hi = m.lower_bound(A[i]), lo = m.upper_bound(A[i]);
+            if(hi != m.end()) higher[i] = lower[hi->second];
+            if(lo != m.begin()){
+                lo--;
+                lower[i] = higher[lo->second];
+            }
+            // if higher[i] is true, we can start from current index
+            if(higher[i]) res++;
+            // in this way, we can make sure we always find the one with smallest index
+            m[A[i]] = i;
+        }
+        return res;
+    }
+};
