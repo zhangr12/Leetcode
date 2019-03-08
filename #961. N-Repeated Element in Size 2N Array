@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int repeatedNTimes(vector<int>& A) {
+        int i, j, n = A.size();
+        while(true){
+            i = rand()%n, j = rand()%n;
+            if(i != j && A[i] == A[j]) return A[i];
+        }
+        return -1;
+    }
+};
