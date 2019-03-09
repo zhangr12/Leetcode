@@ -1,3 +1,109 @@
+// better solution
+// idea: circular vector
+class MyCircularDeque {
+public:
+    /** Initialize your data structure here. Set the size of the deque to be k. */
+    MyCircularDeque(int k) {
+        q.resize(k, 0);
+        front = 0;
+        end = k-1;
+        maxCap = k;
+        crtSize = 0;
+    }
+    
+    /** Adds an item at the front of Deque. Return true if the operation is successful. */
+    bool insertFront(int value) {
+        if(crtSize == maxCap) return false;
+        q[front] = value;
+        front = (front+1)%maxCap;
+        ++crtSize;
+        return true;
+    }
+    
+    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+    bool insertLast(int value) {
+        if(crtSize == maxCap) return false;
+        q[end] = value;
+        if(end-1 >= 0){
+            --end;
+        }
+        else{
+            end = maxCap-1;
+        }
+        ++crtSize;
+        return true;
+    }
+    
+    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+    bool deleteFront() {
+        if(crtSize == 0) return false;
+        if(front == 0){
+            front = maxCap-1;
+        }
+        else{
+            --front;
+        }
+        --crtSize;
+        return true;
+    }
+    
+    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+    bool deleteLast() {
+        if(crtSize == 0) return false;
+        if(end == maxCap-1){
+            end = 0;
+        }
+        else{
+            ++end;
+        }
+        --crtSize;
+        return true;
+    }
+    
+    /** Get the front item from the deque. */
+    int getFront() {
+        if(isEmpty()) return -1;
+        if(front == 0) return q[maxCap-1];
+        return q[front-1];
+    }
+    
+    /** Get the last item from the deque. */
+    int getRear() {
+        if(isEmpty()) return -1;
+        if(end == maxCap-1) return q[0];
+        return q[end+1];
+    }
+    
+    /** Checks whether the circular deque is empty or not. */
+    bool isEmpty() {
+        return crtSize == 0;
+    }
+    
+    /** Checks whether the circular deque is full or not. */
+    bool isFull() {
+        return crtSize == maxCap;
+    }
+private:
+    vector<int> q;
+    int front, end, maxCap, crtSize;
+};
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque obj = new MyCircularDeque(k);
+ * bool param_1 = obj.insertFront(value);
+ * bool param_2 = obj.insertLast(value);
+ * bool param_3 = obj.deleteFront();
+ * bool param_4 = obj.deleteLast();
+ * int param_5 = obj.getFront();
+ * int param_6 = obj.getRear();
+ * bool param_7 = obj.isEmpty();
+ * bool param_8 = obj.isFull();
+ */
+
+
+
+///////////////////////////////
 class MyCircularDeque {
 public:
     int max_size;
