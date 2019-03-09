@@ -1,0 +1,34 @@
+class Solution {
+public:
+    // back tracking
+    // Start row by row, and loop through columns. 
+    // At each decision point, skip unsafe positions by using three boolean arrays.
+    int totalNQueens(int n) {
+        // two queens share same main diagnal if their row+col are same
+        // two queens share same sub-diagnal if their row-col+n are same
+        vector<bool> col(n, true), mainDiag(2*n-1, true), subDiag(2*n-1, true);
+        int res = 0;
+        helper(n, res, 0, col, mainDiag, subDiag);
+        return res;
+    }
+    
+    
+    void helper(int count, int &res, int row, vector<bool> &col, vector<bool> &mainDiag, vector<bool> &subDiag){
+        if(count == 0){
+            res++;
+            return;
+        }
+        int n = col.size();
+        for(int j = 0; j < n; j++){
+            if(col[j] && mainDiag[row+j] && subDiag[row-j+n]){
+                col[j] = false;
+                mainDiag[row+j] = false;
+                subDiag[row-j+n] = false;
+                helper(count-1, res, row+1, col, mainDiag, subDiag);
+                col[j] = true;
+                mainDiag[row+j] = true;
+                subDiag[row-j+n] = true;
+            }
+        }
+    }
+};
