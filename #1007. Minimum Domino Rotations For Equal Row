@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // 4 rounds
+    // try to make A contains one value with/without rotate A[0]
+    // try to make B contains one value with/without rotate B[0]
+    int minDominoRotations(vector<int>& A, vector<int>& B) {
+        int res = INT_MAX;
+        bool A0r = true, A0nr = true, B0r = true, B0nr = true;
+        int n = A.size(), temp1 = 1, temp2 = 1, temp3 = 0, temp4 = 0;
+        // let A contains only one value without rotate A[0]
+        for(int i = 1; i < n; i++){
+            if(A0r){
+                if(A[i] != B[0] && B[i] != B[0]) A0r = false;
+                if(B[i] == B[0] && A[i] != B[0]) ++temp1;
+            }
+            if(B0r){
+                if(B[i] != A[0] && A[i] != A[0]) B0r = false;
+                if(A[i] == A[0] && B[i] != A[0]) ++temp2;
+            }
+            if(A0nr){
+                if(A[i] != A[0] && B[i] != A[0]) A0nr = false;
+                if(B[i] == A[0] && A[i] != A[0]) ++temp3;
+            }
+            if(B0nr){
+                if(A[i] != B[0] && B[i] != B[0]) B0nr = false;
+                if(A[i] == B[0] && B[i] != B[0]) ++temp4;
+            }
+            if(!(A0r || B0r || A0nr || B0nr)) return -1;
+        }
+        if(A0r && temp1 < res) res = temp1;
+        if(B0r && temp2 < res) res = temp2;
+        if(A0nr && temp3 < res) res = temp3;
+        if(B0nr && temp4 < res) res = temp4;
+        return res == INT_MAX ? -1 : res;
+    }
+};
