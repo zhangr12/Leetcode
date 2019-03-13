@@ -9,6 +9,47 @@
 class Solution {
 public:
     ListNode* oddEvenList(ListNode* head) {
+        if(!head) return head;
+        ListNode *evenHead = new ListNode(0), *oddHead = new ListNode(0);
+        ListNode *crtEven = evenHead, *crtOdd = oddHead;
+        int count = 0;
+        while(head){
+            ++count;
+            if(count%2){
+                crtOdd->next = head;
+                head = head->next;
+                crtOdd = crtOdd->next;
+                crtOdd->next = nullptr;
+            }
+            else{
+                crtEven->next = head;
+                head = head->next;
+                crtEven = crtEven->next;
+                crtEven->next = nullptr;
+            }
+        }
+        crtOdd->next = evenHead->next;
+        return oddHead->next;
+    }
+};
+
+
+
+
+
+
+////////////////////////
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
         ListNode *odd = new ListNode(0), *even = new ListNode(0), *crto, *crte;
         crto = odd;
         crte = even;
