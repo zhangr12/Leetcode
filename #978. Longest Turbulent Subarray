@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int maxTurbulenceSize(vector<int>& A) {
+        if(A.size() == 1) return 1;
+        // 0: equal, 1: A[i-1] < A[i], -1: A[i-1] > A[i]
+        int prevComp = 0, res = 1, temp = 1;
+        for(int i = 1; i < A.size(); ++i){
+            if(A[i-1] < A[i]){
+                temp = prevComp == -1 ? temp+1 : 2;
+                prevComp = 1;
+            }
+            else if(A[i-1] > A[i]){
+                temp = prevComp == 1 ? temp+1 : 2;
+                prevComp = -1;
+            }
+            else{
+                prevComp = 0;
+                temp = 1;
+            }
+            if(temp > res) res = temp;
+        }
+        return res;
+    }
+};
