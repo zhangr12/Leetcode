@@ -1,0 +1,30 @@
+class Solution {
+public:
+    // idea: union find
+    // first take care of all the equals, then take care of all the non-equals
+    bool equationsPossible(vector<string>& equations) {
+        vector<int> parent(26, 0);
+        iota(parent.begin(), parent.end(), 0);
+        // first take care all the equals
+        for(string eq:equations){
+            if(eq[1] == '!') continue;
+            unionFind(parent, eq[0]-'a', eq[3]-'a');
+        }
+        for(string eq:equations){
+            if(eq[1] == '=') continue;
+            int p1 = findParent(parent, eq[0]-'a'), p2 = findParent(parent, eq[3]-'a');
+            if(p1 == p2) return false;
+        }
+        return true;
+    }
+    
+    void unionFind(vector<int> &parent, int n1, int n2){
+        int p1 = findParent(parent, n1), p2 = findParent(parent, n2);
+        if(p1 != p2) parent[p1] = p2;
+    }
+    
+    int findParent(vector<int> &parent, int n){
+        if(parent[n] != n) parent[n] = findParent(parent, parent[n]);
+        return parent[n];
+    }
+};
