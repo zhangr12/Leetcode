@@ -1,0 +1,63 @@
+class Solution {
+public:
+    // idea: modified BFS
+    // remember the boundary and try to expand it after water level increase
+    int swimInWater(vector<vector<int>>& grid) {
+        vector<pair<int, int>> crt, next, *pc, *pn;
+        crt.push_back({0, 0});
+        pc = &crt;
+        pn = &next;
+        int waterLevel = grid[0][0], n = grid.size();
+        grid[0][0] = -1;
+        while(waterLevel < n*n){
+            bool canSwim = true;
+            while(canSwim){
+                canSwim = false;
+                for(size_t i = 0; i < pc->size(); i++){
+                    int x = (*pc)[i].first, y = (*pc)[i].second;
+                    // cout << x << " " << y << " " << waterLevel << endl;
+                    if(x == n-1 && y == n-1) return waterLevel;
+                    if(x-1 >= 0 && grid[x-1][y] != -1 && grid[x-1][y] <= waterLevel){
+                        grid[x-1][y] = -1;
+                        pn->push_back({x-1, y});
+                        canSwim = true;
+                    }
+                    if(y-1 >= 0 && grid[x][y-1] != -1 && grid[x][y-1] <= waterLevel){
+                        grid[x][y-1] = -1;
+                        pn->push_back({x, y-1});
+                        canSwim = true;
+                    }
+                    if(x+1 < n && grid[x+1][y] != -1 && grid[x+1][y] <= waterLevel){
+                        grid[x+1][y] = -1;
+                        pn->push_back({x+1, y});
+                        canSwim = true;
+                    }
+                    if(y+1 < n && grid[x][y+1] != -1 && grid[x][y+1] <= waterLevel){
+                        grid[x][y+1] = -1;
+                        pn->push_back({x, y+1});
+                        canSwim = true;
+                    }
+                    if(isBoundary(grid, x, y)) pn->push_back({x, y});
+                }
+                if(canSwim){
+                    swap(pc, pn);
+                    (*pn) = {};
+                }
+                else{
+                    (*pn) = {};
+                }
+            }
+            ++waterLevel;
+        }
+        return -1;
+    }
+    
+    bool isBoundary(vector<vector<int>> &grid, int x, int y){
+        int n = grid.size();
+        if(x-1 >= 0 && grid[x-1][y] != -1) return true;
+        if(x+1 < n && grid[x+1][y] != -1) return true;
+        if(y-1 >= 0 && grid[x][y-1] != -1) return true;
+        if(y+1 < n && grid[x][y+1] != -1) return true;
+        return false;
+    }
+};
