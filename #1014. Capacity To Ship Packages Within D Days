@@ -1,0 +1,38 @@
+class Solution {
+public:
+    // binary search
+    int shipWithinDays(vector<int>& weights, int D) {
+        int l = INT_MIN, r = 0;
+        for(int w:weights){
+            if(l < w) l = w;
+            r += w;
+        }
+        while(l < r){
+            int mid = l + (r-l)/2;
+            int times = needDays(weights, mid);
+            // if need more than D days, this means we need more capacity, l = mid+1
+            if(times > D){
+                l = mid+1;
+            }
+            // if we can finish the job with in D days, this means mid is greater than or equal to the answer we want
+            else{
+                r = mid;
+            }
+        }
+        return l;
+    }
+    
+    int needDays(vector<int> &weights, int cap){
+        int res = 1, crt = 0;
+        for(int w:weights){
+            if(crt+w > cap){
+                ++res;
+                crt = w;
+            }
+            else{
+                crt += w;
+            }
+        }
+        return res;
+    }
+};
