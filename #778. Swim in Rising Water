@@ -7,7 +7,9 @@ public:
         crt.push_back({0, 0});
         pc = &crt;
         pn = &next;
-        int waterLevel = grid[0][0], n = grid.size();
+        int n = grid.size();
+        // final water level should be at least be max(grid[0][0], grid[n-1][n-1])
+        int waterLevel = max(grid[0][0], grid[n-1][n-1]);
         grid[0][0] = -1;
         while(waterLevel < n*n){
             bool canSwim = true;
