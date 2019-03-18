@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // idea: sort the array
+    // first try to change as much negative part of A into positive as we can
+    // then check if we still have K left, if yes, sort the whole array again
+    // now the whole array must be all positive, so the best thing we can do is:
+    // if K is even, we keep changing one number, so at the very end, all the numbers are still positive
+    // if K is odd, we keep changing the smallest number, so at the very end, only the smallest number's sign becomes negative
+    int largestSumAfterKNegations(vector<int>& A, int K) {
+        sort(A.begin(), A.end());
+        int i = 0;
+        for(; i < A.size(); ++i){
+            if(A[i] >= 0 || K == 0) break;
+            A[i] = -A[i];
+            --K;
+        }
+        if(K == 0) return accumulate(A.begin(), A.end(), 0);
+        // now K > 0, so A[i] >= 0
+        sort(A.begin(), A.end());
+        if(K%2) A[0] = -A[0];
+        return accumulate(A.begin(), A.end(), 0);
+        
+    }
+};
