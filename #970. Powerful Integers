@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> powerfulIntegers(int x, int y, int bound) {
+        unordered_set<int> sx, sy, res;
+        int crt = 1;
+        while(crt < bound){
+            sx.insert(crt);
+            if(x == 1) break;
+            crt *= x;
+        }
+        crt = 1;
+        while(crt < bound){
+            sy.insert(crt);
+            if(y == 1) break;
+            crt *= y;
+        }
+        for(auto crtx:sx){
+            for(auto crty:sy){
+                if(crtx+crty <= bound) res.insert(crtx + crty);
+            }
+        }
+        return vector<int>(res.begin(), res.end());
+    }
+};
