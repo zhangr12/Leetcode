@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<string> commonChars(vector<string>& A) {
+        vector<int> res(26, 0);
+        for(auto c:A[0]) ++res[c-'a'];
+        for(int i = 1; i < A.size(); ++i){
+            vector<int> temp(26, 0);
+            for(auto c:A[i]) ++temp[c-'a'];
+            for(int i = 0; i < 26; ++i) res[i] = min(res[i], temp[i]);
+        }
+        vector<string> ans;
+        for(int i = 0; i < 26; ++i){
+            for(int j = 0; j < res[i]; ++j) ans.push_back(string(1, 'a'+i));
+        }
+        return ans;
+    }
+};
