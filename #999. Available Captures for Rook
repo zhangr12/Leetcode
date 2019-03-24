@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int numRookCaptures(vector<vector<char>>& board) {
+        // find white rook
+        int res = 0, i, j, m = board.size(), n = board[0].size();
+        vector<vector<int>> moves{{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+        for(i = 0; i < m; ++i){
+            for(j = 0; j < n; ++j){
+                if(board[i][j] == 'R'){
+                    for(int k = 0; k < 4; ++k){
+                        if(canCap(board, i, j, moves[k])) ++res;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+    
+    bool canCap(const vector<vector<char>>& board, int i, int j, const vector<int> &move){
+        while(i+move[0] >= 0 && i+move[0] < board.size() && j+move[1] >= 0 && j+move[1] < board[0].size()){
+            i += move[0];
+            j += move[1];
+            if(board[i][j] == '.') continue;
+            // is p, return true
+            if(board[i][j] == 'p') return true;
+            // is B, return false
+            if(board[i][j] == 'B') return false;
+        }
+        return false;
+    }
+    
+};
