@@ -1,0 +1,36 @@
+class Solution {
+public:
+    // idea: 
+    // if the number before modify is even number and after modify is even number, we just add the change part to result
+    // if the number before modify is even number and after modify is odd number, we minus the number from result
+    // if the number before modify is odd number and after modify is even number, we add the changed number to result
+    // if the number before modify is odd number and after modify is odd number, we do not change the result
+    vector<int> sumEvenAfterQueries(vector<int>& A, vector<vector<int>>& queries) {
+        int n = queries.size();
+        vector<int> res(n);
+        int crt = 0;
+        for(int a:A){
+            if(a%2 == 0) crt += a;
+        }
+        int idx = 0;
+        for(auto q:queries){
+            if(A[q[1]]%2 == 0){
+                if((A[q[1]] + q[0])%2 == 0){
+                    crt += q[0];
+                }
+                else{
+                    crt -= A[q[1]];
+                }
+            }
+            else{
+                if((A[q[1]] + q[0])%2 == 0){
+                    crt += A[q[1]] + q[0];
+                }
+            }
+            A[q[1]] += q[0];
+            res[idx] = crt;
+            ++idx;
+        }
+        return res;
+    }
+};
