@@ -1,0 +1,69 @@
+class Comp{
+public:
+    bool operator()(const pair<int, pair<int, int>> &p1, const pair<int, pair<int, int>> &p2){
+        return p1.first > p2.first;
+    }
+};
+
+class Solution {
+public:
+    // idea: priority_queue + BFS + read question carefull!!!
+    int cutOffTree(vector<vector<int>>& forest) {
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, Comp> q;
+        for(int i = 0; i < forest.size(); ++i){
+            for(int j = 0; j < forest[0].size(); ++j){
+                if(forest[i][j] > 1) q.push({forest[i][j], {i, j}});
+            }
+        }
+        pair<int, int> crtPos = {0, 0}, nxtPos;
+        int res = 0;
+        while(!q.empty()){
+            nxtPos = q.top().second;
+            // cout << nxtPos.first << " " << nxtPos.second << endl;
+            int temp = BFS(forest, crtPos, nxtPos);
+            q.pop();
+            if(temp == -1) return -1;
+            res += temp;
+            crtPos = nxtPos;
+        }
+        return res;
+    }
+    // return minimum number of steps that need to travel from crt to nxt
+    int BFS(vector<vector<int>> &f, pair<int, int> &crt, pair<int, int> &nxt){
+        queue<pair<int, int>> q;
+        q.push(crt);
+        vector<vector<bool>> visited(f.size(), vector<bool>(f[0].size(), false));
+        visited[crt.first][crt.second] = true;
+        int steps = -1;
+        while(!q.empty()){
+            ++steps;
+            int num = q.size();
+            for(int i = 0; i < num; ++i){
+                auto temp = q.front();
+                q.pop();
+                if(temp.first == nxt.first && temp.second == nxt.second){
+                    f[temp.first][temp.second] = 1;
+                    return steps;
+                }
+                int x = temp.first, y = temp.second;
+                if(x-1 >= 0 && !visited[x-1][y] && f[x-1][y] != 0){
+                    visited[x-1][y] = true;
+                    q.push({x-1, y});
+                }
+                if(x+1 < f.size() && !visited[x+1][y] && f[x+1][y] != 0){
+                    visited[x+1][y] = true;
+                    q.push({x+1, y});
+                }
+                if(y-1 >= 0 && !visited[x][y-1] && f[x][y-1] != 0){
+                    visited[x][y-1] = true;
+                    q.push({x, y-1});
+                }
+                if(y+1 < f[0].size() && !visited[x][y+1] && f[x][y+1] != 0){
+                    visited[x][y+1] = true;
+                    q.push({x, y+1});
+                }
+            }
+        }
+        return -1;
+    }
+};
