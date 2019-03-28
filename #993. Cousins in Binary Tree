@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // level order traversal
+    bool isCousins(TreeNode* root, int x, int y) {
+        if(root == nullptr) return false;
+        queue<TreeNode*> q;
+        q.push(root);
+        int foundNum = 0;
+        while(!q.empty()){
+            size_t num = q.size();
+            for(size_t i = 0; i < num; ++i){
+                TreeNode* crt = q.front();
+                q.pop();
+                if(crt->val == x || crt->val == y) ++foundNum;
+                // if current node has two children, make sure their value is not equal to x and y
+                if(crt->left && crt->right && ((crt->left->val == x && crt->right->val == y) || (crt->left->val == y && crt->right->val == x))) return false;
+                if(crt->left) q.push(crt->left);
+                if(crt->right) q.push(crt->right);
+            }
+            if(foundNum == 2) return true;
+            if(foundNum == 1) return false;
+        }
+        return false;
+    }
+};
