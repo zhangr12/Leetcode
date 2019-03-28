@@ -1,0 +1,23 @@
+class Comp{
+public:
+    bool operator()(const string &a, const string &b){
+        int i = a.find(' '), j = b.find(' ');
+        if(!isdigit(a[i+1]) && !isdigit(b[j+1])){
+            if(a.substr(i+1) > b.substr(j+1)) return false;
+            if(a.substr(i+1) < b.substr(j+1)) return true;
+            return a.substr(0, i) < b.substr(0, j);
+        }
+        else{
+            if(isdigit(a[i+1])) return false;
+            return true;
+        }
+    }
+};
+
+class Solution {
+public:
+    vector<string> reorderLogFiles(vector<string>& logs) {
+        stable_sort(logs.begin(), logs.end(), Comp());
+        return logs;
+    }
+};
