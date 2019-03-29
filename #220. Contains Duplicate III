@@ -1,5 +1,26 @@
 class Solution {
 public:
+    // bucket sort with bucket size k+1(since we need difference between i and j to be at most k)
+    // be careful about the type convert(int to long int)
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        if(k <= 0 || t < 0) return false;
+        if(k > nums.size()-1) k = nums.size()-1;
+        unordered_map<long int, long int> m;
+        for(size_t i = 0; i < nums.size(); ++i){
+            if(i > k) m.erase(((long)nums[i-k-1]-INT_MIN)/((long)t+1));
+            long int crt = (long)nums[i] - INT_MIN;
+            long int bucket = crt/((long)t+1);
+            if(m.count(bucket) || (m.count(bucket-1) && crt - m[bucket-1] <= t) || (m.count(bucket+1) && m[bucket+1] - crt <= t)) return true;
+            m[bucket] = crt;
+        }
+        return false;
+    }
+};
+
+
+//////////////////////////////
+class Solution {
+public:
     // idea:
     // use set the keep element in the window with size k+1
     // whenever a new element comes, first check whether we have existing elements in s such that the absolute difference between these two element is at most k
