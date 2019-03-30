@@ -1,5 +1,8 @@
 class Solution {
 public:
+    // idea:
+    // sort A first, for a >= b >= c, if a < b+c, we have a triangle
+    // if A[i] >= A[i-1]+A[i-2] then we don't need to try other elements between 0~i-3
     int largestPerimeter(vector<int>& A) {
         sort(A.begin(), A.end());
         for(int i = A.size()-1; i >= 2; --i){
