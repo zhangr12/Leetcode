@@ -1,0 +1,64 @@
+/*
+// Definition for a QuadTree node.
+class Node {
+public:
+    bool val;
+    bool isLeaf;
+    Node* topLeft;
+    Node* topRight;
+    Node* bottomLeft;
+    Node* bottomRight;
+
+    Node() {}
+
+    Node(bool _val, bool _isLeaf, Node* _topLeft, Node* _topRight, Node* _bottomLeft, Node* _bottomRight) {
+        val = _val;
+        isLeaf = _isLeaf;
+        topLeft = _topLeft;
+        topRight = _topRight;
+        bottomLeft = _bottomLeft;
+        bottomRight = _bottomRight;
+    }
+};
+*/
+class Solution {
+public:
+    // bottom up
+    Node* construct(vector<vector<int>>& grid) {
+        return helper(grid, 0, 0, grid.size()-1, grid.size()-1);
+    }
+    // v1 is the coordinate of up left corner
+    // v2 is the coordinate of the bottom right corner
+    Node* helper(vector<vector<int>> &g, int v10, int v11, int v20, int v21){
+        if(v10 > v20 || v11 > v21) return nullptr;
+        // only one value
+        if(v10 == v20 && v11 == v21){
+            if(g[v10][v11] == 0){
+                Node *res = new Node(false, true, nullptr, nullptr, nullptr, nullptr);
+                return res;
+            }
+            Node *res = new Node(true, true, nullptr, nullptr, nullptr, nullptr);
+            return res;
+        }
+        
+        // divide into four parts
+        int midRow = (v10+v20)/2, midCol = (v11+v21)/2;
+        //cout << midRow << " " << midCol << endl;
+        Node *upLeft = helper(g, v10, v11, midRow, midCol);
+        Node *upRight = helper(g, v10, midCol+1, midRow, v21);
+        Node *bottomLeft = helper(g, midRow+1, v11, v20, midCol);
+        Node *bottomRight = helper(g, midRow+1, midCol+1, v20, v21);
+        Node *res = new Node(false, true, nullptr, nullptr, nullptr, nullptr);
+        if((upLeft->isLeaf && upRight->isLeaf && bottomLeft->isLeaf && bottomRight->isLeaf) && (upLeft->val == upRight->val && upLeft->val == bottomLeft->val && upLeft->val == bottomRight->val)){
+            res->val = upLeft->val;
+            return res;
+        }
+        
+        res->isLeaf = false;
+        res->topLeft = upLeft;
+        res->topRight = upRight;
+        res->bottomLeft = bottomLeft;
+        res->bottomRight = bottomRight;
+        return res;
+    }
+};
