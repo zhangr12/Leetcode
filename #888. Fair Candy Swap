@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> fairCandySwap(vector<int>& A, vector<int>& B) {
+        int sum1 = accumulate(A.begin(), A.end(), 0), sum2 = accumulate(B.begin(), B.end(), 0);
+        // how many candies A must give to B to make A and B equal
+        int diff = (sum1-sum2)/2;
+        unordered_set<int> s(B.begin(), B.end());
+        vector<int> res(2);
+        for(int i = 0; i < A.size(); ++i){
+            if(s.count(A[i]-diff)){
+                res[0] = A[i];
+                res[1] = A[i]-diff;
+                break;
+            }
+        }
+        return res;
+    }
+};
