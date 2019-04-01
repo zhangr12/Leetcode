@@ -1,5 +1,7 @@
 class Solution {
 public:
+    // idea: assume total in A is tA, total in B is tB
+    // we want to find a bar in A such that A[i]-(tA-tB)/2 exist in B
     vector<int> fairCandySwap(vector<int>& A, vector<int>& B) {
         int sum1 = accumulate(A.begin(), A.end(), 0), sum2 = accumulate(B.begin(), B.end(), 0);
         // how many candies A must give to B to make A and B equal
