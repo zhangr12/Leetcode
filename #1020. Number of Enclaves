@@ -1,0 +1,45 @@
+class Solution {
+public:
+    // modified BFS
+    // idea: first check four boundary, if it is 1, mark all the connected 1 to be -1
+    // then check internal points, if it is 1, mark all the connected 1 to be -1 and increase the result by 1
+    int numEnclaves(vector<vector<int>>& A) {
+        vector<vector<int>> moves{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        // check four boundaries
+        int temp = 0;
+        int m = A.size(), n = A[0].size();
+        for(int i = 0; i < m; ++i){
+            if(A[i][0] == 1) BFS(A, i, 0, moves, temp);
+            if(A[i][n-1] == 1) BFS(A, i, n-1, moves, temp);
+        }
+        for(int i = 0; i < n; ++i){
+            if(A[0][i] == 1) BFS(A, 0, i, moves, temp);
+            if(A[m-1][i] == 1) BFS(A, m-1, i, moves, temp);
+        }
+        int res = 0;
+        for(int i = 1; i < m-1; ++i){
+            for(int j = 1; j < n-1; ++j){
+                if(A[i][j] == 1) BFS(A, i, j, moves, res);
+            }
+        }
+        return res;
+    }
+    
+    void BFS(vector<vector<int>> &A, int i, int j, vector<vector<int>> &moves, int &res){
+        queue<pair<int, int>> q;
+        q.push({i, j});
+        A[i][j] = -1;
+        while(!q.empty()){
+            auto crt = q.front();
+            q.pop();
+            ++res;
+            for(auto m:moves){
+                int tempX = crt.first+m[0], tempY = crt.second+m[1];
+                if(tempX >= 0 && tempX < A.size() && tempY >= 0 && tempY < A[0].size() && A[tempX][tempY] == 1){
+                    q.push({tempX, tempY});
+                    A[tempX][tempY] = -1;
+                }
+            }
+        }
+    }
+};
