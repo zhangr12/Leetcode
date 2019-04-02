@@ -1,3 +1,4 @@
+// priority_queue method
 class Comp{
 public:
     bool operator()(pair<int, vector<int>> &p1, pair<int, vector<int>> &p2){
@@ -19,5 +20,16 @@ public:
             q.pop();
         }
         return res;
+    }
+};
+
+
+// use std::partial_sort
+class Solution {
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        auto comp = [](const vector<int> &p1, const vector<int> &p2){ return p1[0]*p1[0]+p1[1]*p1[1] < p2[0]*p2[0]+p2[1]*p2[1]; };
+        partial_sort(points.begin(), points.begin()+K, points.end(), comp);
+        return vector<vector<int>>(points.begin(), points.begin()+K);
     }
 };
