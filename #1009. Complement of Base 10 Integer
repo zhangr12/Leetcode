@@ -13,3 +13,21 @@ public:
         return res;
     }
 };
+
+
+
+////////////////////////////////////
+class Solution {
+public:
+    // a number N + its bit wise complement equals to 111....11 >= N
+    // so we only need to find the first 111...11 >= N
+    int bitwiseComplement(int N) {
+        if(N == 0) return 1;
+        int R = 0, pow = 1;
+        while(R < N){
+            R += pow;
+            pow *= 2;
+        }
+        return R-N;
+    }
+};
