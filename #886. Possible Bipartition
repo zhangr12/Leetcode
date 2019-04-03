@@ -1,0 +1,37 @@
+class Solution {
+public:
+    bool possibleBipartition(int N, vector<vector<int>>& dislikes) {
+        vector<vector<int>> graph(N);
+        for(auto d:dislikes){
+            graph[d[0]-1].push_back(d[1]-1);
+            graph[d[1]-1].push_back(d[0]-1);
+        }
+        vector<int> visited(N, 0);
+        
+        for(int i = 0; i < N; i++){
+            if(!visited[i]){
+                if(!BFS(graph, visited, i, 1)) return false;
+            }
+        }
+        return true;
+    }
+    
+    bool BFS(vector<vector<int>> &graph, vector<int> &visited, int crt, int color){
+        if(visited[crt]){
+            if(visited[crt] == color) return false;
+            return true;
+        }
+        
+        if(color == 1){
+            color = 2;
+        }
+        else{
+            color = 1;
+        }
+        visited[crt] = color;
+        for(int node:graph[crt]){
+            if(!BFS(graph, visited, node, color)) return false;
+        }
+        return true;
+    }
+};
