@@ -1,5 +1,8 @@
 class Solution {
 public:
+    // idea: the sightseeing value decrease as the distance increase
+    // we just need to keep tracking the largest previous sightseeing value at current position
+    // the best sightseeing value so far is equal to the largest previous sightseeing value(decrease by 1 every time) plus current sightseeing value
     int maxScoreSightseeingPair(vector<int>& A) {
         int res = 0, crt = 0;
         for(int a:A){
