@@ -2,7 +2,7 @@ class Solution {
 public:
     // idea: modular
     int numPairsDivisibleBy60(vector<int>& time) {
-        unordered_map<int, int> m;
+        vector<int> m(60, 0);
         int res = 0;
         for(int t:time){
             int mod = t%60;
