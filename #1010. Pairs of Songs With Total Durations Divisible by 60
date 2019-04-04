@@ -1,0 +1,19 @@
+class Solution {
+public:
+    // idea: modular
+    int numPairsDivisibleBy60(vector<int>& time) {
+        unordered_map<int, int> m;
+        int res = 0;
+        for(int t:time){
+            int mod = t%60;
+            if(mod == 0){
+                res += m[0];
+            }
+            else{
+                res += m[60-mod];
+            }
+            ++m[mod];
+        }
+        return res;
+    }
+};
