@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // create the result vecto reversely then reverse it back
+    // should try to avoid use insert method in vector class since it is expensive(O(N) time for length N vector)
+    vector<int> addToArrayForm(vector<int>& A, int K) {
+        int carry = 0, idxA = A.size()-1;
+        vector<int> res;
+        while(K && idxA >= 0){
+            int temp = A[idxA] + K%10 + carry;
+            K /= 10;
+            res.push_back(temp%10);
+            carry = temp/10;
+            --idxA;
+        }
+        while(idxA >= 0){
+            int temp = A[idxA] + carry;
+            res.push_back(temp%10);
+            carry = temp/10;
+            --idxA;
+        }
+        while(K){
+            int temp = K%10 + carry;
+            res.push_back(temp%10);
+            carry = temp/10;
+            K /= 10;
+        }
+        if(carry){
+            res.push_back(1);
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
