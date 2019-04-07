@@ -1,0 +1,18 @@
+class Solution {
+public:
+    // observation: everytime we need to shift previous bonary number to left by 1 bit
+    // this is equal to multiply previous number by 2
+    // given a number n, if n = a*m+b
+    // then n%m = b, (2*n)%m = (2am+2b)%m, which means (2*n)%m = (2b)%m = (2*(n%m))%m
+    // also we have (a+b)%m = (a%m + b%m)%m
+    // so current modular equals to (2*previous_modular + current last bit)%5
+    vector<bool> prefixesDivBy5(vector<int>& A) {
+        int crt = 0;
+        vector<bool> res(A.size(), false);
+        for(int i = 0; i <A.size(); ++i){
+            crt = (crt*2+A[i])%5;
+            if(crt == 0) res[i] = true;
+        }
+        return res;
+    }
+};
