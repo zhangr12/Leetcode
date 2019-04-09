@@ -1,0 +1,25 @@
+class Solution {
+public:
+    // just search substring for each number
+    bool queryString(string S, int N) {
+        for(int i = 1; i <= N; ++i){
+            if(S.find(numToBitString(i)) == string::npos) return false;
+        }
+        return true;
+    }
+    
+    string numToBitString(int N){
+        string res = "";
+        while(N){
+            if(N%2){
+                res += "1";
+            }
+            else{
+                res += "0";
+            }
+            N /=2;
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
