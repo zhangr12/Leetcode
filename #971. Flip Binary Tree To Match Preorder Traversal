@@ -1,0 +1,34 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // idea: perform preorder traversal
+    // if root value is not equal to desired value, return false
+    // if left child value is not equal to decired value, swap left and right, call the check function recursively
+    // otherwise, just call the check function
+    vector<int> res;
+    int i = 0, count = 0;
+    vector<int> flipMatchVoyage(TreeNode* root, vector<int>& voyage) {
+        if(!helper(root, voyage) || count != voyage.size()) return {-1};
+        return res;
+    }
+    
+    bool helper(TreeNode* root, vector<int> &v){
+        if(root == nullptr) return true;
+        ++count;
+        if(root->val != v[i]) return false;
+        ++i;
+        if(root->left && root->left->val != v[i]){
+            res.push_back(root->val);
+            return helper(root->right, v) && helper(root->left, v);
+        }
+        return helper(root->left, v) && helper(root->right, v);
+    }
+};
