@@ -1,0 +1,43 @@
+class Comp{
+public:
+    bool operator()(const pair<int, int> &p1, const pair<int, int> &p2){
+        return p1.second > p2.second;
+    }
+};
+
+class Solution {
+public:
+    // modified Dijkstra
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        vector<vector<pair<int,int>>> graph(N+1);
+        for(auto& t:times) graph[t[0]].push_back({t[1], t[2]});
+        vector<int> res(N+1, INT_MAX);
+        // first is node index, second is delay time
+        priority_queue<pair<int, int>, vector<pair<int, int>>, Comp> pq;
+        pq.push({K, 0});
+        vector<bool> visited(N+1, false);
+        int count = 0;
+        pair<int, int> crt;
+        while(!pq.empty()){
+            crt = pq.top();
+            pq.pop();
+            if(visited[crt.first]) continue;
+            visited[crt.first] = true;
+            if(res[crt.first] > crt.second) res[crt.first] = crt.second;
+            ++count;
+            if(count == N) break;
+            // cout << crt.first << " " << crt.second << endl;
+            for(auto& node:graph[crt.first]){
+                if(!visited[node.first]){
+                    pq.push({node.first, node.second+crt.second});
+                }
+            }
+        }
+        if(count < N) return -1;
+        int ans = 0;
+        for(int i = 1; i <= N; ++i){
+            if(res[i] > ans) ans = res[i];
+        }
+        return ans;
+    }
+};
