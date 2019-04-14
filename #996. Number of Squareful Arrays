@@ -1,0 +1,39 @@
+class Solution {
+public:
+    // DFS
+    int numSquarefulPerms(vector<int>& A) {
+        unordered_map<int, int> count;
+        unordered_map<int, unordered_set<int>> square;
+        
+        for(int a:A) ++count[a];
+        
+        for(auto& item1:count){
+            for(auto& item2:count){
+                int temp = sqrt(item1.first+item2.first);
+                if(temp*temp == item1.first + item2.first){
+                    square[item1.first].insert(item2.first);
+                }
+            }
+        }
+        int res = 0, N = A.size();
+        for(auto c:count){
+            helper(count, square, c.first, N-1, res);
+        }
+        return res;
+    }
+    
+    void helper(unordered_map<int, int> &count, unordered_map<int, unordered_set<int>> &square, int crt, int left, int &res){
+        if(left == 0){
+            ++res;
+            return;
+        }
+        
+        --count[crt];
+        for(auto nxt:square[crt]){
+            if(count[nxt] > 0){
+                helper(count, square, nxt, left-1, res);
+            }
+        }
+        ++count[crt];
+    }
+};
