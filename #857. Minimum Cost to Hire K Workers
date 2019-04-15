@@ -1,0 +1,42 @@
+class Solution {
+public:
+    // idea:
+    // the ideal workers are thoes who have high quality and low wage
+    // let ratio[i] = wage[i]/quality[i]
+    // we can use higher ratio to pay worker with lower ratio
+    // first pick up K workers with smallest ratio and record their total quaity
+    // pop out the worker with largest quality
+    // insert the worker who has the next smallest ratio
+    // update total quality and calculate ratio
+    // the total cost is equal to the largest ratio times total quality
+    double mincostToHireWorkers(vector<int>& quality, vector<int>& wage, int K) {
+        int N = quality.size();
+        // pair<ratio, quality>
+        vector<pair<double, int>> ratio(N);
+        for(int i = 0; i < N; ++i) ratio[i] = {wage[i]*1.0/quality[i], quality[i]};
+        sort(ratio.begin(), ratio.end(), [](pair<double, int> &p1, pair<double, int> &p2){ return p1.first < p2.first; });
+        // max-heap
+        priority_queue<int> workers;
+        int totalQuality = 0;
+        double crtRatio, res = DBL_MAX;
+        for(int i = 0; i < N; ++i){
+            if(workers.size() < K){
+                workers.push(ratio[i].second);
+                totalQuality += ratio[i].second;
+                // record the one with largest ratio
+                crtRatio = ratio[i].first;
+                if(workers.size() == K && crtRatio*totalQuality < res) res = crtRatio*totalQuality;
+            }
+            else{
+                // now we have K workers
+                totalQuality += ratio[i].second;
+                workers.push(ratio[i].second);
+                totalQuality -= workers.top();
+                workers.pop();
+                crtRatio = ratio[i].first;
+                if(crtRatio*totalQuality < res) res = crtRatio*totalQuality;
+            }
+        }
+        return res;
+    }
+};
