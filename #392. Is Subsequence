@@ -1,5 +1,49 @@
 class Solution {
 public:
+    // method when we have a lot of S
+    // time complexity: O(kMlogN), where k is the number of S, M is the length of S, N is the length of T
+    bool isSubsequence(string s, string t) {
+        vector<vector<int>> T(256);
+        for(int i = 0; i < t.size(); ++i) T[t[i]].push_back(i);
+        
+        int tIdx = 0;
+        for(char S:s){
+            auto it = lower_bound(T[S].begin(), T[S].end(), tIdx);
+            if(it == T[S].end()) return false;
+            tIdx = (*it) + 1;
+        }
+        return true;
+    }
+};
+
+
+
+///////////////////////////////
+class Solution {
+public:
+    // two pointers
+    bool isSubsequence(string s, string t) {
+        int i = 0, j = 0;
+        while(j < t.size()){
+            if(i == s.size()) return true;
+            if(s[i] == t[j]){
+                ++i;
+                ++j;
+            }
+            else{
+                ++j;
+            }
+        }
+        if(i == s.size()) return true;
+        return false;
+    }
+};
+
+
+
+//////////////////////////////
+class Solution {
+public:
     bool isSubsequence(string s, string t) {
         int i = 0;
         for(char S:s){
