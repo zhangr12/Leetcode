@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    // iterative + stack
+    // Input: "1-2--3---4-5--6---7"
+    // Output: [1,2,5,3,null,6,null,4,null,7]
+    TreeNode* recoverFromPreorder(string S) {
+        // TreeNode and its depth
+        stack<pair<TreeNode*, int>> nodes;
+        int pos = 0;
+        pair<int, int> crt = nextNode(S, pos);
+        TreeNode* root = new TreeNode(crt.first);
+        nodes.push({root, 0});
+        while(pos < S.size()){
+            crt = nextNode(S, pos);
+            TreeNode* crtNode = new TreeNode(crt.first);
+            // right child
+            if(crt.second == nodes.top().second){
+                nodes.pop();
+                nodes.top().first->right = crtNode;
+                nodes.pop();
+            }
+            else if(crt.second == nodes.top().second + 1){
+                nodes.top().first->left = crtNode;
+            }
+            else{
+                while(crt.second != nodes.top().second + 1) nodes.pop();
+                nodes.top().first->right = crtNode;
+            }
+            nodes.push({crtNode, crt.second});
+        }
+        return root;
+    }
+    // value, depth
+    pair<int, int> nextNode(string &s, int &pos){
+        int count = 0;
+        while(pos < s.size() && s[pos] == '-'){
+            ++count;
+            ++pos;
+        }
+        int start = pos;
+        while(pos < s.size() && s[pos] != '-') ++pos;
+        return {stoi(s.substr(start, pos-start)), count};
+    }
+    
+};
