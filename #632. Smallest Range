@@ -1,0 +1,42 @@
+class Comp{
+public:
+    bool operator()(const vector<int> &p1, const vector<int> &p2){
+        return p1[0] > p2[0];
+    }
+};
+
+class Solution {
+public:
+    // idea: priority_queue
+    // push all the first number into the priority_queue
+    // everytime, pop out the smallest number, put the next number in correspoding row into queue
+    // finish when we reach end of one of the row
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        // min heap
+        priority_queue<vector<int>, vector<vector<int>>, Comp> pq;
+        
+        int N = nums.size(), minNum = INT_MAX, maxNum = INT_MIN, minRange = INT_MAX;
+        for(int i = 0; i < N; ++i){
+            if(minNum > nums[i][0]) minNum = nums[i][0];
+            if(maxNum < nums[i][0]) maxNum = nums[i][0];
+            pq.push({nums[i][0], i, 0});
+        }
+        minRange = maxNum-minNum;
+        vector<int> res{minNum, maxNum};
+        vector<int> temp;
+        while(true){
+            temp = pq.top();
+            pq.pop();
+            if(temp[2] == nums[temp[1]].size()-1) break;
+            pq.push({nums[temp[1]][temp[2]+1], temp[1], temp[2]+1});
+            minNum = pq.top()[0];
+            if(maxNum < nums[temp[1]][temp[2]+1]) maxNum = nums[temp[1]][temp[2]+1];
+            if(minRange > maxNum - minNum){
+                minRange = maxNum-minNum;
+                res[0] = minNum;
+                res[1] = maxNum;
+            }
+        }
+        return res;
+    }
+};
