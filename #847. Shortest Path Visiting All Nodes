@@ -1,0 +1,40 @@
+class Solution {
+public:
+    // bit mask + BFS
+    int shortestPathLength(vector<vector<int>>& graph) {
+        // int, int
+        // int: current node
+        // int: mask(until current node)
+        queue<pair<int, int>> q;
+        unordered_set<string> visited;
+        
+        int N = graph.size();
+        for(int i = 0; i < N; ++i){
+            q.push({i, 1 << i});
+            visited.insert(nodeToCode(i, 0));
+        }
+        int step = -1, finalStop = (1 << N) - 1;
+        pair<int, int> crt;
+        while(!q.empty()){
+            int num = q.size();
+            ++step;
+            for(int i = 0; i < num; ++i){
+                crt = q.front();
+                q.pop();
+                if(crt.second == finalStop) return step;
+                for(auto nxt:graph[crt.first]){
+                    string temp = nodeToCode(nxt, crt.second);
+                    if(!visited.count(temp)){
+                        q.push({nxt, crt.second | (1 << nxt)});
+                        visited.insert(temp);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+    
+    string nodeToCode(int crtNode, int prevMask){
+        return to_string(crtNode) + " " + to_string(prevMask | (1 << crtNode));
+    }
+};
