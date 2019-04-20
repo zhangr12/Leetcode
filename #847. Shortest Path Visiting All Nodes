@@ -1,6 +1,48 @@
 class Solution {
 public:
     // bit mask + BFS
+    // use bit mask to remember the visited path
+    // we define two path to be the same if they have the same visited node and the same end node
+    int shortestPathLength(vector<vector<int>>& graph) {
+        // int, int
+        // int: current node
+        // int: mask(until current node)
+        queue<pair<int, int>> q;
+        unordered_set<int> visited;
+        
+        int N = graph.size();
+        for(int i = 0; i < N; ++i){
+            q.push({i, 1 << i});
+            visited.insert((1 << (N+i))|(1 << i));
+        }
+        int step = -1, finalStop = (1 << N) - 1;
+        pair<int, int> crt;
+        while(!q.empty()){
+            int num = q.size();
+            ++step;
+            for(int i = 0; i < num; ++i){
+                crt = q.front();
+                q.pop();
+                if(crt.second == finalStop) return step;
+                for(auto crtNode:graph[crt.first]){
+                    int crtMask = crt.second | (1 << crtNode);
+                    int temp = (1 << (N+crtNode))|(crtMask);
+                    if(!visited.count(temp)){
+                        q.push({crtNode, crtMask});
+                        visited.insert(temp);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
+
+
+//////////////////////////
+class Solution {
+public:
+    // bit mask + BFS
     int shortestPathLength(vector<vector<int>>& graph) {
         // int, int
         // int: current node
