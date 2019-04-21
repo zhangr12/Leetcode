@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // idea: stable sort
+    // stable_sort is the same as sort, but for elements with equal value, stable_sort will preserves the relative order
+    // first stable sort the arr and keep tracking the index using lambda function
+    // then we iterative from the beginning, keep tracking the maximum index after sorted, we know that we can have a new chunk when the maximum index is the same with the iterative index
+    // example: 2 1 3 4 4
+    // indexes after sorted: 1 0 2 4 4
+    // start from beginning, i = 0, maximum index after sorted is 1
+    // we move to i = 1, maximum index is 1, we add one chunk
+    // we move to i = 2, maximum index is 2, we add one chunk
+    // so one so force
+    int maxChunksToSorted(vector<int>& arr) {
+        if(arr.size() == 0) return 0;
+        int N = arr.size();
+        vector<int> idx(N);
+        iota(idx.begin(), idx.end(), 0);
+        stable_sort(idx.begin(), idx.end(), [&arr](int a, int b){ return arr[a] < arr[b]; });
+        
+        int res = 0, crtIdx = -1;
+        for(int i = 0; i < arr.size(); ++i){
+            crtIdx = max(crtIdx, idx[i]);
+            if(crtIdx == i) ++res;
+        }
+        return res;
+    }
+};
