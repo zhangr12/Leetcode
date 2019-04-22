@@ -1,0 +1,27 @@
+class Solution {
+public:
+    // idea: exactly K = at most K - at most K-1
+    int subarraysWithKDistinct(vector<int>& A, int K) {
+        return atMostK(A, K) - atMostK(A, K-1);
+    }
+    
+    int atMostK(vector<int> &A, int K){
+        int i = 0, res = 0;
+        unordered_map<int, int> m;
+        for(int j = 0; j < A.size(); ++j){
+            ++m[A[j]];
+            if(m.size() <= K){
+                res += j-i+1;
+            }
+            else{
+                while(m.size() > K){
+                    --m[A[i]];
+                    if(m[A[i]] == 0) m.erase(A[i]);
+                    ++i;
+                }
+                res += j-i+1;
+            }
+        }
+        return res;
+    }
+};
