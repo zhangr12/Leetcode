@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> board(n, string(n, '.'));
+        
+        vector<bool> cols(n, false), diags(2*n-1, false), subdiags(2*n-1, false);
+        
+        vector<vector<string>> res;
+        
+        helper(res, board, cols, diags, subdiags, n, 0);
+        
+        return res;
+    }
+    
+    void helper(vector<vector<string>> &res, vector<string> &board, vector<bool> &cols, vector<bool> &diags, vector<bool> &subdiags, int n, int crtRow){
+        if(crtRow == n){
+            res.push_back(board);
+            return;
+        }
+        
+        for(int i = 0; i < n; ++i){
+            if(!cols[i] && !diags[i-crtRow+n-1] && !subdiags[i+crtRow]){
+                board[crtRow][i] = 'Q';
+                cols[i] = true;
+                diags[i-crtRow+n-1] = true;
+                subdiags[i+crtRow] = true;
+                helper(res, board, cols, diags, subdiags, n, crtRow+1);
+                board[crtRow][i] = '.';
+                cols[i] = false;
+                diags[i-crtRow+n-1] = false;
+                subdiags[i+crtRow] = false;
+            }
+        }
+    }
+};
