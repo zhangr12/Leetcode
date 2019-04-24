@@ -1,0 +1,60 @@
+class Solution {
+public:
+    // use two stacks to handle the brackets
+    string countOfAtoms(string formula) {
+        stack<pair<string, int>> s, temp;
+        int idx = 0, j, N = formula.size();
+        while(idx < N){
+            if(formula[idx] == '('){
+                s.push({"(", 1});
+                ++idx;
+            }
+            else if(formula[idx] == ')'){
+                // find next number
+                ++idx;
+                if(idx == N) break;
+                if(formula[idx] < '0' || formula[idx] > '9') continue;
+                j = idx;
+                while(idx < N && formula[idx] >= '0' && formula[idx] <= '9') ++idx;
+                int multiplier = stoi(formula.substr(j, idx-j));
+                while(!s.empty() && s.top().first != "("){
+                    auto crt = s.top();
+                    s.pop();
+                    temp.push({crt.first, crt.second*multiplier});
+                }
+                s.pop();
+                while(!temp.empty()){
+                    s.push(temp.top());
+                    temp.pop();
+                }
+            }
+            else{
+                j = idx;
+                // get current element
+                ++idx;
+                while(idx < N && formula[idx] >= 'a' && formula[idx] <= 'z') ++idx;
+                string atom = formula.substr(j, idx-j);
+                // check if there is a number after the element, if not, give it a one
+                if(!isdigit(formula[idx])){
+                    s.push({atom, 1});
+                    continue;
+                }
+                j = idx;
+                while(idx < N && isdigit(formula[idx])) ++idx;
+                int num = stoi(formula.substr(j, idx-j));
+                s.push({atom, num});
+            }
+        }
+        map<string, int> m;
+        while(!s.empty()){
+            m[s.top().first] += s.top().second;
+            s.pop();
+        }
+        string res = "";
+        for(auto& item:m){
+            res += item.first;
+            if(item.second > 1) res += to_string(item.second);
+        }
+        return res;
+    }
+};
