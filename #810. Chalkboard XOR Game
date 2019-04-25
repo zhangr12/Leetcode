@@ -1,0 +1,13 @@
+class Solution {
+public:
+    // if the XOR of nums is already zero, then Alice wins
+    // if nums has even length
+    // if the XOR of nums is not equal to zero, this means not all numbers are the same
+    // inorder to win the game, Alice simply need to always pick the number which has different bit with current XOR
+    // so Alice will always wins if the length of nums is even
+    bool xorGame(vector<int>& nums) {
+        int temp = 0;
+        for(int num:nums) temp ^= num;
+        return temp == 0 || nums.size()%2 == 0;
+    }
+};
