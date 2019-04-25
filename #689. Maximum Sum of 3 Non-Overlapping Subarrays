@@ -1,0 +1,60 @@
+class Solution {
+public:
+    // dp
+    // for fixed middle interval [i, i+k), the first interval has to be in the range [0, i-1]
+    // the third interval has to be in the range [i+k+1, N-1]
+    // for first interval, we can use dp to find the largest interval in range [0, i-1], we start from [0, k-1], when we expand to the right
+    // the only possible new interval is [1, k], we only need to compare previous largest interval with the summation of this new interval
+    // to get the result for current subinterval
+    // we do the same thing to right interval, but this time we fix right end
+    // be aware that we want the lexicographically smallest answer
+    // this means for left interval we want to use >, for right interval we want to use >=
+    // since left is increasing, right is decreasing
+    vector<int> maxSumOfThreeSubarrays(vector<int>& nums, int k) {
+        int N = nums.size();
+        // first[i] is the maximum sum of interval we can get if we choose interval from nums[0]~nums[i]
+        // third[i] is the maximum sum of interval we can get if we choose interval from nums[i]~nums[N-1]
+        // pair<int, int>: start index, summation
+        vector<pair<int, int>> first(N), third(N);
+        
+        int prev = accumulate(nums.begin(), nums.begin()+k, 0);
+        int temp = prev;
+        first[k-1] = {0, prev};
+        for(int i = k; i < N-2*k; ++i){
+            temp += -nums[i-k] + nums[i];
+            if(prev < temp){
+                prev = temp;
+                first[i] = {i-k+1, prev};
+            }
+            else{
+                first[i] = first[i-1];
+            }
+        }
+        
+        prev = accumulate(nums.end()-k, nums.end(), 0);
+        temp = prev;
+        third[N-k] = {N-k, prev};
+        for(int i = N-k-1; i >= 2*k; --i){
+            temp += -nums[i+k] + nums[i];
+            if(prev <= temp){
+                prev = temp;
+                third[i] = {i, prev};
+            }
+            else{
+                third[i] = third[i+1];
+            }
+        }
+        
+        int second = accumulate(nums.begin()+k-1, nums.begin()+2*k-1, 0);
+        vector<int> res{0, 0, 0};
+        int currentSum = 0;
+        for(int i = k; i <= N-2*k; ++i){
+            second += -nums[i-1] + nums[i+k-1];
+            if(first[i-1].second + second + third[i+k].second > currentSum){
+                currentSum = first[i-1].second + second + third[i+k].second;
+                res = {first[i-1].first, i, third[i+k].first};
+            }
+        }
+        return res;
+    }
+};
