@@ -1,5 +1,8 @@
 class Solution {
 public:
+    // idea: record the value on y axis, later we search these intervals on y axis
+    // sort the rectangulars based on their start point on x axis
+    // for each y interval, see how much area we can cover on x axis
     int rectangleArea(vector<vector<int>>& rects) {
         sort(rects.begin(), rects.end(), [](const vector<int> &v1, const vector<int> &v2){ return v1[0] < v2[0]; });
         
@@ -14,10 +17,12 @@ public:
         sort(ys.begin(), ys.end());
         
         long long int mod = pow(10, 9) + 7, res = 0;
+        // for each interval on y axis
         for(int i = 1; i < ys.size(); ++i){
             int x_start = rects[0][0];
             int x_end = x_start;
             long long int height = ys[i] - ys[i-1];
+            // see how much areas we can cover on x axis
             for(auto& r:rects){
                 // check if current rectangular is in current y range
                 if(r[1] <= ys[i-1] && r[3] >= ys[i]){
