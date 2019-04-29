@@ -1,5 +1,6 @@
 class Solution {
 public:
+    // check each corner case one by one
     vector<int> numMovesStones(int a, int b, int c) {
         vector<int> v{a, b, c};
         sort(v.begin(), v.end());
