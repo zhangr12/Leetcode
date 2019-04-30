@@ -1,6 +1,7 @@
 class Solution {
 public:
 	// dp with size N
+    // dp[i][j] for number at index i, if the arithmetic difference is j, what is the length of that arithmetic array end at number i
     int longestArithSeqLength(vector<int>& A) {
 		if(A.size() == 0) return 0;
 		// first int: difference between in arithematic array
