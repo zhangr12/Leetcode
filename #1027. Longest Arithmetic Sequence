@@ -1,0 +1,23 @@
+class Solution {
+public:
+	// dp with size N
+    int longestArithSeqLength(vector<int>& A) {
+		if(A.size() == 0) return 0;
+		// first int: difference between in arithematic array
+		// second int: array length
+		vector<unordered_map<int, int>> dp(A.size());
+		int res = 1;
+		for(int i = 0; i < A.size(); ++i){
+			for(int j = 0; j < i; ++j){
+				if(dp[j][A[i]-A[j]] == 0){
+					dp[i][A[i]-A[j]] = max(dp[i][A[i]-A[j]], 2);
+				}
+				else{
+					dp[i][A[i]-A[j]] = max(dp[i][A[i]-A[j]], dp[j][A[i]-A[j]] + 1);
+				}
+				res = max(res, dp[i][A[i]-A[j]]);
+			}
+		}
+		return res;
+    }
+};
