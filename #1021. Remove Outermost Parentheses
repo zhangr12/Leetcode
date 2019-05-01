@@ -1,0 +1,12 @@
+class Solution {
+public:
+    string removeOuterParentheses(string S) {
+        string res = "";
+		int count = 0;
+		for(char s:S){
+			count += s == '(' ? 1 : -1;
+			if((s == '(' && count > 1) || (s == ')' && count >= 1)) res += s;
+		}
+		return res;
+    }
+};
