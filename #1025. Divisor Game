@@ -1,12 +1,15 @@
 class Solution {
 public:
+    // remember history
     unordered_map<int, bool> m;
     bool divisorGame(int N) {
+        // if currently N is 1, lose
         if(N == 1) return false;
-        
+        // check if we have searched this number already
         if(m.count(N)) return m[N];
-        
+        // try all the number can divide N
         for(int i = 1; i <= sqrt(N); ++i){
+            // check if we can guarantee a win if we pick number i at this step
             if(N%i == 0 && !divisorGame(N-i)){
                 m[N] = true;
                 return true;
