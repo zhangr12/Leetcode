@@ -1,0 +1,18 @@
+class Solution {
+public:
+    unordered_map<int, bool> m;
+    bool divisorGame(int N) {
+        if(N == 1) return false;
+        
+        if(m.count(N)) return m[N];
+        
+        for(int i = 1; i <= sqrt(N); ++i){
+            if(N%i == 0 && !divisorGame(N-i)){
+                m[N] = true;
+                return true;
+            }
+        }
+        m[N] = false;
+        return false;
+    }
+};
