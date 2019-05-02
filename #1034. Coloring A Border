@@ -1,0 +1,47 @@
+class Solution {
+public:
+    // idea: modified BFS
+    // since color is [1, 1000], we use 1001 to mark the boundary to avoid color equal to some existing cell's color
+    // for visited non boundary  cells, we change it to negative
+    vector<vector<int>> colorBorder(vector<vector<int>>& grid, int r0, int c0, int color) {
+        if(grid.size() == 0) return {};
+        int m = grid.size(), n = grid[0].size(), prevColor = grid[r0][c0];
+        // visited = negative
+        // border = 1001
+        queue<pair<int, int>> q;
+        q.push({r0, c0});
+        grid[r0][c0] *= -1;
+        pair<int, int> crt;
+        vector<vector<int>> moves{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        while(!q.empty()){
+            crt = q.front();
+            q.pop();
+            if(isBoundary(grid, crt, moves, m, n, prevColor)) grid[crt.first][crt.second] = 1001;
+            for(auto& move:moves){
+                int x = crt.first+move[0], y = crt.second+move[1];
+                if(x >= 0 && y >= 0 && x < m && y < n && grid[x][y] == prevColor){
+                    q.push({x, y});
+                    grid[x][y] *= -1;
+                }
+            }
+        }
+        for(int i = 0; i < m; ++i){
+            for(int j = 0; j < n; ++j){
+                if(grid[i][j] < 0) grid[i][j] *= -1;
+                if(grid[i][j] == 1001) grid[i][j] = color;
+            }
+        }
+        return grid;
+    }
+    
+    
+    bool isBoundary(vector<vector<int>> &g, pair<int, int> &p, vector<vector<int>> &moves, int m, int n, int prevColor){
+        if(p.first == 0 || p.second == 0 || p.first == m-1 || p.second == n-1) return true;
+        for(auto& move:moves){
+            int x = p.first+move[0], y = p.second+move[1];
+            if(x >= 0 && y >= 0 && x < m && y < n && g[x][y] != prevColor && g[x][y] != -prevColor && g[x][y] != 1001) return true;
+        }
+        return false;
+    }
+    
+};
