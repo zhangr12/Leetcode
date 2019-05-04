@@ -1,3 +1,39 @@
+class Solution {
+public:
+    // idea:
+    // make the first two correct
+    // then there are three possibilities for each element with index >= 2 (nums[i-2], nums[i-1], nums[i])
+    // 1. correct order
+    // 2. incorrect order and nums[i] is betweem nums[i-2] and nums[i-1]: in this case, we want to adjust nums[i-1]
+    // 3. incorrect order and nums[i] is less than both nums[i-2] and nums[i]: in this case, we  want to adjust nums[i]
+    bool checkPossibility(vector<int>& nums) {
+        if(nums.size() <= 2) return true;
+        int count = 0;
+        if(nums[0] > nums[1]){
+            nums[0] = nums[1];
+            ++count;
+        }
+        for(int i = 2; i < nums.size(); ++i){
+            if(nums[i-2] <= nums[i-1] && nums[i-1] <= nums[i]) continue;
+            if(count == 1) return false;
+            if(nums[i] >= nums[i-2] && nums[i-1] > nums[i]){
+                nums[i-1] = nums[i];
+                ++count;
+            }
+            else if(nums[i] < nums[i-2] && nums[i] < nums[i-1]){
+                nums[i] = nums[i-1];
+                ++count;
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+
+
 //This problem is like a greedy problem. When you find nums[i-1] > nums[i] for some i, you will prefer to change nums[i-1]'s value, since a 
 //larger nums[i] will give you more risks that you get inversion errors after position i. But, if you also find nums[i-2] > nums[i], then you 
 //have to change nums[i]'s value instead, or else you need to change both of nums[i-2]'s and nums[i-1]'s values.
