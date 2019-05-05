@@ -1,6 +1,26 @@
 class Solution {
 public:
     string reverseStr(string s, int k) {
+        int idx = 0;
+        while(idx < s.size()){
+            if(idx + k > s.size()){
+                reverse(s.begin()+idx, s.end());
+            }
+            else{
+                reverse(s.begin() + idx, s.begin() + idx + k);
+            }
+            idx += 2*k;
+        }
+        return s;
+    }
+};
+
+
+
+//////////////////////////////
+class Solution {
+public:
+    string reverseStr(string s, int k) {
         char temp1;
         int i = 0, j = k-1, temp2;
         while (j < s.size()){
