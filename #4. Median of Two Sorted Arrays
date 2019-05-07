@@ -1,10 +1,9 @@
 class Solution {
 public:
-	// idea:
+    // http://windliang.cc/2018/07/18/leetCode-4-Median-of-Two-Sorted-Arrays/
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
         int m = nums1.size(), n = nums2.size();
 		int left = (m+n+1)/2, right = (m+n+2)/2;
-		
 		return (getKth(nums1, 0, m-1, nums2, 0, n-1, left) + getKth(nums1, 0, m-1, nums2, 0, n-1, right))/2.0;
     }
 	
@@ -13,16 +12,16 @@ public:
 		
 		if(m > n) return getKth(nums2, start2, end2, nums1, start1, end1, k);
 		
-		if(m == 0) return nums2[start2+k-1];
+		if(m == 0) return nums2[start2 + k - 1];
 		if(k == 1) return min(nums1[start1], nums2[start2]);
 		
-		int pos1 = start1 + min(m, k/2)-1, pos2 = start2 + min(n, k/2)-1;
+		int pos1 = start1 + min(m, k/2) - 1, pos2 = start2+min(n, k/2) - 1;
 		
 		if(nums1[pos1] > nums2[pos2]){
-			return getKth(nums1, start1, end1, nums2, pos2+1, end2, k - (pos2 - start2 + 1));
+			return getKth(nums1, start1, end1, nums2, pos2+1, end2, k-(pos2-start2+1));
 		}
 		else{
-			return getKth(nums1, pos1+1, end1, nums2, start2, end2, k - (pos1 - start1 + 1));
+			return getKth(nums1, pos1+1, end1, nums2, start2, end2, k-(pos1-start1+1));
 		}
 		return -1;
 	}
