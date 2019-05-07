@@ -28,11 +28,11 @@ public:
 					}
 					else{
 						// 1, 0, multi
-                        // copy a* once: check dp[i+1][j]
-                        // copy a* zero times: check dp[i+1][j-1]
-                        // copy a* multiple times:
-                        // two subcases: 1. p[j-1] == s[i], we can copy p[j-1] to extend to s[i], so only need to check dp[i][j+1]
-                        // 2. p[j-1] == '.', in this case, no matter what is s[i], we can extend to it, also need to check dp[i][j+1]
+                        			// copy a* once: check dp[i+1][j]
+                        			// copy a* zero times: check dp[i+1][j-1]
+                        			// copy a* multiple times:
+                        			// two subcases: 1. p[j-1] == s[i], we can copy p[j-1] to extend to s[i], so only need to check dp[i][j+1]
+                        			// 2. p[j-1] == '.', in this case, no matter what is s[i], we can extend to it, also need to check dp[i][j+1]
 						dp[i+1][j+1] = dp[i+1][j] || dp[i+1][j-1] || dp[i][j+1];
 					}
 				}
