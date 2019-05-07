@@ -1,0 +1,33 @@
+class Solution {
+public:
+    // DFS with memorization
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_map<string, vector<string>> m;
+        return helper(s, wordDict, m);
+    }
+    
+    // return a vector which contains all the combinations we can get from string s
+    vector<string> helper(string s, vector<string> &wordDict, unordered_map<string, vector<string>> &m){
+        if(m.count(s)) return m[s];
+        
+        if(s == ""){
+            m[s] = {};
+            return {};
+        }
+        vector<string> res;
+        for(string &word:wordDict){
+            int len = word.size();
+            if(len <= s.size() && s.substr(0, len) == word){
+                if(len == s.size()){
+                    res.push_back(word);
+                }
+                else{
+                    vector<string> temp = helper(s.substr(word.size()), wordDict, m);
+                    for(string &t:temp) res.push_back(word + " " + t);
+                }
+            }
+        }
+        m[s] = res;
+        return res;
+    }
+};
