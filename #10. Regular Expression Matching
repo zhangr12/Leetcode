@@ -1,14 +1,17 @@
 class Solution {
 public:
     bool isMatch(string s, string p) {
-        int m = s.size(), n = p.size();
+        if(s.size() != 0 && p.size() == 0) return false;
+		if(s.size() == 0 && p.size() == 0) return true;
+		if(p[0] == '*') return false;
+		int m = s.size(), n = p.size();
 		
 		vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
 		
 		dp[0][0] = true;
+		// initialization
 		for(int j = 0; j < n; ++j){
-			// if(j > 0 && p[j] == p[j-1] && p[j] == '*') return false;
-			if(p[j] == '*' && dp[0][j-1]) dp[0][j+1] = true;
+			if(p[j] == '*' && dp[0][j-1] == true) dp[0][j+1] = true;
 		}
 		
 		for(int i = 0; i < m; ++i){
@@ -20,11 +23,17 @@ public:
 					dp[i+1][j+1] = dp[i][j];
 				}
 				else if(p[j] == '*'){
-					if(p[j-1] != s[i] && p[j-1] != '.'){
+					if(p[j-1] != '.' && s[i] != p[j-1]){
 						dp[i+1][j+1] = dp[i+1][j-1];
 					}
 					else{
-						dp[i+1][j+1] = (dp[i+1][j] || dp[i+1][j-1] || dp[i][j+1]);
+						// 1, 0, multi
+                        // copy a* once: check dp[i+1][j]
+                        // copy a* zero times: check dp[i+1][j-1]
+                        // copy a* multiple times:
+                        // two subcases: 1. p[j-1] == s[i], we can copy p[j-1] to extend to s[i], so only need to check dp[i][j+1]
+                        // 2. p[j-1] == '.', in this case, no matter what is s[i], we can extend to it, also need to check dp[i][j+1]
+						dp[i+1][j+1] = dp[i+1][j] || dp[i+1][j-1] || dp[i][j+1];
 					}
 				}
 			}
