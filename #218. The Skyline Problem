@@ -1,29 +1,35 @@
 class Solution {
 public:
+    // https://leetcode.com/problems/the-skyline-problem/discuss/61192/Once-for-all-explanation-with-clean-Java-code(O(n2)time-O(n)-space)
     vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
         // position, height
 		vector<vector<int>> points;
-		
+		// give start point negative sign
+        // later we will sort these points according to their position and height
+        // we want the sorted points to be from left to right, with height from smallest to highest
+        // we want start point shows before the end point if two points have the same x position
 		for(auto& b:buildings){
 			points.push_back({b[0], -b[2]});
 			points.push_back({b[1], b[2]});
 		}
-		
+		// sort according to positon and height
 		sort(points.begin(), points.end(), [](vector<int> &p1, vector<int> &p2){ 
 			if(p1[0] == p2[0]){
 				return p1[1] < p2[1];
 			}
 			return p1[0] < p2[0];
 		});
-		
+		// maximum element is the first one in m
 		map<int, int, greater<int>> m;
-		
+		// start from 0 height
 		m[0] = 1;
-		
+		// pervious height is 0
 		int prev = 0, crt;
 		vector<vector<int>> res;
 		for(auto& p:points){
-            // cout << p[0] << " " << p[1] << endl;
+            // if it is start point, add its height to m
+            // we want to process start point first because we want to keep the height for as longer as possible
+            // for start point with same x position, we want to process higher point first, since this can guarantee that we will not be disturbed by lower height
 			if(p[1] < 0){
 				++m[-p[1]];
 			}
@@ -31,9 +37,9 @@ public:
 				--m[p[1]];
 				if(m[p[1]] == 0) m.erase(p[1]);
 			}
-			
+			// check current height
 			crt = m.begin()->first;
-			
+			// if height changes, record
 			if(crt != prev){
 				res.push_back({p[0], crt});
 				prev = crt;
