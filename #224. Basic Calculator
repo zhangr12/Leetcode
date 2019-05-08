@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int calculate(string s) {
+        if(s.size() == 0) return 0;
+        stack<string> st;
+        int negative = 0, idx = 0, res = 0;
+        while(idx < s.size()){
+            // cout << idx << endl;
+            if(s[idx] == ' '){
+                ++idx;
+            }
+            else if(s[idx] == '+'){
+                ++idx;
+            }
+            else if(s[idx] == '-'){
+                // two subcases
+                ++idx;
+                while(s[idx] == ' ') ++idx;
+                // it is a positive sign after -
+                if(s[idx] >= '0' && s[idx] <= '9'){
+                    int start = idx;
+                    while(idx < s.size() && s[idx] >= '0' && s[idx] <= '9') ++idx;
+                    int crt = stoi(s.substr(start, idx-start));
+                    res += negative%2 == 1 ? crt : -crt;
+                }
+                // it is a ( after -
+                else if(s[idx] == '('){
+                    st.push("-(");
+                    ++negative;
+                    ++idx;
+                }
+            }
+            else if(s[idx] == '('){
+                ++idx;
+                st.push("(");
+            }
+            else if(s[idx] == ')'){
+                if(st.top() == "-(") --negative;
+                st.pop();
+                ++idx;
+            }
+            else{
+                int start = idx;
+                while(idx < s.size() && s[idx] >= '0' && s[idx] <= '9') ++idx;
+                res += negative%2 == 1 ? -1*stoi(s.substr(start, idx - start)) : stoi(s.substr(start, idx - start));
+            }
+        }
+        return res;
+    }
+};
