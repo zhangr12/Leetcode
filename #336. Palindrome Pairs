@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<vector<int>> palindromePairs(vector<string>& words) {
+        unordered_map<string, int> m;
+		vector<vector<int>> res;
+		
+		for(int i = 0; i < words.size(); ++i){
+			string temp = words[i];
+			reverse(temp.begin(), temp.end());
+			m[temp] = i;
+		}
+		// corner case: when there exist empty string
+		if(m.count("")){
+			for(int i = 0; i < words.size(); ++i){
+				if(words[i] == "") continue;
+				if(isPalindrome(words[i])) res.push_back({m[""], i});
+			}
+		}
+		
+		for(int i = 0; i < words.size(); ++i){
+            // when j = 0, left = "", right is the whole word
+            // when j = words[i].size()-1, right = last char in words[i], left is the rest part
+			for(int j = 0; j < words[i].size(); ++j){
+                string left = words[i].substr(0, j), right = words[i].substr(j);
+				
+				// candidate | left | right
+				if(isPalindrome(left) && m.count(right) && m[right] != i){
+					res.push_back({m[right], i});
+				}
+				
+				// left | right | candidate
+                // in this case, we cover words[i] + ""
+                // "" + words[i] has been treated as a corner case
+				if(isPalindrome(right) && m.count(left) && m[left] != i){
+					res.push_back({i, m[left]});
+				}
+			}
+		}
+		return res;
+    }
+	
+	bool isPalindrome(string &s){
+		int i = 0, j = s.size()-1;
+		while(i < j){
+			if(s[i] != s[j]) return false;
+			++i;
+			--j;
+		}
+		return true;
+	}
+};
