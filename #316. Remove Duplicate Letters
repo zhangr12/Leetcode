@@ -1,0 +1,35 @@
+class Solution {
+public:
+    // idea:
+    // first count the number for each char
+    // start build res string from left
+    // whenever we see a char in origin string
+    // we first decrease its count number
+    // then we check if this char already has been visited, if yes, continue
+    // then we check if we can make final result smaller by moving current char forward in the res string
+    // note that since we want lexicographical smallest result, we can pop out last char in res string if
+    // 1. it is larger than current char, and
+    // 2. we have chance to meet this char later
+    // note that we need to set the pop out char to be unvisited
+    // after pop out all the larger&available chars, put current char at the end of res string and mark it as visited
+    string removeDuplicateLetters(string s) {
+        vector<int> count(256, 0);
+        vector<bool> visited(256, false);
+        
+        for(char S:s) ++count[S];
+        
+        string res = "";
+        
+        for(char S:s){
+            --count[S];
+            if(visited[S]) continue;
+            while(res.size() > 0 && S < res.back() && count[res.back()] > 0){
+                visited[res.back()] = false;
+                res.pop_back();
+            }
+            res += S;
+            visited[S] = true;
+        }
+        return res;
+    }
+};
