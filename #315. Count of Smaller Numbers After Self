@@ -1,0 +1,63 @@
+struct Node{
+    int val, left_child, dups;
+    Node *left, *right;
+    Node(int x){
+        val = x;
+        left_child = 0;
+        dups = 1;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+
+class Solution {
+public:
+    // idea: build BST, count number of left children and duplicates for each node
+    // whenever we need to choose right side, we know that current number is greater than all the left children and the duplicates of current node
+    // whenever the value is equal to current node's value, we know that it must be greater than all the left children
+    vector<int> countSmaller(vector<int>& nums) {
+        if(nums.size() == 0) return {};
+        
+        vector<int> res(nums.size(), 0);
+        
+        Node* root = new Node(nums.back());
+        for(int i = nums.size()-2; i >= 0; --i){
+            res[i] = insertNode(root, nums[i]);
+        }
+        
+        return res;
+    }
+    // return smaller number on right
+    int insertNode(Node* root, int num){
+        int res = 0;
+        while(true){
+            if(root->val == num){
+                ++root->dups;
+                res += root->left_child;
+                break;
+            }
+            else if(root->val > num){
+                ++root->left_child;
+                if(root->left == nullptr){
+                    root->left = new Node(num);
+                    break;
+                }
+                else{
+                    root = root->left;
+                }
+            }
+            else{
+                res += root->left_child + root->dups;
+                if(root->right == nullptr){
+                    root->right = new Node(num);
+                    break;
+                }
+                else{
+                    root = root->right;
+                }
+            }
+        }
+        return res;
+    }
+};
