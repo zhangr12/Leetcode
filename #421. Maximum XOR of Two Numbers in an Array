@@ -1,0 +1,100 @@
+struct Node{
+    int val;
+    Node *left, *right;
+    Node(int x){
+        val = x;
+        left = nullptr;
+        right = nullptr;
+    }
+};
+
+class Solution {
+public:
+    // idea: build binary tree to represent the numbers in nums
+    // the most significant bit is at root
+    // https://leetcode.com/problems/maximum-xor-of-two-numbers-in-an-array/discuss/130427/()-92
+    
+    // steps: 
+    // 1. find position for most significant bit
+    // 2. build binary tree: start from the most significant bit (assume left: 1, right: 0)
+    // 3. for each given number, first find its current bit(start from most significant one)
+    // then if it is 1 and right child exist, turn right and add current level's corresponding number to result
+    // otherwise turn right
+    // similar when the bit is 0
+    int findMaximumXOR(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int maxLevel = 0, temp = 0;
+        for(int num:nums){
+            temp = 0;
+            while(num){
+                ++temp;
+                num /= 2;
+            }
+            maxLevel = max(maxLevel, temp);
+        }
+        Node* root = buildTree(nums, maxLevel);
+        int res = 0;
+        for(int num:nums){
+            int temp = findMaxXOR(root, num, maxLevel);
+            res = max(res, temp);
+        }
+        return res;
+    }
+    
+    // build tree
+    // left: 1
+    // right: 0
+    Node* buildTree(vector<int> &nums, int maxLevel){
+        // the bit at maxLevel is zero for all numbers
+        Node* root = new Node(0);
+        for(int num:nums){
+            Node* crt = root;
+            for(int i = maxLevel; i >= 0; --i){
+                int crtBit = num & (1 << i);
+                if(crtBit > 0){
+                    if(crt->left == nullptr){
+                        crt->left = new Node(1);
+                    }
+                    crt = crt->left;
+                }
+                else{
+                    if(crt->right == nullptr){
+                        crt->right = new Node(0);
+                    }
+                    crt = crt->right;
+                }
+            }
+        }
+        return root;
+    }
+    
+    int findMaxXOR(Node* root, int num, int maxLevel){
+        // here we need to use long int because if we have maxLevel == 31
+        // then we will have overflow problem since INT_MAX = 2^31 - 1
+        long int res = 0, maxPow = pow(2, maxLevel);
+        for(int i = maxLevel; i >= 0; --i){
+            // cout << maxPow << endl;
+            int crtBit = num & (1 << i);
+            if(crtBit > 0){
+                if(root->right == nullptr){
+                    root = root->left;
+                }
+                else{
+                    root = root->right;
+                    res += maxPow;
+                }
+            }
+            else{
+                if(root->left == nullptr){
+                    root = root->right;
+                }
+                else{
+                    root = root->left;
+                    res += maxPow;
+                }
+            }
+            maxPow /= 2;
+        }
+        return res;
+    }
+};
