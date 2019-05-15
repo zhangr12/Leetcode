@@ -1,0 +1,24 @@
+class Solution {
+public:
+    // dp with size N by N where N is the size of costs
+    // dp[i][j]: the lowest cost for first i+j people with i people assigned to city A and j people assigned to city B
+    // initialization: dp[i+1][0] = sum(costs[i][0]), dp[0][j+1] = sum(costs[j][1])
+    // transition formula: dp[i+1][j+1] = min(dp[i][j+1] + cost[i+j+1][0], dp[i+1][j] + cost[i+j+1][1])
+    int twoCitySchedCost(vector<vector<int>>& costs) {
+        int m = costs.size()/2;
+        
+        vector<vector<int>> dp(m+1, vector<int>(m+1, 0));
+        
+        for(int i = 0; i < m; ++i){
+            dp[i+1][0] = dp[i][0] + costs[i][0];
+            dp[0][i+1] = dp[0][i] + costs[i][1];
+        }
+        
+        for(int i = 0; i < m; ++i){
+            for(int j = 0; j < m; ++j){
+                dp[i+1][j+1] = min(dp[i][j+1] + costs[i+j+1][0], dp[i+1][j] + costs[i+j+1][1]);
+            }
+        }
+        return dp[m][m];
+    }
+};
