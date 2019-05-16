@@ -1,0 +1,69 @@
+/*
+// Definition for a QuadTree node.
+class Node {
+public:
+    bool val;
+    bool isLeaf;
+    Node* topLeft;
+    Node* topRight;
+    Node* bottomLeft;
+    Node* bottomRight;
+
+    Node() {}
+
+    Node(bool _val, bool _isLeaf, Node* _topLeft, Node* _topRight, Node* _bottomLeft, Node* _bottomRight) {
+        val = _val;
+        isLeaf = _isLeaf;
+        topLeft = _topLeft;
+        topRight = _topRight;
+        bottomLeft = _bottomLeft;
+        bottomRight = _bottomRight;
+    }
+};
+*/
+class Solution {
+public:
+    Node* intersect(Node* quadTree1, Node* quadTree2) {
+        if(quadTree1 == nullptr) return quadTree2;
+		if(quadTree2 == nullptr) return quadTree1;
+		
+		return helper(quadTree1, quadTree2);
+    }
+	
+	// take OR operation
+	Node* helper(Node* tree1, Node* tree2){
+		if(tree1->isLeaf && tree2->isLeaf){
+			return new Node(tree1->val || tree2->val, true, nullptr, nullptr, nullptr, nullptr);
+		}
+		Node* node = new Node(false, false, nullptr, nullptr, nullptr, nullptr);
+		if(!tree1->isLeaf && !tree2->isLeaf){
+			node->topLeft = helper(tree1->topLeft, tree2->topLeft);
+			node->topRight = helper(tree1->topRight, tree2->topRight);
+			node->bottomLeft = helper(tree1->bottomLeft, tree2->bottomLeft);
+			node->bottomRight = helper(tree1->bottomRight, tree2->bottomRight);
+		}
+		else if(!tree1->isLeaf){
+			node->topLeft = helper(tree1->topLeft, tree2);
+			node->topRight = helper(tree1->topRight, tree2);
+			node->bottomLeft = helper(tree1->bottomLeft, tree2);
+			node->bottomRight = helper(tree1->bottomRight, tree2);
+		}
+		else{
+			node->topLeft = helper(tree1, tree2->topLeft);
+			node->topRight = helper(tree1, tree2->topRight);
+			node->bottomLeft = helper(tree1, tree2->bottomLeft);
+			node->bottomRight = helper(tree1, tree2->bottomRight);
+		}
+		// combine if nessesary
+		if(node->topLeft->isLeaf && node->topRight->isLeaf && node->bottomLeft->isLeaf && node->bottomRight->isLeaf && ((node->topLeft->val && node->topRight->val && node->bottomLeft->val && node->bottomRight->val) || !(node->topLeft->val || node->topRight->val || node->bottomLeft->val || node->bottomRight->val))){
+			node->val = node->topLeft->val;
+			node->isLeaf = true;
+			node->topLeft = nullptr;
+			node->topRight = nullptr;
+			node->bottomLeft = nullptr;
+			node->bottomRight = nullptr;
+			return node;
+		}
+		return node;
+	}
+};
