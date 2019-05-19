@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool isBoomerang(vector<vector<int>>& points) {
+        sort(points.begin(), points.end(), [](vector<int> &p1, vector<int> &p2){ return p1[0] < p1[0]; });
+        
+        if(existDup(points)) return false;
+        
+        if(points[0][0] == points[1][0] && points[1][0] == points[2][0]) return false;
+        if(points[0][0] == points[1][0] || points[1][0] == points[2][0]) return true;
+        
+        if((points[0][1] - points[1][1])*1.0/(points[0][0] - points[1][0]) != (points[0][1] - points[2][1])*1.0/(points[0][0] - points[2][0])) return true;
+        
+        return false;
+    }
+    
+    bool existDup(vector<vector<int>> &points){
+        for(int i = 0; i < 3; ++i){
+            for(int j = i+1; j < 3; ++j){
+                if(points[i][0] == points[j][0] && points[i][1] == points[j][1]) return true;
+            }
+        }
+        return false;
+    }
+    
+};
