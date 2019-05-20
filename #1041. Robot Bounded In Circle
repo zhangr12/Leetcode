@@ -1,0 +1,26 @@
+class Solution {
+public:
+    // true if the robot can return to origin after repeat the instructions for 4 times
+    bool isRobotBounded(string instructions) {
+        // L: +; R: -
+        vector<vector<int>> moves{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int facing = 0, x = 0, y = 0;
+        for(int i = 0; i < 4; ++i){
+            for(char c:instructions){
+                if(c == 'G'){
+                    x += moves[facing][0];
+                    y += moves[facing][1];
+                }
+                else if(c == 'L'){
+                    ++facing;
+                    facing %= 4;
+                }
+                else{
+                    --facing;
+                    if(facing < 0) facing += 4;
+                }
+            }
+        }
+        return x == 0 && y == 0;
+    }
+};
