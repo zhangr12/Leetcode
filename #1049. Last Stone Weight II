@@ -1,0 +1,21 @@
+class Solution {
+public:
+    // Knapsack problem
+    int lastStoneWeightII(vector<int>& stones) {
+        int sum = accumulate(stones.begin(), stones.end(), 0);
+        
+        vector<bool> dp(sum/2 + 1, false);
+        dp[0] = true;
+        
+        for(int s:stones){
+            for(int i = sum/2; i >= 0; --i){
+                if(i-s >= 0 && dp[i-s]) dp[i] = true;
+            }
+        }
+        
+        for(int i = sum/2; i >= 0; --i){
+            if(dp[i]) return sum - i - i;
+        }
+        return -1;
+    }
+};
