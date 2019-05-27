@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string removeDuplicates(string S) {
+        string res = "";
+        for(char s:S){
+            if(res.size() > 0 && res.back() == s){
+                res.pop_back();
+            }
+            else{
+                res += s;
+            }
+        }
+        return res;
+    }
+};
+
+////////////////////////////
+// relatively slow solution
+class Solution {
+public:
+    string removeDuplicates(string S) {
+        stack<char> s;
+        for(char crt:S){
+            if(!s.empty() && s.top() == crt){
+                s.pop();
+            }
+            else{
+                s.push(crt);
+            }
+        }
+        string res = "";
+        while(!s.empty()){
+            res += s.top();
+            s.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
