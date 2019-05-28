@@ -1,0 +1,43 @@
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        vector<vector<bool>> row(9, vector<bool>(9, false)), col(9, vector<bool>(9, false)), block(9, vector<bool>(9, false));
+		vector<vector<int>> empty;
+		for(int i = 0; i < 9; ++i){
+			for(int j = 0; j < 9; ++j){
+				if(board[i][j] != '.'){
+					row[i][board[i][j] - '1'] = true;
+					col[j][board[i][j] - '1'] = true;
+					block[(i/3)*3 + j/3][board[i][j] - '1'] = true;
+				}
+				else{
+					empty.push_back({i, j});
+				}
+			}
+		}
+		
+		helper(board, row, col, block, empty, 0);
+		
+		return;
+    }
+	
+	bool helper(vector<vector<char>>& board, vector<vector<bool>> &row, vector<vector<bool>>& col, vector<vector<bool>>& block, vector<vector<int>>& empty, int pos){
+		if(pos == empty.size()) return true;
+		
+		int r = empty[pos][0], c = empty[pos][1];
+		for(int i = 0; i < 9; ++i){
+			if(!row[r][i] && !col[c][i] && !block[r/3*3+c/3][i]){
+				row[r][i] = true;
+				col[c][i] = true;
+				block[r/3*3+c/3][i] = true;
+				board[r][c] = '1' + i;
+				if(helper(board, row, col, block, empty, pos+1)) return true;
+				board[r][c] = '.';
+				row[r][i] = false;
+				col[c][i] = false;
+				block[r/3*3+c/3][i] = false;
+			}
+		}
+		return false;
+	}
+};
