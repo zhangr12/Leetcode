@@ -1,0 +1,34 @@
+class Solution {
+public:
+    // idea: use unordered_map to mimic the sort
+    // this is efficient because the range of the numbers is in [1, 100]
+    int heightChecker(vector<int>& heights) {
+        unordered_map<int, int> m;
+        for(int h:heights) ++m[h];
+        
+        int res = 0, crt = 0;
+        for(int h:heights){
+            while(m[crt] == 0) ++crt;
+            
+            if(crt != h) ++res;
+            --m[crt];
+        }
+        return res;
+    }
+};
+
+
+
+///////////////////////////////////////
+class Solution {
+public:
+    int heightChecker(vector<int>& heights) {
+        vector<int> temp = heights;
+        sort(temp.begin(), temp.end());
+        int count = 0;
+        for(int i = 0; i < heights.size(); ++i){
+            if(temp[i] != heights[i]) ++count;
+        }
+        return count;
+    }
+};
