@@ -1,5 +1,25 @@
 class Solution {
 public:
+    // https://leetcode.com/problems/matrix-cells-in-distance-order/discuss/278708/O(n)-with-picture
+    vector<vector<int>> allCellsDistOrder(int R, int C, int r0, int c0) {
+        vector<vector<int>> res;
+        res.push_back({r0, c0});
+        for(int dis = 1; dis < R+C; ++dis){
+            for(int x = -dis; x <= dis; ++x){
+                // each x displacement according to two y displacement, one positive, one negative
+                if(r0 + x >= 0 && r0 + x < R && c0 + (dis - abs(x)) >= 0 && c0 + (dis - abs(x)) < C) res.push_back({r0 + x, c0 + (dis - abs(x))});
+                if(x == dis || x == -dis) continue;
+                if(r0 + x >= 0 && r0 + x < R && c0 - (dis - abs(x)) >= 0 && c0 - (dis - abs(x)) < C) res.push_back({r0 + x, c0 - (dis - abs(x))});
+            }
+        }
+        return res;
+    }
+};
+
+
+////////////////////////////////
+class Solution {
+public:
     vector<vector<int>> allCellsDistOrder(int R, int C, int r0, int c0) {
         vector<bool> visited(R*C, false);
         visited[r0*C +c0] = true;
