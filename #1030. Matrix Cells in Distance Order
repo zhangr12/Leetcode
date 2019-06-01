@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> allCellsDistOrder(int R, int C, int r0, int c0) {
+        vector<bool> visited(R*C, false);
+        visited[r0*C +c0] = true;
+        vector<vector<int>> res;
+        res.push_back({r0, c0});
+        int crt = 0;
+        vector<vector<int>> moves{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        while(crt < res.size()){
+            int num = res.size();
+            while(crt < num){
+                for(auto & move:moves){
+                    int x = res[crt][0] + move[0], y = res[crt][1] + move[1];
+                    if(x >= 0 && x < R && y >= 0 && y < C && !visited[x*C + y]){
+                        visited[x*C + y] = true;
+                        res.push_back({x, y});
+                    }
+                }
+                ++crt;
+            }
+        }
+        return res;
+    }
+};
