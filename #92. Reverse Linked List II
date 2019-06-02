@@ -1,3 +1,33 @@
+// https://leetcode.com/problems/reverse-linked-list-ii/discuss/30709/Talk-is-cheap-show-me-the-code-(and-DRAWING)
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode N(0);
+        ListNode *pH = &N, *prev = &N, *tail, *temp;
+        pH->next = head;
+        for(int i = 0; i < m-1; ++i) prev = prev->next;
+        tail = prev->next;
+        for(int i = 0; i < n-m; ++i){
+            temp = prev->next;
+            prev->next = tail->next;
+            tail->next = tail->next->next;
+            prev->next->next = temp;
+        }
+        return pH->next;
+    }
+};
+
+
+
+///////////////////////////////
 /**
  * Definition for singly-linked list.
  * struct ListNode {
