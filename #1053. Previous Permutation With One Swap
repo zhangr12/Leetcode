@@ -1,0 +1,15 @@
+class Solution {
+public:
+    vector<int> prevPermOpt1(vector<int>& A) {
+        int pos = A.size() - 2;
+        while(pos >= 0 && A[pos] <= A[pos+1]) --pos;
+        if(pos < 0) return A;
+        // A[pos] > A[pos + 1]
+        int swapIdx = A.size() - 1;
+        // find the largest number that is smaller than A[pos] on right
+        while(A[swapIdx] >= A[pos]) --swapIdx;
+        while(A[swapIdx] == A[swapIdx - 1]) --swapIdx;
+        swap(A[swapIdx], A[pos]);
+        return A;
+    }
+};
