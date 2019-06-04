@@ -1,0 +1,22 @@
+class Solution {
+public:
+    // idea: moving window
+    int maxSatisfied(vector<int>& customers, vector<int>& grumpy, int X) {
+        int res = 0, extra = 0, temp = 0, l = 0, r = 0;
+        while(r < customers.size()){
+            if(grumpy[r] == 0){
+                res += customers[r];
+            }
+            else{
+                temp += customers[r];
+            }
+            if(r-l+1 > X){
+                if(grumpy[l] == 1) temp -= customers[l];
+                ++l;
+            }
+            extra = max(extra, temp);
+            ++r;
+        }
+        return res + extra;
+    }
+};
