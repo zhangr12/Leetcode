@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<string> findOcurrences(string text, string first, string second) {
+        unordered_set<int> s1, s2;
+        unordered_map<int, string> m;
+        stringstream ss(text);
+        int crt = 0;
+        string temp;
+        while(ss >> temp){
+            m[crt] = temp;
+            if(temp == first) s1.insert(crt);
+            if(temp == second) s2.insert(crt);
+            ++crt;
+        }
+        vector<string> res;
+        for(auto num:s1){
+            if(s2.count(num+1) && m.count(num+2)) res.push_back(m[num+2]);
+        }
+        return res;
+    }
+};
