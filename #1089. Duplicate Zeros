@@ -1,0 +1,35 @@
+class Solution {
+public:
+    void duplicateZeros(vector<int>& arr) {
+        if(arr.size() == 0) return;
+        int i = 0, crtPos = -1, N = arr.size();
+        for(; i < N; ++i){
+            if(arr[i] == 0){
+                crtPos += 2;
+            }
+            else{
+                ++crtPos;
+            }
+            if(crtPos >= N-1) break;
+        }
+        
+        if(crtPos == N){
+            arr[N-1] = 0;
+            crtPos = N-2;
+            --i;
+        }
+        while(i >= 0){
+            if(arr[i] == 0){
+                arr[crtPos] = 0;
+                arr[crtPos - 1] = 0;
+                crtPos -= 2;
+            }
+            else{
+                arr[crtPos] = arr[i];
+                --crtPos;
+            }
+            --i;
+        }
+        return;
+    }
+};
