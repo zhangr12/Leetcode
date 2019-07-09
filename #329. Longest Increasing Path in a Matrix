@@ -1,6 +1,36 @@
 // DP with memory
 class Solution {
 public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if(matrix.size() == 0 || matrix[0].size() == 0) return 0;
+        int m = matrix.size(), n = matrix[0].size(), res = 0;
+        vector<vector<int>> dp(m, vector<int>(n, 0)), moves{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        for(int i = 0; i < matrix.size(); ++i){
+            for(int j = 0; j < matrix[0].size(); ++j){
+                DFS(matrix, dp, i, j, moves);
+                res = max(res, dp[i][j]);
+            }
+        }
+        return res;
+    }
+    
+    void DFS(vector<vector<int>> &m, vector<vector<int>> &dp, int x, int y, vector<vector<int>>& moves){
+        if(dp[x][y] != 0) return;
+        dp[x][y] = 1;
+        for(auto& move:moves){
+            int crtX = x + move[0], crtY = y + move[1];
+            if(crtX < 0 || crtY < 0 || crtX == m.size() || crtY == m[0].size() || m[crtX][crtY] <= m[x][y]) continue;
+            DFS(m, dp, crtX, crtY, moves);
+            dp[x][y] = max(dp[x][y], dp[crtX][crtY] + 1);
+        }
+        return;
+    }
+};
+
+
+// DP with memory
+class Solution {
+public:
     int res = 0;
     int longestIncreasingPath(vector<vector<int>>& matrix) {
         if(matrix.size() == 0) return 0;
