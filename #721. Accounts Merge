@@ -66,3 +66,43 @@ public:
         return m[s];
     }
 };
+
+
+///////////////////////////
+// Python version
+class Solution:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
+        user, parent = {}, {}
+        for account in accounts:
+            for i in range(1, len(account)):
+                user[account[i]] = account[0]
+                parent[account[i]] = account[1]
+        
+        for account in accounts:
+            p1 = self.findParent(parent, account[1])
+            for i in range(2, len(account)):
+                p2 = self.findParent(parent, account[i])
+                if p1 != p2: parent[p2] = p1
+        
+        record = {}
+        for account in accounts:
+            for i in range(1, len(account)):
+                p = self.findParent(parent, account[i])
+                if p not in record: record[p] = set()
+                record[p].add(account[i])
+        
+        res = []
+        for key, value in record.items():
+            temp = list(value)
+            temp.sort()
+            temp.insert(0, user[temp[0]])
+            res.append(temp)
+        return res
+        
+        
+    
+    
+    def findParent(self, parent, p):
+        if parent[p] != p: parent[p] = self.findParent(parent, parent[p])
+        return parent[p]
+
