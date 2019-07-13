@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int numTilePossibilities(string tiles) {
+        vector<int> count(26, 0);
+        for(auto c:tiles) ++count[c-'A'];
+        int res = 0;
+        helper(count, tiles.size(), res);
+        return res;
+    }
+    
+    void helper(vector<int> &count, int residual, int &res){
+        if(residual == 0) return;
+        
+        for(int i = 0; i < 26; ++i){
+            if(count[i] == 0) continue;
+            --count[i];
+            ++res;
+            helper(count, residual-1, res);
+            ++count[i];
+        }
+        return;
+    }
+};
