@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lcaDeepestLeaves(TreeNode* root) {
+        pair<TreeNode*, int> res = depth(root);
+        return res.first;
+    }
+    
+    pair<TreeNode*, int> depth(TreeNode* node){
+        if(node == nullptr) return {nullptr, 0};
+        pair<TreeNode*, int> l = depth(node->left), r = depth(node->right);
+        if(l.second == r.second){
+            return {node, l.second+1};
+        }
+        else if(l.second > r.second){
+            return {l.first, l.second + 1};
+        }
+        else{
+            return {r.first, r.second + 1};
+        }
+    }
+};
