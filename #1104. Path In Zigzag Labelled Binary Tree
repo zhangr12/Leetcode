@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> pathInZigZagTree(int label) {
+        int level = 0;
+        while(1 << level <= label) ++level;
+        
+        // need to reverse node when we are at even level
+        vector<int> res(level);
+        while(level > 0){
+            res[level-1] = label;
+            // for each level, the min element is 1<<(level-1), the maximum element is (1<<level)-1
+            label = (1<<level) - 1 - label + (1 << (level-1));
+            label /= 2;
+            --level;
+        }
+        return res;
+    }
+};
