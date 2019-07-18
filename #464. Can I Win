@@ -39,3 +39,30 @@ public:
     }
     
 };
+
+
+////////////////////////////
+// Python version
+class Solution:
+    def canIWin(self, maxChoosableInteger: int, desiredTotal: int) -> bool:
+        if maxChoosableInteger >= desiredTotal: return True
+        if (1+maxChoosableInteger)*maxChoosableInteger/2 < desiredTotal: return False
+        record = {}
+        return self.helper(0, maxChoosableInteger, desiredTotal, record)
+        
+        
+    def helper(self, used: int, maxInt: int, residual: int, record: dict) -> bool:
+        if used in record: return record[used]
+        
+        if residual <= 0:
+            record[used] = False
+            return False
+        
+        for i in range(1, maxInt+1):
+            crt = 1 << i
+            if not crt&used and not self.helper(used|crt, maxInt, residual-i, record):
+                record[used] = True
+                return True
+        record[used] = False
+        return False
+
