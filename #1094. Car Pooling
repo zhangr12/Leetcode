@@ -1,0 +1,37 @@
+class Comp{
+public:
+    bool operator()(vector<int> &p1, vector<int> &p2){
+        if(p1[0] > p2[0]) return true;
+        return false;
+    }
+};
+
+// idea: first sort the trips based on pick up point
+// iterate through the trips, push drop off location and number of people into a min heap which are sorted based on drop off location
+// everytime, check the top of the min heap to determine whether we need to drop off people
+// then pick up and check capacity
+class Solution {
+public:
+    bool carPooling(vector<vector<int>>& trips, int capacity) {
+        sort(trips.begin(), trips.end(), [](vector<int> &v1, vector<int> &v2){ 
+            if(v1[1] < v2[1]) return true;
+            return false;
+        });
+        // first int: number of people
+        // second int: drop off position
+        priority_queue<vector<int>, vector<vector<int>>, Comp> pq;
+        int crtCap = 0;
+        for(auto& t:trips){
+            // cout << t[0] << " " << t[1] << " " << t[2] << endl;
+            while(!pq.empty() && pq.top()[0] <= t[1]){
+                crtCap -= pq.top()[1];
+                pq.pop();
+            }
+            crtCap += t[0];
+            // cout << crtCap << endl;
+            if(crtCap > capacity) return false;
+            pq.push({t[2], t[0]});
+        }
+        return true;
+    }
+};
